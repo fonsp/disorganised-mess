@@ -13,20 +13,14 @@ macro bind(def, element)
     end
 end
 
-# ╔═╡ 66181f40-dd53-11ea-22ad-a7f633462733
-
-
-# ╔═╡ 27d5bed6-7fe8-11ea-1a8a-af798742d71d
-view([1,2,3], 2:end) == [2,3]
-
-# ╔═╡ 61fb01fc-7fe8-11ea-04f6-c1a6fb545a0d
-
-
 # ╔═╡ cccd3524-7fd7-11ea-241b-a35f2ca3e245
 using JSON
 
 # ╔═╡ 1836b868-dd53-11ea-3711-cd4504b2aca0
 tic = Ref(time())
+
+# ╔═╡ 66181f40-dd53-11ea-22ad-a7f633462733
+
 
 # ╔═╡ e0ce06f8-7fd6-11ea-2b59-ff9d69c47d42
 @bind x html"""
@@ -42,7 +36,8 @@ var startY = 40
 function sendvalue() {
 	// 🐸 This is how we send the value back to Julia 🐸 //
 	const raw = ctx.getImageData(0,0,200,200).data
-	canvas.value = btoa(raw)
+	canvas.value = raw.buffer
+	
 	canvas.dispatchEvent(new CustomEvent("input"))
 }
 
@@ -83,9 +78,6 @@ let
 	Δt
 end
 
-# ╔═╡ efb50b94-7fd6-11ea-1d80-f7ddee184780
-(x |> length, rand())
-
 # ╔═╡ a8eb7240-7fe8-11ea-3379-e1f3cd6f4684
 begin
 	import Base: endswith
@@ -99,6 +91,12 @@ end
 
 # ╔═╡ cd83f1a0-7fe7-11ea-1546-910dec41906e
 endswith([1,2,3], [2,3, 4, 5])
+
+# ╔═╡ 27d5bed6-7fe8-11ea-1a8a-af798742d71d
+view([1,2,3], 2:end) == [2,3]
+
+# ╔═╡ 61fb01fc-7fe8-11ea-04f6-c1a6fb545a0d
+
 
 # ╔═╡ fed7690c-7fe8-11ea-221c-edefefcd4aef
 begin
@@ -119,7 +117,6 @@ JSON.Parser.parse( codeunits(JSON.json(obj)) |> Vector{UInt8}) |> length
 # ╠═1836b868-dd53-11ea-3711-cd4504b2aca0
 # ╠═66181f40-dd53-11ea-22ad-a7f633462733
 # ╠═25b8e04a-dd53-11ea-2067-adfc77c6b0fc
-# ╠═efb50b94-7fd6-11ea-1d80-f7ddee184780
 # ╠═e0ce06f8-7fd6-11ea-2b59-ff9d69c47d42
 # ╠═a8eb7240-7fe8-11ea-3379-e1f3cd6f4684
 # ╠═cd83f1a0-7fe7-11ea-1546-910dec41906e

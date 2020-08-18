@@ -1,7 +1,10 @@
 ### A Pluto.jl notebook ###
-# v0.10.0
+# v0.11.5
 
 using Markdown
+using InteractiveUtils
+
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
         local el = $(esc(element))
@@ -121,7 +124,7 @@ struct ImageInput
 end
 
 # ╔═╡ 8c0caad4-b861-11ea-3aab-83e4d3718aa9
-img = ImageInput(true, "asdf", 50)
+img = ImageInput(true, "asdf", 200)
 
 # ╔═╡ 74cac824-b861-11ea-37e9-e97065879618
 ph = """
@@ -174,7 +177,7 @@ const send_source = (source, src_width, src_height) => {
 	span.value = {
 		width: width,
 		height: height,
-		data: Array.from(ctx.getImageData(0, 0, width, height).data),
+		data: ctx.getImageData(0, 0, width, height).data,
 	}
 	span.dispatchEvent(new CustomEvent("input"))
 }
