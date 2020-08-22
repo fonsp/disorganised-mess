@@ -29,35 +29,26 @@ end
 # ╔═╡ fcac2038-b7aa-11ea-1320-355e0731afb4
 using LinearAlgebra
 
-# ╔═╡ 61d48226-e4a7-11ea-1603-61dc0c38f436
-Gray.(rand(400,400))
-
-# ╔═╡ 5d6a224c-e4a8-11ea-1cb8-2972b443f834
-RGB(.1, .1, .9)
-
 # ╔═╡ d7eadad2-b7ad-11ea-22e3-f1e5ded42255
 md"# Singular Value Decomposition
 
 Lorem ipsum SVD est."
 
-# ╔═╡ dfd0317e-b85f-11ea-3f2b-fd95c87a0a69
-zeros(Float64, 0, 0)
-
 # ╔═╡ d6f2ee1c-b7ad-11ea-0e1c-fb21a58c5711
 md"## Step 1: upload your favorite image:"
 
-# ╔═╡ 841551d2-b861-11ea-08de-c180ca50b9be
-struct ImageInput
-    use_camera::Bool
-    default_url::AbstractString
-    maxsize::Integer
-end
+# ╔═╡ 7754f882-e4bf-11ea-0cc3-3b5223f73125
+
 
 # ╔═╡ 212d10d6-b7ae-11ea-1434-fb7d45aaf278
-md"The (black-and-white) image data is now available as a Julia 2D array:"
+md"The camera image can be **used as a variable** inside Julia! Let's have a look at its type:"
 
-# ╔═╡ 42578c50-b7ae-11ea-2f7d-6b8b3df44aed
-md"This notebook defines a type `BWImage` that can be used to turn 2D Float arrays into a picture!"
+# ╔═╡ 1cfdfacc-e4bd-11ea-2efb-8707d895025a
+md"### Pixels
+To get a single _pixel_ from the image, we just need to get a _value_ from the 2D array. This is done with 2D indexing:"
+
+# ╔═╡ 3f06949c-e4bd-11ea-21d1-910dae46d2b6
+md"To get its values, we use the functions `red`, `green`, `blue`. These are part of the `Images.jl` package."
 
 # ╔═╡ 90715ff6-b7ae-11ea-3780-1d227049322c
 md"You can use `img_data` like any other Julia 2D array! For example, here is the top left corner of your image:"
@@ -69,9 +60,6 @@ The Julia standard library package `LinearAlgebra` contains a method to compute 
 
 # ╔═╡ 07834ab8-b7ba-11ea-0279-77179671d826
 md"Let's look at the result."
-
-# ╔═╡ 9765a090-b7b0-11ea-3c1f-e5a8ac58d7de
-#[📚.U, 📚.S, 📚.V]
 
 # ╔═╡ fe4c70fe-b7b0-11ea-232b-1996facd33a0
 md"Let's verify the identity
@@ -89,6 +77,9 @@ Since we are using a _computer_, the decomposition and multiplication both intro
 # ╔═╡ 2199d7b2-b7b2-11ea-2e86-95b23658a538
 md"One way to quantify the _distance_ between two matrices is to look at the **point-wise difference**. If the **sum** of all differences is close to 0, the matrices are almost equal."
 
+# ╔═╡ 315955ac-b7b1-11ea-31a1-31a206c2ab72
+p1_dist = sum(abs.(img_data_reconstructed - img_data))
+
 # ╔═╡ 489b7c9c-b7b1-11ea-3a54-87bd17341b2c
 md"There are other ways to compare two matrices, such methods are called _**matrix norms**_."
 
@@ -97,6 +88,9 @@ md"### The 👀-norm"
 
 # ╔═╡ b15d683c-b7b2-11ea-1090-b392950bedb6
 md"Another popular matrix norm is the **👀_-norm_**: you turn both matrices into a picture, and use your 👀 to see how close they are:"
+
+# ╔═╡ f0e75616-b7b2-11ea-1187-714258b32e84
+[BWImage(img_data), BWImage(img_data_reconstructed)]
 
 # ╔═╡ 064d5a78-b7b3-11ea-399c-f968bf9c910a
 md"""**How similar are these images?**  $(@bind 👀_dist html"<input>")"""
@@ -143,6 +137,9 @@ md"## Going further
 More stuff to learn about SVD
 
 To keep things simple (and dependency-free), this notebook only works with downscaled black-and-white images that you pick using the button. For **color**, **larger images**, or **images from your disk**, you should look into the [`Images.jl`](https://github.com/JuliaImages/Images.jl) package!"
+
+# ╔═╡ 1b7fedd2-e4bf-11ea-2947-dded12a5ea95
+md"# Appendix"
 
 # ╔═╡ 74cac824-b861-11ea-37e9-e97065879618
 function camera_input(maxsize=200)
@@ -237,13 +234,10 @@ span.querySelector("#video-container").onclick = function() {
 end
 
 # ╔═╡ 54f79f6e-b865-11ea-2f16-ff76fe1f14ed
-@bind upload_data camera_input()
-
-# ╔═╡ 693f5432-e4a5-11ea-070e-f5fd245ccefc
-upload_data
+@bind raw_camera_data camera_input()
 
 # ╔═╡ ef44d20c-e4a8-11ea-0bb5-8fbafddaf2b5
-img = let
+function process_raw_camera_data(raw_camera_data)
 	# the raw image data is a long byte array, we need to transform it into something
 	# more "Julian" - something with more _structure_.
 	
@@ -254,15 +248,15 @@ img = let
 	
 	# So to get the red values for each pixel, we take every 4th value, starting at 
 	# the 1st:
-	reds_flat = UInt8.(upload_data["data"][1:4:end])
-	greens_flat = UInt8.(upload_data["data"][2:4:end])
-	blues_flat = UInt8.(upload_data["data"][3:4:end])
+	reds_flat = UInt8.(raw_camera_data["data"][1:4:end])
+	greens_flat = UInt8.(raw_camera_data["data"][2:4:end])
+	blues_flat = UInt8.(raw_camera_data["data"][3:4:end])
 	
 	# but these are still 1-dimensional arrays, nicknamed 'flat' arrays
 	# We will 'reshape' this into 2D arrays:
 	
-	width = upload_data["width"]
-	height = upload_data["height"]
+	width = raw_camera_data["width"]
+	height = raw_camera_data["height"]
 	
 	# shuffle and flip to get it in the right shape
 	reds = reshape(reds_flat, (width, height))' / 255.0
@@ -276,6 +270,30 @@ img = let
 	RGB.(reds, greens, blues)
 end
 
+# ╔═╡ fb667d22-e4be-11ea-073a-65449018db8c
+img = process_raw_camera_data(raw_camera_data)
+
+# ╔═╡ 27f61a6e-e4bf-11ea-1130-d3d1ad366536
+color .- img
+
+# ╔═╡ 7b3ee492-e4b7-11ea-0637-bf80c9d4c3a9
+typeof(img)
+
+# ╔═╡ 0cec122a-e4b8-11ea-3780-a9f681edd329
+md"It's a 2D array, and its elements are of the type _$(eltype(img))_"
+
+# ╔═╡ 848d85ee-e4b7-11ea-3e0c-eb232a9883ef
+firstpixel = img[1,1]
+
+# ╔═╡ 8e7c030c-e4b7-11ea-3429-312395080f75
+typeof(firstpixel)
+
+# ╔═╡ d263df02-e4b7-11ea-3280-6de622af30d3
+red(firstpixel), green(firstpixel), blue(firstpixel)
+
+# ╔═╡ 87d77024-e4bd-11ea-3ceb-d3b8dcc7564b
+red.(img)
+
 # ╔═╡ b8f3fa2e-b7ae-11ea-1089-3d08cd1e7874
 topleft = let
 	# the first coordinate is vertical, the second is horizontal (it's a matrix!)
@@ -286,7 +304,7 @@ topleft = let
 end
 
 # ╔═╡ 8e009aea-e4aa-11ea-03eb-bd3a7533d818
-bw = Gray.(red.(img))
+bw = Gray.(img)
 
 # ╔═╡ a404b9f8-b7ab-11ea-0b07-a733a3c4f353
 📚 = svd(bw);
@@ -295,13 +313,7 @@ bw = Gray.(red.(img))
 📚
 
 # ╔═╡ dbfa7a96-b7b0-11ea-2737-c7bfd486db3c
-img_data_reconstructed = 📚.U * Diagonal(📚.S) * 📚.V'
-
-# ╔═╡ 315955ac-b7b1-11ea-31a1-31a206c2ab72
-p1_dist = sum(abs.(img_data_reconstructed - img_data))
-
-# ╔═╡ f0e75616-b7b2-11ea-1187-714258b32e84
-[BWImage(img_data), BWImage(img_data_reconstructed)]
+bw_reconstructed = 📚.U * Diagonal(📚.S) * 📚.V'
 
 # ╔═╡ 1e866730-b7ac-11ea-3df1-9f7f92d504db
 @bind keep HTML("<input type='range' max='$(length(📚.S))' value='10'>")
@@ -344,21 +356,25 @@ Gray.(normalize_mat((
 	), Inf))
 
 # ╔═╡ 917b7e88-b7b1-11ea-1d05-ef95e73ff181
-bw == img_data_reconstructed
+bw == bw_reconstructed
 
 # ╔═╡ Cell order:
 # ╠═06e84756-e4a7-11ea-0c72-351643e66b0f
-# ╠═61d48226-e4a7-11ea-1603-61dc0c38f436
-# ╠═5d6a224c-e4a8-11ea-1cb8-2972b443f834
 # ╟─d7eadad2-b7ad-11ea-22e3-f1e5ded42255
-# ╠═dfd0317e-b85f-11ea-3f2b-fd95c87a0a69
 # ╟─d6f2ee1c-b7ad-11ea-0e1c-fb21a58c5711
-# ╠═841551d2-b861-11ea-08de-c180ca50b9be
 # ╠═54f79f6e-b865-11ea-2f16-ff76fe1f14ed
-# ╠═693f5432-e4a5-11ea-070e-f5fd245ccefc
-# ╠═ef44d20c-e4a8-11ea-0bb5-8fbafddaf2b5
+# ╠═fb667d22-e4be-11ea-073a-65449018db8c
+# ╠═7754f882-e4bf-11ea-0cc3-3b5223f73125
+# ╠═27f61a6e-e4bf-11ea-1130-d3d1ad366536
 # ╟─212d10d6-b7ae-11ea-1434-fb7d45aaf278
-# ╟─42578c50-b7ae-11ea-2f7d-6b8b3df44aed
+# ╠═7b3ee492-e4b7-11ea-0637-bf80c9d4c3a9
+# ╟─0cec122a-e4b8-11ea-3780-a9f681edd329
+# ╟─1cfdfacc-e4bd-11ea-2efb-8707d895025a
+# ╠═848d85ee-e4b7-11ea-3e0c-eb232a9883ef
+# ╠═8e7c030c-e4b7-11ea-3429-312395080f75
+# ╟─3f06949c-e4bd-11ea-21d1-910dae46d2b6
+# ╠═d263df02-e4b7-11ea-3280-6de622af30d3
+# ╠═87d77024-e4bd-11ea-3ceb-d3b8dcc7564b
 # ╟─90715ff6-b7ae-11ea-3780-1d227049322c
 # ╠═b8f3fa2e-b7ae-11ea-1089-3d08cd1e7874
 # ╟─7c8b8c96-b7ae-11ea-149d-61d29d35847c
@@ -367,7 +383,6 @@ bw == img_data_reconstructed
 # ╠═a404b9f8-b7ab-11ea-0b07-a733a3c4f353
 # ╟─07834ab8-b7ba-11ea-0279-77179671d826
 # ╠═a8039914-b7ce-11ea-25fe-03f554383d31
-# ╠═9765a090-b7b0-11ea-3c1f-e5a8ac58d7de
 # ╟─fe4c70fe-b7b0-11ea-232b-1996facd33a0
 # ╠═dbfa7a96-b7b0-11ea-2737-c7bfd486db3c
 # ╟─8e7cb972-b7b1-11ea-2c4d-ed583218740a
@@ -378,7 +393,7 @@ bw == img_data_reconstructed
 # ╟─489b7c9c-b7b1-11ea-3a54-87bd17341b2c
 # ╟─a6dcc77c-b7b2-11ea-0c7d-d5686603d182
 # ╟─b15d683c-b7b2-11ea-1090-b392950bedb6
-# ╟─f0e75616-b7b2-11ea-1187-714258b32e84
+# ╠═f0e75616-b7b2-11ea-1187-714258b32e84
 # ╟─064d5a78-b7b3-11ea-399c-f968bf9c910a
 # ╠═2c7c8cdc-b7b3-11ea-166c-cfd232fd2004
 # ╟─64e51904-b7b3-11ea-0f72-359d63261b21
@@ -399,4 +414,6 @@ bw == img_data_reconstructed
 # ╠═379d608c-b7c9-11ea-1ae2-89a2713a91ff
 # ╠═779fc8e6-b7c9-11ea-0d74-4da167b76227
 # ╟─7485990a-b7af-11ea-10e4-53a3ab5dcea7
-# ╠═74cac824-b861-11ea-37e9-e97065879618
+# ╟─1b7fedd2-e4bf-11ea-2947-dded12a5ea95
+# ╟─74cac824-b861-11ea-37e9-e97065879618
+# ╟─ef44d20c-e4a8-11ea-0bb5-8fbafddaf2b5
