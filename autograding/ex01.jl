@@ -14,6 +14,9 @@ md"""
 Submission by: **_$(student.name)_** ($(student.email))
 """
 
+# ╔═╡ 4e85c810-e7d9-11ea-2c6b-fb2fb7ef4692
+TODO auto add @mit.edu
+
 # ╔═╡ 094e39c8-e6ce-11ea-131b-07c4a1199edf
 
 
@@ -53,6 +56,7 @@ end
 # ╔═╡ Cell order:
 # ╟─a2181260-e6cd-11ea-2a69-8d9d31d1ef0e
 # ╠═7308bc54-e6cd-11ea-0eab-83f7535edf25
+# ╠═4e85c810-e7d9-11ea-2c6b-fb2fb7ef4692
 # ╟─094e39c8-e6ce-11ea-131b-07c4a1199edf
 # ╟─31a8fbf8-e6ce-11ea-2c66-4b4d02b41995
 # ╟─339c2d5c-e6ce-11ea-32f9-714b3628909c
