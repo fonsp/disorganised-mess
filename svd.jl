@@ -142,12 +142,15 @@ To keep things simple (and dependency-free), this notebook only works with downs
 md"# Appendix"
 
 # ╔═╡ 74cac824-b861-11ea-37e9-e97065879618
-function camera_input(maxsize=200)
+function camera_input(;maxsize=200, default_url="https://i.imgur.com/VGPeJ6s.jpg")
 """
 <span class="pl-image">
 <style>
 
 .pl-image video {
+	max-width: 250px;
+}
+.pl-image prompt {
 	max-width: 250px;
 }
 
@@ -167,16 +170,15 @@ function camera_input(maxsize=200)
 </style>
 
 <div id="video-container" title="Click to take a picture">
-<video playsinline autoplay></video>
+	<video playsinline autoplay></video>
+	<div id="prompt">Enable 📸</div>
 </div>
 
 <script>
-// mostly taken from https://github.com/fonsp/printi-static
-// (by the same author)
+// based on https://github.com/fonsp/printi-static (by the same author)
 
 const span = this.currentScript.parentElement
 const video = span.querySelector("video")
-const img = html`<img crossOrigin="anonymous">`
 
 const maxsize = $(maxsize)
 
@@ -228,6 +230,15 @@ span.querySelector("#video-container").onclick = function() {
 	send_source(video, video.videoWidth, video.videoHeight)
 };
 
+
+const img = html`<img crossOrigin="anonymous">`
+	
+img.onload = () => {
+	send_source(img, img.width, img.height)
+}
+img.src = "$(default_url)"
+
+
 </script>
 </span>
 """ |> HTML
@@ -235,6 +246,12 @@ end
 
 # ╔═╡ 54f79f6e-b865-11ea-2f16-ff76fe1f14ed
 @bind raw_camera_data camera_input()
+
+# ╔═╡ 07ec56da-e51d-11ea-3e12-496f3c94775b
+raw_camera_data
+
+# ╔═╡ 2d36d628-e51c-11ea-12d2-3d5bfcc4a297
+camera_input()
 
 # ╔═╡ ef44d20c-e4a8-11ea-0bb5-8fbafddaf2b5
 function process_raw_camera_data(raw_camera_data)
@@ -363,6 +380,7 @@ bw == bw_reconstructed
 # ╟─d7eadad2-b7ad-11ea-22e3-f1e5ded42255
 # ╟─d6f2ee1c-b7ad-11ea-0e1c-fb21a58c5711
 # ╠═54f79f6e-b865-11ea-2f16-ff76fe1f14ed
+# ╠═07ec56da-e51d-11ea-3e12-496f3c94775b
 # ╠═fb667d22-e4be-11ea-073a-65449018db8c
 # ╠═7754f882-e4bf-11ea-0cc3-3b5223f73125
 # ╠═27f61a6e-e4bf-11ea-1130-d3d1ad366536
@@ -415,5 +433,6 @@ bw == bw_reconstructed
 # ╠═779fc8e6-b7c9-11ea-0d74-4da167b76227
 # ╟─7485990a-b7af-11ea-10e4-53a3ab5dcea7
 # ╟─1b7fedd2-e4bf-11ea-2947-dded12a5ea95
-# ╟─74cac824-b861-11ea-37e9-e97065879618
-# ╟─ef44d20c-e4a8-11ea-0bb5-8fbafddaf2b5
+# ╠═2d36d628-e51c-11ea-12d2-3d5bfcc4a297
+# ╠═74cac824-b861-11ea-37e9-e97065879618
+# ╠═ef44d20c-e4a8-11ea-0bb5-8fbafddaf2b5
