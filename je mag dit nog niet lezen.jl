@@ -718,6 +718,14 @@ lines_i_edited = md"""
 Lecture 1, lines 10-50 (_for example_)
 """
 
+# ╔═╡ 8ffe16ce-ee20-11ea-18bd-15640f94b839
+if student.kerberos_id === "jazz"
+	md"""
+!!! danger "Oops!"
+    **Before you submit**, remember to fill in your name and kerberos ID at the top of this notebook!
+	"""
+end
+
 # ╔═╡ 5516c800-edee-11ea-12cf-3f8c082ef0ef
 hint(text) = Markdown.MD(Markdown.Admonition("hint", "Hint", [text]))
 
@@ -1000,6 +1008,9 @@ bigbreak
 bigbreak
 
 # ╔═╡ 0001f782-ee0e-11ea-1fb4-2b5ef3d241e2
+bigbreak
+
+# ╔═╡ 91f4778e-ee20-11ea-1b7e-2b0892bd3c0f
 bigbreak
 
 # ╔═╡ 5842895a-ee10-11ea-119d-81e4c4c8c53b
@@ -1423,6 +1434,8 @@ with_sobel_edge_detect(sobel_camera_image)
 # ╟─0001f782-ee0e-11ea-1fb4-2b5ef3d241e2
 # ╟─1b85ee76-ee10-11ea-36d7-978340ef61e6
 # ╠═477d0a3c-ee10-11ea-11cf-07b0e0ce6818
+# ╟─91f4778e-ee20-11ea-1b7e-2b0892bd3c0f
+# ╟─8ffe16ce-ee20-11ea-18bd-15640f94b839
 # ╟─5842895a-ee10-11ea-119d-81e4c4c8c53b
 # ╟─5516c800-edee-11ea-12cf-3f8c082ef0ef
 # ╟─57360a7a-edee-11ea-0c28-91463ece500d
