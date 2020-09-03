@@ -918,7 +918,7 @@ else
 			still_missing()
 		elseif isnothing(result)
 			keep_working(md"Did you forget to write `return`?")
-		elseif !(result ≈ shouldbe) && !(result ≈ shouldbe2)
+		elseif !(result == shouldbe) && !(result == shouldbe2)
 			keep_working()
 		else
 			correct()
