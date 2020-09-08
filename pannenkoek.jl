@@ -1,7 +1,8 @@
 ### A Pluto.jl notebook ###
-# v0.9.2
+# v0.11.12
 
 using Markdown
+using InteractiveUtils
 
 # ╔═╡ e2ebf2b8-a0c6-11ea-3e52-d30d8b48d57c
 struct Pannenkoek
