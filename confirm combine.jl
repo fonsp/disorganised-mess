@@ -61,6 +61,6 @@ and a checkbox: $(CheckBox())
 sleep(1); xoxo
 
 # ╔═╡ Cell order:
-# ╠═e50355d6-fa7f-11ea-2e0d-673c49836136
 # ╠═fa03a8ca-fa7f-11ea-2021-bfb9dc7ff411
+# ╠═e50355d6-fa7f-11ea-2e0d-673c49836136
 # ╟─3bad3496-fa7e-11ea-333f-57ed97316b28
