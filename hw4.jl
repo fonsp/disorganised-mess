@@ -4,6 +4,15 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        el
+    end
+end
+
 # ╔═╡ 12cc2940-0403-11eb-19a7-bb570de58f6f
 begin
 	using Pkg
@@ -12,17 +21,15 @@ end
 
 # ╔═╡ 15187690-0403-11eb-2dfd-fd924faa3513
 begin
-	Pkg.add([
-			"Plots",
-			"PlutoUI",
-			])
+	Pkg.add(["Plots", "PlutoUI",])
 
 	using Plots
+	plotly()
 	using PlutoUI
 end
 
 # ╔═╡ 01341648-0403-11eb-2212-db450c299f35
-md"_homework 4, version 0_"
+md"_homework 4, version 1_"
 
 # ╔═╡ 06f30b2a-0403-11eb-0f05-8badebe1011d
 md"""
@@ -56,64 +63,44 @@ md"_Let's create a package environment:_"
 
 # ╔═╡ 1d3356c4-0403-11eb-0f48-01b5eb14a585
 html"""
-<iframe width="100%" height="450px" src="https://www.youtube.com/embed/ConoBmjlivs?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-""";
+<iframe width="100%" height="450px" src="https://www.youtube.com/embed/Yx055xdSkx0?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+"""
 
 # ╔═╡ df8547b4-0400-11eb-07c6-fb370b61c2b6
 md"""
 ## **Exercise 1:** _Modelling recovery_
 
 In this exercise we will investigate a simple stochastic (probabilistic) model of recovery from an infection and
-the time $\tau$ needed to recover. Although this model can be easily studied analytically using probability theory, we will instead use computational methods. [If you know about this distribution already, try to ignore what you know about it!]
+the time $\tau$ needed to recover. Although this model can be easily studied analytically using probability theory, we will instead use computational methods. (If you know about this distribution already, try to ignore what you know about it!)
 
 In this model, an individual who is infected has a constant probability $p$ to recover each day. If they recover on day $n$ then $\tau$ takes the value $n$. Each time we run a new experiment $\tau$ will take on different values, so $\tau$ is a (discrete) random variable. We thus need to study statistical properties of $\tau$, such as its mean and its probability distribution.
 
 #### Exercise 1.1 - _Probability distributions_
 
-👉 Define the function `bernoulli(p)` from lectures. Recall that this generates `true` with probability $p$ and `false` with probability $(1 - p)$.
+👉 Define the function `bernoulli(p)`, which returns `true` with probability $p$ and `false` with probability $(1 - p)$.
 
 """
 
-# ╔═╡ d8797684-0414-11eb-1869-5b1e2c469011
-function bernoulli(p::Number)
-	rand() < p
-end
-
 # ╔═╡ 02b0c2fc-0415-11eb-2b40-7bca8ea4eef9
-# function bernoulli(p::Number)
+function bernoulli(p::Number)
 	
-	
-# 	return missing
-# end
+	return missing
+end
 
 # ╔═╡ 76d117d4-0403-11eb-05d2-c5ea47d06f43
 md"""
 👉 Write a function `recovery_time(p)` that returns the time taken until the person recovers. 
 """
 
-# ╔═╡ 6d5c6a84-0415-11eb-3fdf-9355200cb520
+# ╔═╡ d57c6a5a-041b-11eb-3ab4-774a2d45a891
 function recovery_time(p)
 	if p ≤ 0
 		throw(ArgumentError("p must be positive: p = 0 cannot result in a recovery"))
 	end
 	
-	recovered = bernoulli(p)
-	if recovered
-		0
-	else
-		1 + recovery_time(p)
-	end
+	# Your code here. See the comment below about the p ≤ 0 case.
+	return missing
 end
-
-# ╔═╡ d57c6a5a-041b-11eb-3ab4-774a2d45a891
-# function recovery_time(p)
-# 	if p ≤ 0
-# 		throw(ArgumentError("p must be positive: p = 0 cannot result in a recovery"))
-# 	end
-# 	
-# 	# Your code here. See the comment below about the p ≤ 0 case.
-# 	return missing
-# end
 
 # ╔═╡ 6db6c894-0415-11eb-305a-c75b119d89e9
 md"""
@@ -139,27 +126,22 @@ blablabla
 
 # ╔═╡ 76f62d64-0403-11eb-27e2-3de58366b619
 md"""
+#### Exercise 1.2
 👉 Write a function `do_experiment(p, N)` that runs the function `recovery_time` `N` times and collects the results into a vector.
 """
 
-# ╔═╡ cdaade9c-0416-11eb-0550-7b5b3d33e240
-function do_experiment(p, N)
-	map(1:N) do _
-		recovery_time(p)
-	end
-end
-
 # ╔═╡ c5c7cb86-041b-11eb-3360-45463105f3c9
-# function do_experiment(p, N)
+function do_experiment(p, N)
 	
-# 	return missing
-# end
+	return missing
+end
 
 # ╔═╡ d8abd2f6-0416-11eb-1c2a-f9157d9760a7
 small_experiment = do_experiment(0.5, 20)
 
 # ╔═╡ 771c8f0c-0403-11eb-097e-ab24d0714ad5
 md"""
+#### Exercise 1.3
 👉 Write a function `frequencies(data)` that calculates and returns the frequencies (i.e. probability distribution) of input data.
 
 The input will be an array of integers, **with duplicates**, and the result will be a dictionary that maps each occured value to its frequency in the data.
@@ -180,20 +162,11 @@ Dict(
 As with any probability distribution, it should be normalised to $1$, in the sense that the *total* probability should be $1$.
 """
 
-# ╔═╡ aa6673d4-0417-11eb-32cc-79560896c195
-function frequencies(values)
-	result = Dict()
-	for x in values
-		result[x] = get(result, x, 0) + 1/length(values)
-	end
-	result
-end
-
 # ╔═╡ 105d347e-041c-11eb-2fc8-1d9e5eda2be0
-# function frequencies(values)
+function frequencies(values)
 	
-# 	return missing
-# end
+	return missing
+end
 
 # ╔═╡ 1ca7a8c2-041a-11eb-146a-15b8cdeaea72
 frequencies(small_experiment)
@@ -207,88 +180,88 @@ Let's run an experiment with $p=0.25$ and $N=10,000$.
 large_experiment = do_experiment(0.25, 10_000) 
 # (10_000 is just 10000 but easier to read)
 
-# ╔═╡ 6c7891f2-0419-11eb-1137-e7ec60266b26
-frequencies(large_experiment)
-
 # ╔═╡ dc784864-0430-11eb-1478-d1153e017310
 md"""
 The frequencies dictionary is difficult to interpret on its own, so instead, we will **plot** it, i.e. plot $P(\tau = n)$ against $n$, where $n$ is the recovery time.
 
-
+Plots.jl comes with a function `bar`, which does exactly what we want:
 """
 
-# ╔═╡ 45caf17c-041a-11eb-1e14-a98b934da463
-"""
-	frequencies_plot(data::Vector)
+# ╔═╡ 8a28c56e-04b4-11eb-279c-3b4dfb2a9f9b
+bar(frequencies(large_experiment))
 
-Compute the frequencies of the given data, and return a _bar plot_ of those.
+# ╔═╡ 9374e63c-0493-11eb-0952-4b97512d7cdb
+md"""
+Great! Feel free to experiment with this function, try giving it a different array as argument. Plots.jl is pretty clever, it even works with an array of strings!
+
+#### Exercise 1.4
+Next, we want to **add a new element** to our plot: a vertical line. To demonstrate how this works, here we added a vertical line at the _maximum value_.
+
+To write this function, we first create a **base plot**, we then **modify** that plot to add the vertical line, and finally, we **return** the plot. More on this in [the next info box](#note_about_plotting).
 """
-function frequencies_plot(data::Vector)
-	freqs = frequencies(data)
+
+# ╔═╡ 823364ce-041c-11eb-2467-7ffa4f751527
+function frequencies_plot_with_maximum(data::Vector)
+	base = bar(frequencies(data))
+	vline!(base, [maximum(data)], label="maximum")
 	
-	# we turn the dictionary into a vector of pairs (same data, different structure)
-	pairs = collect(freqs)
-	# we create the bar plot
-	p = bar(first.(pairs), last.(pairs), label=nothing)
-	# and return the plot
-	return p
+	return base
 end
 
-# ╔═╡ 2a6ab940-0430-11eb-204b-c58dc521ae36
-frequencies_plot(large_experiment)
+# ╔═╡ 1ddbaa18-0494-11eb-1fc8-250ab6ae89f1
+frequencies_plot_with_maximum(large_experiment)
 
 # ╔═╡ f3f81172-041c-11eb-2b9b-e99b7b9400ed
 md"""
+$(html"<span id=note_about_plotting></span>")
 > ### Note about plotting
 > 
 > Plots.jl has an interesting property: a plot is an object, not an action. Functions like `plot`, `bar`, `histogram` don't draw anything on your screen - they just return a `Plots.Plot`. This is a struct that contains the _description_ of a plot (what data should be plotted in what way?), not the _picture_.
 > 
-> So a Pluto cell with a single line, `plot(1:10)`, will show a plot, because the _result_ of the function `plot` is a `Plot` object, and Pluto always shows the result of a cell.
+> So a Pluto cell with a single line, `plot(1:10)`, will show a plot, because the _result_ of the function `plot` is a `Plot` object, and Pluto just shows the result of a cell.
 >
 > ##### Modifying plots
 > Nice plots are often formed by overlaying multiple plots. In Plots.jl, this is done using the **modifying functions**: `plot!`, `bar!`, `vline!`, etc. These take an extra (first) argument: a previous plot to modify.
 > 
-> For example, to plot the `sin` and `cos` functions in the same view, we do:
+> For example, to plot the `sin`, `cos` and `tan` functions in the same view, we do:
 > ```julia
 > function sin_cos_plot()
->     T = 0.0:0.01:5.0
+>     T = -1.0:0.01:1.0
 >     
->     original = plot(T, sin.(T))
->     plot!(original, T, cos.(T))
+>     result = plot(T, sin.(T))
+>     plot!(result, T, cos.(T))
+>     plot!(result, T, tan.(T))
 >
->     return original
+>     return result
 > end
 > ```
-"""
-
-# ╔═╡ 823364ce-041c-11eb-2467-7ffa4f751527
-let
-	base = frequencies_plot(large_experiment)
-	vline!(base, [maximum(large_experiment)], label="maximum")
-end
-
-# ╔═╡ c68ebd1e-0433-11eb-048b-4b6900f79970
-md"""
-_(`let` can group multiple expressions together into one, and variables defined inside of it are **local**: they don't affect code outside of the block. So like `begin`, it is just a block of code (like brackets in mathematics), but like `function`, it has a local variable scope.)_
+> 
+> 💡 This example demonstrates a useful pattern to combine plots:
+> 1. Create a **new** plot and store it in a variable
+> 2. **Modify** that plot to add more elements
+> 3. Return the plot
+> 
+> It is recommended that these 3 steps happen **within a single cell**. This can prevent some strange glitches when re-running cells. There are three ways to group expressions together into a single cell: `begin`, `let` and `function`. More on this [later](#function_begin_let)!
 """
 
 # ╔═╡ 7768a2dc-0403-11eb-39b7-fd660dc952fe
 md"""
-6. Calculate the mean recovery time and add it to the plot using the `vline!()` function and the `ls=:dash` argument to make a dashed line.
-
-    [`vline!` takes a *vector* of values at which you want to draw vertical lines.]
-
+👉 Write the function `frequencies_plot_with_mean` that calculates the mean recovery time and displays it using a vertical line. 
 """
 
-# ╔═╡ 778ec25c-0403-11eb-3146-1d11c294bb1f
-md"""
-7. What shape does the distribution seem to have? Can you verify that by using one or more log scales? Feel free to increase `N` (while being careful not to overstretch your computing power with these kinds of calculations!).
+# ╔═╡ f1f89502-0494-11eb-2303-0b79d8bbd13f
+function frequencies_plot_with_mean(data)
+	# start out by copying the frequencies_plot_with_maximum function
+	
+	return missing
+end
 
-"""
+# ╔═╡ 06089d1e-0495-11eb-0ace-a7a7dc60e5b2
+frequencies_plot_with_mean(large_experiment)
 
 # ╔═╡ 77b54c10-0403-11eb-16ad-65374d29a817
 md"""
-👉 Write an interactive visualization that draws the histogram and mean for $p$ between $0.01$ (not $0$!) and $1$, and $N$ between $1$ and $100,000$, say.
+👉 Write an interactive visualization that draws the histogram and mean for $p$ between $0.01$ (not $0$!) and $1$, and $N$ between $1$ and $100,000$, say. To avoid a naming conflict, call them `p_interactive` and `N_interactive`, instead of just `p` and `N`.
 """
 
 # ╔═╡ bb63f3cc-042f-11eb-04ff-a128aec3c378
@@ -299,21 +272,23 @@ md"""
 As you separately vary $p$ and $N$, what do you observe about the **mean** in each case? Does that make sense?
 """
 
+# ╔═╡ 778ec25c-0403-11eb-3146-1d11c294bb1f
+md"""
+#### Exercise 1.5
+👉 What shape does the distribution seem to have? Can you verify that by adding a second plot with the expected shape?
+"""
+
+# ╔═╡ 7bb8e426-0495-11eb-3a8b-cbbab61a1631
+
+
 # ╔═╡ 77db111e-0403-11eb-2dea-4b42ceed65d6
 md"""
+#### Exercise 1.6
 👉 Use $N = 10,000$ to calculate the mean time $\langle \tau(p) \rangle$ to recover as a function of $p$ between $0.001$ and $1$ (say). Plot this relationship.
 
 """
 
 # ╔═╡ 7335de44-042f-11eb-2873-8bceef722432
-
-
-# ╔═╡ 78013f76-0403-11eb-3855-dd4e8ba271c3
-md"""
-👉 By looking at the shape of the graph, guess the functional form $\langle \tau(p) \rangle = f(p)$. Use this guess to plot the data in a different way to obtain a straight line, and hence verify your guess. (If you didn't quite get it right, record your different attempts and try again!)
-"""
-
-# ╔═╡ 97804ff0-042f-11eb-262f-5d9072a80337
 
 
 # ╔═╡ 61789646-0403-11eb-0042-f3b8308f11ba
@@ -329,6 +304,8 @@ The model is an **individual-based** or **agent-based** model:
 we explicitly keep track of each individual, or **agent**, in the population and their
 infection status. For the moment we will not keep track of their position in space;
 we will just assume that there is some mechanism, not included in the model, by which they interact with other individuals.
+
+#### Exercise 2.1
 
 Each agent will have its own **internal state**, modelling its infection status, namely "susceptible", "infectious" or "recovered". We would like to code these as values `S`, `I` and `R`, respectively. One way to do this is using an [**enumerated type**](https://en.wikipedia.org/wiki/Enumerated_type) or **enum**. Variables of this type can take only a pre-defined set of values; the Julia syntax is as follows:
 """
@@ -361,7 +338,9 @@ md"""
 
 # ╔═╡ 860790fc-0403-11eb-2f2e-355f77dcc7af
 md"""
-2. For each agent we want to keep track of its infection status and the number of *other* agents that it infects during the simulation. A good solution for this is to define a *new type* `Agent` to hold all of the information for one agent, as follows:
+#### Exercise 2.2
+
+For each agent we want to keep track of its infection status and the number of *other* agents that it infects during the simulation. A good solution for this is to define a *new type* `Agent` to hold all of the information for one agent, as follows:
 """
 
 # ╔═╡ ae4ac4b4-041f-11eb-14f5-1bcde35d18f2
@@ -377,8 +356,8 @@ When you define a new type like this, Julia automatically defines one or more **
 👉 Use the `methods` function to check how many constructors are pre-defined for the `Agent` type.
 """
 
-# ╔═╡ 18758408-0424-11eb-17fc-2bb4088b03ba
-methods(Agent)
+# ╔═╡ 60a8b708-04c8-11eb-37b1-3daec644ac90
+
 
 # ╔═╡ 189cae1e-0424-11eb-2666-65bf297d8bdd
 md"""
@@ -390,23 +369,28 @@ test_agent = missing
 
 # ╔═╡ 190deebc-0424-11eb-19fe-615997093e14
 md"""
-The `Agent` struct currently has TODODODO
+👉 For convenience, define a new constructor (i.e. a new method for the function) that takes no arguments and creates an `Agent` with status `S` and number infected 0, by calling one of the default constructors that Julia creates. This new method lives *outside* (not inside) the definition of the `struct`. (It is called an **outer constructor**.)
 
-👉 Define a new constructor (i.e. a new method for the function) that takes no arguments and creates an `Agent` with status `S` and number infected 0, by calling one of the default constructors that Julia creates. This new method lives *outside* (not inside) the definition of the `struct`. [It is called an **outer constructor**.]. Check that the new method works correctly.
+(In Pluto, multiple methods for the same function need to be combined in a single cell using a `begin end` block.)
 
-(iv) How many methods does the constructor have now?
+Let's check that the new method works correctly. How many methods does the constructor have now?
 
 """
 
+# ╔═╡ 82f2580a-04c8-11eb-1eea-bdb4e50eee3b
+Agent()
+
 # ╔═╡ 8631a536-0403-11eb-0379-bb2e56927727
 md"""
+#### Exercise 2.3
 👉 Write functions `set_status!(a)` and `set_num_infected!(a)` which modify the respective fields of an `Agent`. Check that they work. [Note the bang ("`!`") at the end of the function names to signify that these functions *modify* their argument.]
 
 """
 
 # ╔═╡ 98beb336-0425-11eb-3886-4f8cfd210288
-function set_status!(a::Agent)
+function set_status!(agent::Agent, new_status::InfectionStatus)
 	
+	# your code here
 end
 
 # ╔═╡ 866299e8-0403-11eb-085d-2b93459cc141
@@ -429,22 +413,25 @@ end
 
 # ╔═╡ 8692bf42-0403-11eb-191f-b7d08895274f
 md"""
+#### Exericse 2.4
 👉 Write a function `generate_agents(N)` that returns a vector of `N` freshly created `Agent`s. They should all be initially susceptible, except one, chosen at random (i.e. uniformly), who is infectious.
 
 """
 
-# ╔═╡ 6d480cf0-0425-11eb-18a9-1737455371d7
+# ╔═╡ 7946d83a-04a0-11eb-224b-2b315e87bc84
 function generate_agents(N::Integer)
 	
 	return missing
 end
 
+# ╔═╡ 488771e2-049f-11eb-3b0a-0de260457731
+generate_agents(3)
+
 # ╔═╡ 86d98d0a-0403-11eb-215b-c58ad721a90b
 md"""
 We will also need types representing different infections. 
 
-👉 Define an (immutable) `struct` called `InfectionRecovery` with parameters `p_infection` and `p_recovery`. You may make it a subtype of an abstract `AbstractInfection` type if you wish (but this is not strictly necessary). TODO
-
+Let's define an (immutable) `struct` called `InfectionRecovery` with parameters `p_infection` and `p_recovery`. We will make it a subtype of an abstract `AbstractInfection` type, because we will define more infection types later.
 """
 
 # ╔═╡ 223933a4-042c-11eb-10d3-852229f25a35
@@ -456,6 +443,39 @@ struct InfectionRecovery <: AbstractInfection
 	p_recovery
 end
 
+# ╔═╡ 2d3bba2a-04a8-11eb-2c40-87794b6aeeac
+md"""
+#### Exercise 2.5
+👉 Write a function `interact!` that takes an affected `agent` of type `Agent`, an `source` of type `Agent` and an `infection` of type `InfectionRecovery`.  It implements a single (one-sided) interaction between two agents: 
+
+- If the `agent` is susceptible and the `source` is infectious, then the `source` infects our `agent` with the given infection probability. If the `source` successfully infects the other agent, then its `num_infected` record must be updated.
+- If the `agent` is infected then it recovers with the relevant probability.
+- Otherwise, nothing happens.
+
+$(html"<span id=interactfunction></span>")
+"""
+
+# ╔═╡ 406aabea-04a5-11eb-06b8-312879457c42
+function interact!(agent::Agent, source::Agent, infection::InfectionRecovery)
+	# your code here
+end
+
+# ╔═╡ b21475c6-04ac-11eb-1366-f3b5e967402d
+md"""
+Play around with the test case below to test your function! Try changing the definitions of `agent`, `source` and `infection`. Since we are working with randomness, you might want to run the cell multiple times.
+"""
+
+# ╔═╡ 9c39974c-04a5-11eb-184d-317eb542452c
+let
+	agent = Agent(S, 0)
+	source = Agent(I, 0)
+	infection = InfectionRecovery(0.9, 0.5)
+	
+	interact!(agent, source, infection)
+	
+	(agent=agent, source=source)
+end
+
 # ╔═╡ 619c8a10-0403-11eb-2e89-8b0974fb01d0
 md"""
 ## **Exercise 3:** _Agent-based model for an epidemic outbreak --  Monte Carlo simulation_
@@ -464,28 +484,21 @@ In this exercise we will build on Exercise 2 to write a Monte Carlo simulation o
 
 Make sure to re-use the functions that we have already written, and introduce new ones if they are helpful! Short functions make it easier to understand what the function does and build up new functionality piece by piece.
 
-You may not use any global variables inside the functions: Each function must accept as arguments all the information it requires to carry out its task. You need to think carefully about what the information each function requires.
+You should not use any global variables inside the functions: Each function must accept as arguments all the information it requires to carry out its task. You need to think carefully about what the information each function requires.
 
-👉 Write a function `step!` that takes a vector `agents` of `Agent`s and an `infection` of type `InfectionRecovery`.  It implements a single step of the infection dynamics by modifying `agents` as follows: 
+#### Exercise 3.1
 
-- Choose a random agent. Each of the following steps deals with that agent.
-- If it is not infectious then nothing happens.
-- If it is infectious then a function `infect!` is called with this agent, another random agent, and the `infection` object; it infects the other agent with the given infection probability if the other agent is susceptible. If it successfully infects the other agent, its `num_infected` record must be updated.
-- It recovers with the relevant probability. This should be in a function `recover!`.
+👉 Write a function `step!` that takes a vector of `Agent`s and an `infection` of type `InfectionRecovery`. It implements a single step of the infection dynamics as follows: 
 
-$(html"<span id=stepfunction></span>")
+- Choose two random agents: an `agent` and a `source`.
+- Apply `interact!(agent, source, infection)`.
+- Return `agents`.
+
 """
 
 # ╔═╡ 2ade2694-0425-11eb-2fb2-390da43d9695
-function step!(agents::Vector{Agent}, infection::InfectionRecovery)
-	
-	
-end
-
-# ╔═╡ a336f36a-042c-11eb-3e1b-2df0ee60936d
-let
-	original = generate_agents(5)
-	TODOTODO
+function step!(agents::Vector{Agent}, infection::AbstractInfection)
+	# your code here
 end
 
 # ╔═╡ 955321de-0403-11eb-04ce-fb1670dfbb9e
@@ -493,9 +506,9 @@ md"""
 👉 Write a function `sweep!`. It runs `step!` $N$ times, where $N$ is the number of agents. Thus each agent acts, on average, once per sweep; a sweep is thus the unit of time in our Monte Carlo simulation.
 """
 
-# ╔═╡ 32cea7ba-0429-11eb-06bc-a5f4ae3ffe37
+# ╔═╡ 46133a74-04b1-11eb-0b46-0bc74e564680
 function sweep!(agents::Vector{Agent}, infection::AbstractInfection)
-	
+	# your code here
 end
 
 # ╔═╡ 95771ce2-0403-11eb-3056-f1dc3a8b7ec3
@@ -504,49 +517,156 @@ md"""
 
 1. Generate the $N$ agents.
 
-2. Run `sweep!` a number $T$ of times. Calculate and store the total number of agents with each status at each step in variables `Ss`, `Is` and `Rs`.
+2. Run `sweep!` a number $T$ of times. Calculate and store the total number of agents with each status at each step in variables `S_counts`, `I_counts` and `R_counts`.
 
-3. Return the vectors `Ss`, `Is` and `Rs`, as well as the probability distribution of `num_infected` over the whole population as outputs of the function.
+3. Return the vectors `S_counts`, `I_counts` and `R_counts` in a **named tuple**, with keys `S`, `I` and `R`.
+
+You've seen an example of named tuples before: the `student` variable at the top of the notebook!
+
+_Feel free to store the counts in a different way, as long as the return type is the same._
 """
 
-# ╔═╡ 3d3b672c-0426-11eb-0a36-153ce3c276b9
-function simulation(N::Integer, infection::AbstractInfection, T::Integer)
+# ╔═╡ 887d27fc-04bc-11eb-0ab9-eb95ef9607f8
+function simulation(N::Integer, T::Integer, infection::AbstractInfection)
+
+	# your code here
+	
+	return (S=missing, I=missing, R=missing)
+end
+
+# ╔═╡ b92f1cec-04ae-11eb-0072-3535d1118494
+simulation(3, 20, InfectionRecovery(0.9, 0.2))
+
+# ╔═╡ 2c62b4ae-04b3-11eb-0080-a1035a7e31a2
+simulation(100, 1000, InfectionRecovery(0.005, 0.2))
+
+# ╔═╡ 28db9d98-04ca-11eb-3606-9fb89fa62f36
+@bind run_basic_sir Button("Run simulation again!")
+
+# ╔═╡ c5156c72-04af-11eb-1106-b13969b036ca
+let
+	run_basic_sir
+	
+	N = 100
+	T = 1000
+	sim = simulation(N, T, InfectionRecovery(0.02, 0.002))
+	
+	result = plot(1:T, sim.S, ylim=(0, N), label="Susceptible")
+	plot!(result, 1:T, sim.I, ylim=(0, N), label="Infectious")
+	plot!(result, 1:T, sim.R, ylim=(0, N), label="Recovered")
+end
+
+# ╔═╡ 0a967f38-0493-11eb-0624-77e40b24d757
+md"""
+We used a `let` block in this cell to group multiple expressions together, but how is it different from `begin` or `function`?
+
+$(html"<span id=function_begin_let></span>")
+> ##### _**function**_ vs. _**begin**_ vs. _**let**_
+> Writing functions is a way to group multiple expressions (i.e. lines of code) together into a mini-program. Note the following about functions:
+> - A function always returns **one object**.[^1] This object can be given explicitly by writing `return x`, or implicitly: Julia functions always return the result of the last expression by default. So `f(x) = x+2` is the same as `f(x) = return x+2`.
+> - Variables defined inside a function are _not accessible outside the function_. We say that function bodies have a **local scope**. This helps to keep your program easy to read and write: if you define a local variable, then you don't need to worry about it in the rest of the notebook.
+> 
+> There are two other ways to group epxressions together that you might have seen before: `begin` and `let`.
+> 
+> ###### begin
+> **`begin`** will group expressions together, and it takes the value of its last subexpression. 
+>     
+> We use it in this notebook when we want multiple expressions to always run together.
+> 
+> ###### let
+> **`let`** also groups multiple expressions together into one, but variables defined inside of it are **local**: they don't affect code outside of the block. So like `begin`, it is just a block of code, but like `function`, it has a local variable scope.
+> 
+> We use it when we want to define some local (temporary) variables to produce a complicated result, without interfering with other cells. Pluto allows only one definition per _global_ variable of the same name, but you can define _local_ variables with the same names whenever you wish!
+> 
+> [^1]: Even a function like 
+>     
+>     `f(x) = return`
+>     
+>     returns **one object**: the object `nothing` — try it out!
+"""
+
+# ╔═╡ bf6fd176-04cc-11eb-008a-2fb6ff70a9cb
+md"""
+#### Exercise 3.2
+Alright! Every time that we run the simulation, we get slightly different results, because it is based on randomness. By running the simulation a number of times, you start to get an idea of the _mean behaviour_ of our model. This is the essence of a Monte Carlo method! You use computer-generated randomness to generate samples.
+
+Instead of pressing the button many times, let's have the computer repeat the simulation. In the next cells, we run your simulation `num_simulations=20` times with $N=100$, $p_\text{infection} = 0.02$, $p_\text{infection} = 0.002$ and $T = 1000$. 
+
+Every single simulation returns a named tuple with the status counts, so the result of multiple simulations will be an array of those. Have a look inside the result, `simulations`, and make sure that its structure is clear.
+"""
+
+# ╔═╡ 38b1aa5a-04cf-11eb-11a2-930741fc9076
+function repeat_simulations(N, T, infection, num_simulations)
+	N = 100
+	T = 1000
+	
+	map(1:num_simulations) do _
+		simulation(N, T, infection)
+	end
+end
+
+# ╔═╡ 80c2cd88-04b1-11eb-326e-0120a39405ea
+simulations = repeat_simulations(100, 1000, InfectionRecovery(0.02, 0.002), 20)
+
+# ╔═╡ 80e6f1e0-04b1-11eb-0d4e-475f1d80c2bb
+md"""
+In the cell below, we plot the evolution of the number of $I$ individuals as a function of time for each of the simulations on the same plot using transparency (`alpha=0.5` inside the plot command).
+"""
+
+# ╔═╡ 9cd2bb00-04b1-11eb-1d83-a703907141a7
+let
+	p = plot()
+	
+	for sim in simulations
+		plot!(p, 1:1000, sim.I, alpha=.5, label=nothing)
+	end
+	
+	p
+end
+
+# ╔═╡ 95c598d4-0403-11eb-2328-0175ed564915
+md"""
+👉 Write a function `sir_mean_plot` that returns a plot of the means of $S$, $I$ and $R$ as a function of time on a single graph.
+"""
+
+# ╔═╡ 843fd63c-04d0-11eb-0113-c58d346179d6
+function sir_mean_plot(simulations::Vector{<:NamedTuple})
+	# you might need T for this function, here's a trick to get it:
+	T = length(first(simulations).S)
 	
 	return missing
 end
 
-# ╔═╡ 959ef526-0403-11eb-07d1-192e7e83c942
+# ╔═╡ 7f635722-04d0-11eb-3209-4b603c9e843c
+sir_mean_plot(simulations)
+
+# ╔═╡ dfb99ace-04cf-11eb-0739-7d694c837d59
 md"""
-👉 Run your simulation 50 times with $N=100$ with $p_\text{infection} = 0.02$ and $T = 1000$. Store the data in vectors `all_Is` etc.; note that these will be vectors of vectors!
-
-👉 Plot the evolution of the number of $I$ individuals as a function of time for each of the 50 graphs on the same plot using transparency [`alpha=0.5` inside the plot command].
-
-👉 Calculate the mean trajectory using the `mean` function applied to `all_Is`. Add it to the plot using a heavier line [`lw=3` for "linewidth"].
-
+👉 Allow $p_\text{infection}$ and $p_\text{recovery}$ to be changed interactively and find parameter values for which you observe an epidemic outbreak.
 """
 
-# ╔═╡ 95c598d4-0403-11eb-2328-0175ed564915
-md"""
-👉 Plot the means of $S$, $I$ and $R$ as a function of time on a single graph.
-    Allow $p_\text{infection}$ and $T$ to be changed interactively and find parameter values for which you observe an epidemic outbreak.
-
-"""
-
-# ╔═╡ 2e21c38a-0435-11eb-1fa3-65acce73108d
+# ╔═╡ 1c6aa208-04d1-11eb-0b87-cf429e6ff6d0
 
 
 # ╔═╡ 95eb9f88-0403-11eb-155b-7b2d3a07cff0
 md"""
-👉 Calculate the standard deviation $\sigma$ of $I$ at each step. (The result should thus be a *vector*.) Add this to the plot using **error bars**, using the option `yerr=σ` in the plot command; use transparency.
+👉 Write a function `sir_mean_error_plot` that does the same as `sir_mean_plot`, which also computes the **standard deviation** $\sigma$ of $S$, $I$, $R$ at each step. Add this to the plot using **error bars**, using the option `yerr=σ` in the plot command; use transparency.
 
 This should confirm that the distribution of $I$ at each step is pretty wide!
 """
 
 # ╔═╡ 287ee7aa-0435-11eb-0ca3-951dbbe69404
-
+function sir_mean_error_plot(simulations::Vector{<:NamedTuple})
+	# you might need T for this function, here's a trick to get it:
+	T = length(first(simulations).S)
+	
+	return missing
+end
 
 # ╔═╡ 9611ca24-0403-11eb-3582-b7e3bb243e62
 md"""
+#### Exercise 3.3
+
 👉 Plot the probability distribution of `num_infected`. Does it have a recognisable shape? (Feel free to increase the number of agents in order to get better statistics.)
 
 """
@@ -556,6 +676,7 @@ md"""
 
 # ╔═╡ 9635c944-0403-11eb-3982-4df509f6a556
 md"""
+#### Exercse 3.4
 👉 What are three *simple* ways in which you could characterise the magnitude (size) of the epidemic outbreak? Find approximate values of these quantities for one of the runs of your simulation.
 
 """
@@ -565,26 +686,31 @@ md"""
 
 # ╔═╡ 61c00724-0403-11eb-228d-17c11670e5d1
 md"""
-
-## Exercise 4: Reinfection
+## **Exercise 4:** _Reinfection_
 
 In this exercise we will *re-use* our simulation infrastructure to study the dynamics of a different type of infection: there is no immunity, and hence no "recovery" rather, susceptible individuals may now be **re-infected** 
 
-1. Make a new infection type `Reinfection`. This has the *same* two fields, `p_infection` and `p_recovery`. However, "recovery" now means "becomes susceptible again", instead of "moves to the `R` class. 
+#### Exercise 4.1
+👉 Make a new infection type `Reinfection`. This has the *same* two fields as `InfectionRecovery` (`p_infection` and `p_recovery`). However, "recovery" now means "becomes susceptible again", instead of "moves to the `R` class. 
 
+This new type `Reinfection` should also be a **subtype** of `AbstractInfection`. This allows us to reuse our previous functions, which are defined for the abstract supertype.
 """
+
+# ╔═╡ 8dd97820-04a5-11eb-36c0-8f92d4b859a8
+
 
 # ╔═╡ 99ef7b2a-0403-11eb-08ef-e1023cd151ae
 md"""
-👉 Make a *new method* for the `step!` function that accepts the new infection type as argument, reusing as much functionality as possible from the previous version. 
+👉 Make a *new method* for the `interact!` function that accepts the new infection type as argument, reusing as much functionality as possible from the previous version. 
 
-Write it in the same cell as [our previous `step!` method](#stepfunction), and use a `begin` block to group the two definitions together.
+Write it in the same cell as [our previous `interact!` method](#interactfunction), and use a `begin` block to group the two definitions together.
 
 """
 
 # ╔═╡ 9a13b17c-0403-11eb-024f-9b37e95e211b
 md"""
-👉 Run the simulation 50 times and plot $I$ as a function of time for each one, together with the mean over the 50 simulations (as you did in Exercise 2).
+#### Exercise 4.2
+👉 Run the simulation 20 times and plot $I$ as a function of time for each one, together with the mean over the 20 simulations (as you did in the previous exercises).
 
 Note that you should be able to re-use the `sweep!` and `simulation` functions , since those should be sufficiently **generic** to work with the new `step!` function! (Modify them if they are not.)
 
@@ -648,12 +774,14 @@ hint(md"""
 Do you remember how we worked with dictionaries in Homework 3? You can create an empty dictionary using `Dict()`. You may want to use either the function `haskey` or the function `get` on your dictionary -- check the documentation for how to use these functions.
 """)
 
-# ╔═╡ 5c6efd5c-0426-11eb-13cf-bd838f48bd71
-hint(md"""
-We can return more than one output using the syntax
-	
-`return (a, b)`
-""")
+# ╔═╡ 9cf9080a-04b1-11eb-12a0-17013f2d37f5
+md"""
+👉 Calculate the **mean number of infectious agents** of our simulations for each time step. Add it to the plot using a heavier line (`lw=3` for "linewidth") by modifying the cell above. 
+
+Check the answer yourself: does your curve follow the average trend?
+
+$(hint(md"This exercise requires some creative juggling with arrays, anonymous functions, `map`s, or whatever you see fit!"))
+"""
 
 # ╔═╡ 461586dc-0414-11eb-00f3-4984b57bfac5
 almost(text) = Markdown.MD(Markdown.Admonition("warning", "Almost there!", [text]))
@@ -673,6 +801,214 @@ correct(text=rand(yays)) = Markdown.MD(Markdown.Admonition("correct", "Got it!",
 # ╔═╡ 3c0528a0-0414-11eb-2f68-a5657ab9e73d
 not_defined(variable_name) = Markdown.MD(Markdown.Admonition("danger", "Oopsie!", [md"Make sure that you define a variable called **$(Markdown.Code(string(variable_name)))**"]))
 
+# ╔═╡ b817f466-04d4-11eb-0a26-c1c667f9f7f7
+if !@isdefined(bernoulli)
+	not_defined(:bernoulli)
+else
+	let
+		result = bernoulli(0.5)
+		
+		if result isa Missing
+			still_missing()
+		elseif !(result isa Bool)
+			keep_working(md"Make sure that you return either `true` or `false`.")
+		else
+			if bernoulli(0.0) == false && bernoulli(1.0) == true
+				correct()
+			else
+				keep_working()
+			end
+		end
+	end
+end
+
+# ╔═╡ c61f35ea-04d6-11eb-2503-17a79f8d0298
+if !@isdefined(recovery_time)
+	not_defined(:recovery_time)
+else
+	let
+		result = recovery_time(1.0)
+		
+		if result isa Missing
+			still_missing()
+		elseif !(result isa Integer)
+			keep_working(md"Make sure that you return an integer: the recovery time.")
+		else
+			if result == 1
+				samples = [recovery_time(0.2) for _ in 1:256]
+				
+				a, b = extrema(samples)
+				if a == 1 && b > 20
+					correct()
+				else
+					keep_working()
+				end
+			else
+				keep_working(md"`p = 1.0` should return `1`: the agent recovers after the first time step.")
+			end
+		end
+	end
+end
+
+# ╔═╡ 7c515a7a-04d5-11eb-0f36-4fcebff709d5
+if !@isdefined(set_status!)
+	not_defined(:set_status!)
+else
+	let
+		agent = Agent(I,2)
+		
+		set_status!(agent, R)
+		
+		if agent.status == R
+			correct()
+		else
+			keep_working()
+		end
+	end
+end
+
+# ╔═╡ c4a8694a-04d4-11eb-1eef-c9e037e6b21f
+if !@isdefined(is_susceptible)
+	not_defined(:is_susceptible)
+else
+	let
+		result1 = is_susceptible(Agent(I,2))
+		result2 = is_infected(Agent(I,2))
+		
+		if result1 isa Missing || result2 isa Missing
+			still_missing()
+		elseif !(result1 isa Bool) || !(result2 isa Bool)
+			keep_working(md"Make sure that you return either `true` or `false`.")
+		elseif result1 === false && result2 === true
+			if is_susceptible(Agent(S,3)) && !is_infected(Agent(R,9))
+				correct()
+			else
+				keep_working()
+			end
+		else
+			keep_working()
+		end
+	end
+end
+
+# ╔═╡ 393041ec-049f-11eb-3089-2faf378445f3
+if !@isdefined(generate_agents)
+	not_defined(:generate_agents)
+else
+	let
+		result = generate_agents(4)
+		
+		if result isa Missing
+			still_missing()
+		elseif result isa Nothing
+			keep_working("The function returned `nothing`. Did you forget to return something?")
+		elseif !(result isa Vector) || !all(x -> x isa Agent, result)
+			keep_working(md"Make sure that you return an array of objects of the type `Agent`.")
+		elseif length(result) != 4
+			almost(md"Make sure that you return `N` agents.")
+		elseif length(Set(result)) != 4
+			almost(md"You returned the **same** agent `N` times. You need to call the `Agent` constructor `N` times, not once.")
+		else
+			if sum(a -> a.status == I, result) != 1
+				almost(md"Exactly one of the agents should be infectious.")
+			else
+				correct()
+			end
+		end
+	end
+end
+
+# ╔═╡ 759bc42e-04ab-11eb-0ab1-b12e008c02a9
+if !@isdefined(interact!)
+	not_defined(:interact!)
+else
+	let
+		agent = Agent(S, 9)
+		source = Agent(I, 0)
+		interact!(agent, source, InfectionRecovery(0.0, 1.0))
+		
+		if source.status != I || source.num_infected != 0
+			keep_working(md"The `source` should not be modified if no infection occured.")
+		elseif agent.status != S
+			keep_working(md"The `agent` should get infected with the right probability.")
+		else
+			agent = Agent(S, 9)
+			source = Agent(S, 0)
+			interact!(agent, source, InfectionRecovery(1.0, 1.0))
+
+			if source.status != S || source.num_infected != 0 || agent.status != S
+				keep_working(md"The `agent` should get infected with the right probability if the source is infectious.")
+			else
+				agent = Agent(S, 9)
+				source = Agent(I, 3)
+				interact!(agent, source, InfectionRecovery(1.0, 1.0))
+
+				if agent.status == R
+					almost(md"The agent should not recover immediately after becoming infectious.")
+				elseif agent.status == S
+					keep_working(md"The `agent` should recover from an infectious state with the right probability.")
+				elseif source.status != I || source.num_infected != 4
+					almost(md"The `source` did not get updated correctly after infecting the `agent`.")
+				else
+					correct(md"Your function treats the **susceptible** agent case correctly!")
+				end
+			end
+		end
+	end
+end
+
+# ╔═╡ 1491a078-04aa-11eb-0106-19a3cf1e94b0
+if !@isdefined(interact!)
+	not_defined(:interact!)
+else
+	let
+		agent = Agent(I, 9)
+		source = Agent(S, 0)
+
+		interact!(agent, source, InfectionRecovery(1.0, 1.0))
+		
+		if source.status != S || source.num_infected != 0
+			keep_working(md"The `source` should not be modified if `agent` is infectious.")
+		elseif agent.status != R
+			keep_working(md"The `agent` should recover from an infectious state with the right probability.")
+		elseif agent.num_infected != 9
+			keep_working(md"`agent.num_infected` should not be modified if `agent` is infectious.")
+		else
+			let
+				agent = Agent(I, 9)
+				source = Agent(R, 0)
+
+				interact!(agent, source, InfectionRecovery(1.0, 0.0))
+				
+				if agent.status == R
+					keep_working(md"The `agent` should recover from an infectious state with the right probability.")
+				else
+					correct(md"Your function treats the **infectious** agent case correctly!")
+				end
+			end
+		end
+	end
+end
+
+# ╔═╡ f8e05d94-04ac-11eb-26d4-6f1d2c5ed272
+if !@isdefined(interact!)
+	not_defined(:interact!)
+else
+	let
+		agent = Agent(R, 9)
+		source = Agent(I, 0)
+		interact!(agent, source, InfectionRecovery(1.0, 1.0))
+		
+		if source.status != I || source.num_infected != 0
+			keep_working(md"The `source` should not be modified if no infection occured.")
+		elseif agent.status != R || agent.num_infected != 9
+			keep_working(md"The `agent` should not be momdified if it is in a recoved state.")
+		else
+			correct(md"Your function treats the **recovered** agent case correctly!")
+		end
+	end
+end
+
 # ╔═╡ 39dffa3c-0414-11eb-0197-e72b299e9c63
 bigbreak = html"<br><br><br><br><br>";
 
@@ -687,90 +1023,112 @@ bigbreak
 # ╟─03a85970-0403-11eb-334a-812b59c0905b
 # ╟─06f30b2a-0403-11eb-0f05-8badebe1011d
 # ╠═095cbf46-0403-11eb-0c37-35de9562cebc
-# ╠═107e65a4-0403-11eb-0c14-37d8d828b469
+# ╟─107e65a4-0403-11eb-0c14-37d8d828b469
 # ╠═12cc2940-0403-11eb-19a7-bb570de58f6f
 # ╠═15187690-0403-11eb-2dfd-fd924faa3513
-# ╠═1d3356c4-0403-11eb-0f48-01b5eb14a585
+# ╟─1d3356c4-0403-11eb-0f48-01b5eb14a585
 # ╟─2b26dc42-0403-11eb-205f-cd2c23d8cb03
 # ╟─df8547b4-0400-11eb-07c6-fb370b61c2b6
-# ╠═d8797684-0414-11eb-1869-5b1e2c469011
 # ╠═02b0c2fc-0415-11eb-2b40-7bca8ea4eef9
-# ╠═76d117d4-0403-11eb-05d2-c5ea47d06f43
-# ╠═6d5c6a84-0415-11eb-3fdf-9355200cb520
+# ╟─b817f466-04d4-11eb-0a26-c1c667f9f7f7
+# ╟─76d117d4-0403-11eb-05d2-c5ea47d06f43
 # ╠═d57c6a5a-041b-11eb-3ab4-774a2d45a891
+# ╟─c61f35ea-04d6-11eb-2503-17a79f8d0298
 # ╟─6d906d0c-0415-11eb-0c1c-b5c0aca841db
-# ╠═6db6c894-0415-11eb-305a-c75b119d89e9
-# ╠═6de37d6c-0415-11eb-1b05-85ac820016c7
+# ╟─6db6c894-0415-11eb-305a-c75b119d89e9
+# ╟─6de37d6c-0415-11eb-1b05-85ac820016c7
 # ╠═73047bba-0416-11eb-1047-23e9c3dbde05
-# ╠═76f62d64-0403-11eb-27e2-3de58366b619
-# ╠═cdaade9c-0416-11eb-0550-7b5b3d33e240
+# ╟─76f62d64-0403-11eb-27e2-3de58366b619
 # ╠═c5c7cb86-041b-11eb-3360-45463105f3c9
 # ╠═d8abd2f6-0416-11eb-1c2a-f9157d9760a7
 # ╟─771c8f0c-0403-11eb-097e-ab24d0714ad5
-# ╠═aa6673d4-0417-11eb-32cc-79560896c195
 # ╠═105d347e-041c-11eb-2fc8-1d9e5eda2be0
 # ╠═1ca7a8c2-041a-11eb-146a-15b8cdeaea72
 # ╟─08e2bc64-0417-11eb-1457-21c0d18e8c51
 # ╟─77428072-0403-11eb-0068-81e3728f2ebe
 # ╠═4b3ec86c-0419-11eb-26fd-cbbfdf19afa8
-# ╠═6c7891f2-0419-11eb-1137-e7ec60266b26
-# ╠═dc784864-0430-11eb-1478-d1153e017310
-# ╠═45caf17c-041a-11eb-1e14-a98b934da463
-# ╠═2a6ab940-0430-11eb-204b-c58dc521ae36
-# ╟─f3f81172-041c-11eb-2b9b-e99b7b9400ed
+# ╟─dc784864-0430-11eb-1478-d1153e017310
+# ╠═8a28c56e-04b4-11eb-279c-3b4dfb2a9f9b
+# ╟─9374e63c-0493-11eb-0952-4b97512d7cdb
 # ╠═823364ce-041c-11eb-2467-7ffa4f751527
-# ╟─c68ebd1e-0433-11eb-048b-4b6900f79970
-# ╠═7768a2dc-0403-11eb-39b7-fd660dc952fe
-# ╠═778ec25c-0403-11eb-3146-1d11c294bb1f
+# ╠═1ddbaa18-0494-11eb-1fc8-250ab6ae89f1
+# ╟─f3f81172-041c-11eb-2b9b-e99b7b9400ed
+# ╟─7768a2dc-0403-11eb-39b7-fd660dc952fe
+# ╠═f1f89502-0494-11eb-2303-0b79d8bbd13f
+# ╠═06089d1e-0495-11eb-0ace-a7a7dc60e5b2
 # ╟─77b54c10-0403-11eb-16ad-65374d29a817
 # ╠═bb63f3cc-042f-11eb-04ff-a128aec3c378
 # ╟─bb8aeb58-042f-11eb-18b8-f995631df619
+# ╟─778ec25c-0403-11eb-3146-1d11c294bb1f
+# ╠═7bb8e426-0495-11eb-3a8b-cbbab61a1631
 # ╟─77db111e-0403-11eb-2dea-4b42ceed65d6
 # ╠═7335de44-042f-11eb-2873-8bceef722432
-# ╟─78013f76-0403-11eb-3855-dd4e8ba271c3
-# ╠═97804ff0-042f-11eb-262f-5d9072a80337
 # ╟─61789646-0403-11eb-0042-f3b8308f11ba
 # ╠═26f84600-041d-11eb-1856-b12a3e5c1dc7
 # ╟─271ec5f0-041d-11eb-041b-db46ec1465e0
 # ╠═7f4e121c-041d-11eb-0dff-cd0cbfdfd606
 # ╟─7f744644-041d-11eb-08a0-3719cc0adeb7
 # ╠═88c53208-041d-11eb-3b1e-31b57ba99f05
-# ╠═847d0fc2-041d-11eb-2864-79066e223b45
+# ╟─847d0fc2-041d-11eb-2864-79066e223b45
 # ╟─860790fc-0403-11eb-2f2e-355f77dcc7af
 # ╠═ae4ac4b4-041f-11eb-14f5-1bcde35d18f2
-# ╠═ae70625a-041f-11eb-3082-0753419d6d57
-# ╠═18758408-0424-11eb-17fc-2bb4088b03ba
-# ╠═189cae1e-0424-11eb-2666-65bf297d8bdd
+# ╟─ae70625a-041f-11eb-3082-0753419d6d57
+# ╠═60a8b708-04c8-11eb-37b1-3daec644ac90
+# ╟─189cae1e-0424-11eb-2666-65bf297d8bdd
 # ╠═18d308c4-0424-11eb-176d-49feec6889cf
-# ╠═190deebc-0424-11eb-19fe-615997093e14
+# ╟─190deebc-0424-11eb-19fe-615997093e14
+# ╠═82f2580a-04c8-11eb-1eea-bdb4e50eee3b
 # ╟─8631a536-0403-11eb-0379-bb2e56927727
 # ╠═98beb336-0425-11eb-3886-4f8cfd210288
+# ╟─7c515a7a-04d5-11eb-0f36-4fcebff709d5
 # ╟─866299e8-0403-11eb-085d-2b93459cc141
 # ╠═9a837b52-0425-11eb-231f-a74405ff6e23
 # ╠═a8dd5cae-0425-11eb-119c-bfcbf832d695
+# ╟─c4a8694a-04d4-11eb-1eef-c9e037e6b21f
 # ╟─8692bf42-0403-11eb-191f-b7d08895274f
-# ╠═6d480cf0-0425-11eb-18a9-1737455371d7
-# ╠═86d98d0a-0403-11eb-215b-c58ad721a90b
+# ╠═7946d83a-04a0-11eb-224b-2b315e87bc84
+# ╠═488771e2-049f-11eb-3b0a-0de260457731
+# ╟─393041ec-049f-11eb-3089-2faf378445f3
+# ╟─86d98d0a-0403-11eb-215b-c58ad721a90b
 # ╠═223933a4-042c-11eb-10d3-852229f25a35
 # ╠═1a654bdc-0421-11eb-2c38-7d35060e2565
+# ╟─2d3bba2a-04a8-11eb-2c40-87794b6aeeac
+# ╠═406aabea-04a5-11eb-06b8-312879457c42
+# ╟─b21475c6-04ac-11eb-1366-f3b5e967402d
+# ╠═9c39974c-04a5-11eb-184d-317eb542452c
+# ╟─759bc42e-04ab-11eb-0ab1-b12e008c02a9
+# ╟─1491a078-04aa-11eb-0106-19a3cf1e94b0
+# ╟─f8e05d94-04ac-11eb-26d4-6f1d2c5ed272
 # ╟─619c8a10-0403-11eb-2e89-8b0974fb01d0
 # ╠═2ade2694-0425-11eb-2fb2-390da43d9695
-# ╠═a336f36a-042c-11eb-3e1b-2df0ee60936d
 # ╟─955321de-0403-11eb-04ce-fb1670dfbb9e
-# ╠═32cea7ba-0429-11eb-06bc-a5f4ae3ffe37
+# ╠═46133a74-04b1-11eb-0b46-0bc74e564680
 # ╟─95771ce2-0403-11eb-3056-f1dc3a8b7ec3
-# ╠═3d3b672c-0426-11eb-0a36-153ce3c276b9
-# ╟─5c6efd5c-0426-11eb-13cf-bd838f48bd71
-# ╟─959ef526-0403-11eb-07d1-192e7e83c942
+# ╠═887d27fc-04bc-11eb-0ab9-eb95ef9607f8
+# ╠═b92f1cec-04ae-11eb-0072-3535d1118494
+# ╠═2c62b4ae-04b3-11eb-0080-a1035a7e31a2
+# ╠═c5156c72-04af-11eb-1106-b13969b036ca
+# ╟─28db9d98-04ca-11eb-3606-9fb89fa62f36
+# ╟─0a967f38-0493-11eb-0624-77e40b24d757
+# ╟─bf6fd176-04cc-11eb-008a-2fb6ff70a9cb
+# ╠═38b1aa5a-04cf-11eb-11a2-930741fc9076
+# ╠═80c2cd88-04b1-11eb-326e-0120a39405ea
+# ╟─80e6f1e0-04b1-11eb-0d4e-475f1d80c2bb
+# ╠═9cd2bb00-04b1-11eb-1d83-a703907141a7
+# ╟─9cf9080a-04b1-11eb-12a0-17013f2d37f5
 # ╟─95c598d4-0403-11eb-2328-0175ed564915
-# ╠═2e21c38a-0435-11eb-1fa3-65acce73108d
+# ╠═843fd63c-04d0-11eb-0113-c58d346179d6
+# ╠═7f635722-04d0-11eb-3209-4b603c9e843c
+# ╟─dfb99ace-04cf-11eb-0739-7d694c837d59
+# ╠═1c6aa208-04d1-11eb-0b87-cf429e6ff6d0
 # ╟─95eb9f88-0403-11eb-155b-7b2d3a07cff0
 # ╠═287ee7aa-0435-11eb-0ca3-951dbbe69404
 # ╟─9611ca24-0403-11eb-3582-b7e3bb243e62
 # ╠═26e2978e-0435-11eb-0d61-25f552d2771e
 # ╟─9635c944-0403-11eb-3982-4df509f6a556
 # ╠═4ad11052-042c-11eb-3643-8b2b3e1269bc
-# ╠═61c00724-0403-11eb-228d-17c11670e5d1
+# ╟─61c00724-0403-11eb-228d-17c11670e5d1
+# ╠═8dd97820-04a5-11eb-36c0-8f92d4b859a8
 # ╟─99ef7b2a-0403-11eb-08ef-e1023cd151ae
 # ╟─9a13b17c-0403-11eb-024f-9b37e95e211b
 # ╠═1ac4b33a-0435-11eb-36f8-8f3f81ae7844
