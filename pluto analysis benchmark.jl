@@ -4,13 +4,13 @@ import Pluto.Configuration: Options, EvaluationOptions
 using BenchmarkTools
 
 
-s = ServerSession();
+s = ServerSession()
 
-fakeclient = ClientSession(:fake, nothing);
-s.connected_clients[fakeclient.id] = fakeclient;
+fakeclient = ClientSession(:fake, nothing)
+s.connected_clients[fakeclient.id] = fakeclient
 
 filename = download("https://raw.githubusercontent.com/fonsp/disorganised-mess/eaaf8b9198a52571013e140688fe455cb35320b1/big.jl")
-nb = Pluto.load_notebook_nobackup(filename);
+nb = Pluto.load_notebook_nobackup(filename)
 
 parse_and_lint() = let
     foreach(nb.cells) do cell
@@ -23,6 +23,7 @@ end;
 
 #= 
 
+MASTER AT TIME OF WRITING:
 🧧 https://github.com/fonsp/Pluto.jl/commit/5c4fcb4ae16305fe0dc1fb3df7c5368f3b0fb115
 
 BenchmarkTools.Trial: 
@@ -37,6 +38,7 @@ BenchmarkTools.Trial:
   samples:          75
   evals/sample:     1
 
+canonical-function-root-as-reactive-link AT TIME OF WRITING
 👜 https://github.com/fonsp/Pluto.jl/pull/538/commits/496d5b5c2f5dcdee348a6a9ad1972e1585151325
 
 BenchmarkTools.Trial: 
@@ -61,7 +63,7 @@ explore_expressions() = let
 end;
 
 
-Pluto.update_caches!(nb, nb.cells);
+Pluto.update_caches!(nb, nb.cells)
 
 @benchmark explore_expressions()
 
@@ -100,11 +102,11 @@ x =#
 const symstates = map(nb.cells) do cell
     cell.parsedcode |>
         Pluto.ExpressionExplorer.try_compute_symbolreferences
-end;
+end
 
 get_those_nodes() = let 
     foreach(Pluto.ReactiveNode, symstates)
-end;
+end
 
 @benchmark get_those_nodes()
 
@@ -112,7 +114,7 @@ end;
 
 🧧 https://github.com/fonsp/Pluto.jl/commit/5c4fcb4ae16305fe0dc1fb3df7c5368f3b0fb115
 
-
+n/a
 
 👜 https://github.com/fonsp/Pluto.jl/pull/538/commits/496d5b5c2f5dcdee348a6a9ad1972e1585151325
 
@@ -130,8 +132,12 @@ BenchmarkTools.Trial:
 
 x =#
 
-old = NotebookTopology();
-new = updated_topology(old, nb, nb.cells);
+###
+# FIRST RUN
+###
+
+old = NotebookTopology()
+new = updated_topology(old, nb, nb.cells)
 
 compute_topo_order() = let 
     topological_order(nb, old, nb.cells)
@@ -210,6 +216,99 @@ BenchmarkTools.Trial:
   median time:      51.919 μs (0.00% GC)
   mean time:        58.352 μs (1.42% GC)
   maximum time:     8.540 ms (97.31% GC)
+  --------------
+  samples:          10000
+  evals/sample:     1
+
+x =#
+
+
+###
+# SECOND RUN
+###
+
+
+old = NotebookTopology();
+new = updated_topology(old, nb, nb.cells);
+NEW = new
+
+compute_topo_order_2() = let 
+    topological_order(nb, NEW, nb.cells)
+end;
+
+@benchmark compute_topo_order_2()
+
+#= 
+
+🧧 https://github.com/fonsp/Pluto.jl/commit/5c4fcb4ae16305fe0dc1fb3df7c5368f3b0fb115
+
+BenchmarkTools.Trial: 
+  memory estimate:  442.17 KiB
+  allocs estimate:  2285
+  --------------
+  minimum time:     17.596 ms (0.00% GC)
+  median time:      18.907 ms (0.00% GC)
+  mean time:        19.774 ms (0.21% GC)
+  maximum time:     36.737 ms (0.00% GC)
+  --------------
+  samples:          253
+  evals/sample:     1
+
+👜 https://github.com/fonsp/Pluto.jl/pull/538/commits/496d5b5c2f5dcdee348a6a9ad1972e1585151325
+
+BenchmarkTools.Trial: 
+  memory estimate:  454.74 KiB
+  allocs estimate:  2180
+  --------------
+  minimum time:     9.047 ms (0.00% GC)
+  median time:      9.905 ms (0.00% GC)
+  mean time:        10.188 ms (0.41% GC)
+  maximum time:     18.401 ms (30.29% GC)
+  --------------
+  samples:          491
+  evals/sample:     1
+
+x =#
+
+old = NotebookTopology();
+new = updated_topology(old, nb, nb.cells);
+NEW = new
+
+const cell_i_2 = Ref(1)
+compute_topo_order_single_2() = let
+    i = mod1(cell_i_2[], length(nb.cells))
+    topological_order(nb, NEW, nb.cells[i:i])
+    cell_i_2[] += 1
+end;
+
+@benchmark compute_topo_order_single_2() seconds = 8
+
+#= 
+
+🧧 https://github.com/fonsp/Pluto.jl/commit/5c4fcb4ae16305fe0dc1fb3df7c5368f3b0fb115
+
+BenchmarkTools.Trial: 
+  memory estimate:  6.25 KiB
+  allocs estimate:  55
+  --------------
+  minimum time:     165.717 μs (0.00% GC)
+  median time:      189.411 μs (0.00% GC)
+  mean time:        350.840 μs (0.37% GC)
+  maximum time:     7.508 ms (87.11% GC)
+  --------------
+  samples:          10000
+  evals/sample:     1
+
+👜 https://github.com/fonsp/Pluto.jl/pull/538/commits/496d5b5c2f5dcdee348a6a9ad1972e1585151325
+
+BenchmarkTools.Trial: 
+  memory estimate:  6.61 KiB
+  allocs estimate:  59
+  --------------
+  minimum time:     96.961 μs (0.00% GC)
+  median time:      126.742 μs (0.00% GC)
+  mean time:        225.122 μs (0.62% GC)
+  maximum time:     8.105 ms (92.13% GC)
   --------------
   samples:          10000
   evals/sample:     1
