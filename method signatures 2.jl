@@ -48,7 +48,7 @@ begin
 			ex
 		end
 	end
-	hide_argument_name(::Symbol) = nothing
+	hide_argument_name(::Symbol) = Expr(:(::), nothing, Any)
 	hide_argument_name(x::Any) = x
 end
 
