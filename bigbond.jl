@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.11.5
+# v0.12.4
 
 using Markdown
 using InteractiveUtils
@@ -78,6 +78,9 @@ let
 	Δt
 end
 
+# ╔═╡ 59ecd6aa-0fe6-11eb-1e8d-f1f3e99fcd3b
+x
+
 # ╔═╡ a8eb7240-7fe8-11ea-3379-e1f3cd6f4684
 begin
 	import Base: endswith
@@ -111,12 +114,13 @@ codeunits(str)|> Vector{UInt8}
 obj = Dict(:a => Dict(:b => str), :c => :d)
 
 # ╔═╡ deb4cf4a-7fd7-11ea-2a63-7b27570cd414
-JSON.Parser.parse( codeunits(JSON.json(obj)) |> Vector{UInt8}) |> length
+JSON.Parser.parse( codeunits(JSON.json(obj)) |> Vector{UInt8} |> String) |> length
 
 # ╔═╡ Cell order:
 # ╠═1836b868-dd53-11ea-3711-cd4504b2aca0
 # ╠═66181f40-dd53-11ea-22ad-a7f633462733
 # ╠═25b8e04a-dd53-11ea-2067-adfc77c6b0fc
+# ╠═59ecd6aa-0fe6-11eb-1e8d-f1f3e99fcd3b
 # ╠═e0ce06f8-7fd6-11ea-2b59-ff9d69c47d42
 # ╠═a8eb7240-7fe8-11ea-3379-e1f3cd6f4684
 # ╠═cd83f1a0-7fe7-11ea-1546-910dec41906e
