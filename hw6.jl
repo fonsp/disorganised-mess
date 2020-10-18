@@ -114,30 +114,46 @@ for the given values of the parameters.
 We emphasise that this material is pedagogical; there is no suggestion that these specific techniques should be used actual calculations; rather, it is the underlying ideas that are important.
 """
 
-# ╔═╡ 46caa70a-107c-11eb-1cd8-d5f432203eac
-[sqrt(1)]
-
 # ╔═╡ 3cd69418-10bb-11eb-2fb5-e93bac9e54a9
 md"""
-# 1D finite diff
+# **Exercise 1**: _Calculus without calculus_
 """
 
-# ╔═╡ 2b79b698-10b9-11eb-3bde-53fc1c48d5f7
-wavy(x) = .1x^3 - 1.6x^2 + 7x - 3
+# ╔═╡ 2a4050f6-112b-11eb-368a-f91d7a023c9d
+md"""
+#### Exercise 1.1 - _tangent line_
 
-# ╔═╡ 327de976-10b9-11eb-1916-69ad75fc8dc4
-zeroten = LinRange(0.0, 10.0, 300)
+👉 Write a function `finite_difference_slope` that takes a function `f` and numbers `a` and `h`. It returns the slope ``f'(a)``, approximated using the finite difference formula.
+"""
+
+# ╔═╡ 910d30b2-112b-11eb-2d9b-0f509a5d28fb
+function finite_difference_slope(f, a, h)
+	(f(a+h) - f(a)) / h
+end
+
+# ╔═╡ bf8a4556-112b-11eb-042e-d705a2ca922a
+md"""
+👉 Write a function `tangent_line` that takes the same arguments `f`, `a` and `g`, but it **returns a function**. This function (``\mathbb{R} \rightarrow \mathbb{R}``) is the _tangent line_ with slope ``f'(a)`` (computed using `finite_difference_slope`) that passes through ``(a, f(a))``.
+"""
 
 # ╔═╡ 01571b20-10ba-11eb-1c4a-292e427109b7
 function tangent_line(f, a, h)
-	slope = (f(a+h) - f(a)) / h
+	slope = finite_difference_slope(f, a, h)
 	value = f(a)
 	
 	x -> (x - a)*slope + value
 end
 
-# ╔═╡ abc54b82-10b9-11eb-1641-817e2f043d26
-@bind a_finite_diff Slider(zeroten, default=4)
+# ╔═╡ 2b79b698-10b9-11eb-3bde-53fc1c48d5f7
+# this is our test function
+wavy(x) = .1x^3 - 1.6x^2 + 7x - 3
+
+# ╔═╡ a732bbcc-112c-11eb-1d65-110c049e226c
+md"""
+The slider below controls ``h`` using a _log scale_. In the (mathematical) definition of the derivative, we take ``\lim_{h \rightarrow 0}``. This corresponds to moving the slider to the left. 
+
+Notice that, as you decrease ``h``, the tangent line gets more accurate, but what happens if you make ``h`` too small?
+"""
 
 # ╔═╡ c9535ad6-10b9-11eb-0537-45f13931cd71
 @bind log_h Slider(-16:0.01:.5, default=-.5)
@@ -145,60 +161,43 @@ end
 # ╔═╡ 7495af52-10ba-11eb-245f-a98781ba123c
 h_finite_diff = 10.0^log_h
 
-# ╔═╡ 3d44c264-10b9-11eb-0895-dbfc22ba0c37
-let
-	p = plot(zeroten, wavy, label="f(x)")
-	scatter!(p, [a_finite_diff], [wavy(a_finite_diff)], label="a", color="red")
-	vline!(p, [a_finite_diff], label=nothing, color="red", linestyle=:dash)
-	scatter!(p, [a_finite_diff+h_finite_diff], [wavy(a_finite_diff+h_finite_diff)], label="a + h", color="green")
-	
-	try
-		result = tangent_line(wavy, a_finite_diff, h_finite_diff)
-		
-		plot!(p, zeroten, result, label="tangent", color="purple")
-	catch
-	end
-	
-	plot!(p, xlim=(0,10), ylim=(-2, 8))
-end
+# ╔═╡ 327de976-10b9-11eb-1916-69ad75fc8dc4
+zeroten = LinRange(0.0, 10.0, 300)
+
+# ╔═╡ abc54b82-10b9-11eb-1641-817e2f043d26
+@bind a_finite_diff Slider(zeroten, default=4)
 
 # ╔═╡ 43df67bc-10bb-11eb-1cbd-cd962a01e3ee
 md"""
-# 1D "Euler"
+$(html"<span id=theslopeequation></span>")
+#### Exercise 1.2 - _antiderivative_
 
-By doing finite differences, we were able to approximate the derivative of a function:
+In the finite differences method, we approximated the derivative of a function:
 
 $$f'(a) \simeq \frac{f(a + h) - f(a)}{h}$$
 
-We can do something very similar to approximate the antiderivate of a function. Say that we only have a formula for the _slope_ ``f'``, then we can use this to compute ``f`` numerically!
+We can do something very similar to approximate the 'antiderivate' of a function. Finding the antiderivative means that we use the _slope_ ``f'`` to compute ``f`` numerically!
 
-By rearranging the equation above, we get:
+This antiderivative problem is illustrated below. The only information that we have is the **slope** at any point ``a \in \mathbb{R}``, and we have one **initial value**, ``f(1)``.
+"""
+
+# ╔═╡ d5a8bd48-10bf-11eb-2291-fdaaff56e4e6
+# in this exercise, we only the derivative is given
+wavy_deriv(x) = .3x^2 - 3.2x + 7
+
+# ╔═╡ 0b4e8cdc-10bd-11eb-296c-d51dc242a372
+@bind a_euler Slider(zeroten, default=1)
+
+# ╔═╡ 1d8ce3d6-112f-11eb-1343-079c18cdc89c
+md"""
+Using only this information, we want to reconstruct ``f``.
+
+By rearranging [the equation above](#theslopeequation), we get:
 
 $$f(a+h) \simeq hf'(a) + f(a)$$
 
 Using this formula, we only need to know the _value_ ``f(a)`` and the _slope_ ``f'(a)`` of a function at ``a`` to get the value at ``a+h``. Doing this repeatedly can give us the value at ``a+2h``, at ``a+3h``, etc., all from one initial value ``f(a)``.
 """
-
-# ╔═╡ d5a8bd48-10bf-11eb-2291-fdaaff56e4e6
-wavy_deriv(x) = .3x^2 - 3.2x + 7
-
-# ╔═╡ 0b4e8cdc-10bd-11eb-296c-d51dc242a372
-@bind a_euler Slider(zeroten, default=4)
-
-# ╔═╡ 70df9a48-10bb-11eb-0b95-95a224b45921
-let
-	slope = wavy_deriv(a_euler)
-	
-	p = plot(LinRange(a_euler - 0.2, a_euler + 0.2, 2), wavy, label="f(x)", lw=3)
-	# p = plot()
-	for y in -10:20
-		plot!(p, [0,10], slope .* ([0,10] .- a_euler) .+ y, label=nothing, color="purple", opacity=.3)
-	end
-	
-	vline!(p, [a_euler], color="red", label="a", linestyle=:dash)
-	
-	plot!(p, xlim=(0,10), ylim=(-2, 8))
-end
 
 # ╔═╡ 24037812-10bf-11eb-2653-e5c6cdfe95d9
 function euler_integrate(fprime::Function, fa, a, h, N_steps)
@@ -212,33 +211,6 @@ euler_integrate(sqrt, 0, 1, .1, 100)
 
 # ╔═╡ ab72fdbe-10be-11eb-3b33-eb4ab41730d6
 @bind N_euler Slider(2:40)
-
-# ╔═╡ 990236e0-10be-11eb-333a-d3080a224d34
-let
-	a = 1
-	h = .3
-	history = euler_integrate(wavy_deriv, wavy(a), a, h, N_euler)
-	
-	slope = wavy_deriv(a_euler)
-	
-	p = plot(zeroten, wavy, label="exact solution", lw=3, opacity=.1, color="gray")
-	# p = plot()
-	
-	plot!(p, a .+ h .* (1:N_euler), history, 
-		color="blue", label=nothing)
-	scatter!(p, a .+ h .* (1:N_euler), history, 
-		color="blue", label="appromixation", 
-		markersize=2, markerstrokewidth=0)
-	
-	last_a = a + (N_euler-1)*h
-	vline!(p, [last_a], color="red", label="a", linestyle=:dash)
-	
-	plot!(p, [0,10], ([0,10] .- last_a) .* wavy_deriv(last_a) .+ history[end-1],
-		label="tangent",
-		color="purple")
-	
-	plot!(p, xlim=(0,10), ylim=(-2, 8))
-end
 
 # ╔═╡ 518fb3aa-106e-11eb-0fcd-31091a8f12db
 md"""
@@ -276,6 +248,9 @@ In the case of several functions $s$, $i$ and $r$, we must use a rule like this 
 4. Make an interactive visualization in which vary $\beta$ and $\gamma$. What relation should $\beta$ and $\gamma$ have for an epidemic outbreak to occur?
 
 """
+
+# ╔═╡ 68274534-1103-11eb-0d62-f1acb57721bc
+
 
 # ╔═╡ 82539bbe-106e-11eb-0e9e-170dfa6a7dad
 md"""
@@ -315,6 +290,9 @@ FONSI: we should make it ourselves
 
 
 """
+
+# ╔═╡ 69ff577a-1103-11eb-15b7-536764063bc2
+
 
 # ╔═╡ 82579b90-106e-11eb-0018-4553c29e57a2
 md"""
@@ -356,6 +334,9 @@ To do so we will think of a function as a hill. To find a minimum we should "rol
 
 """
 
+# ╔═╡ 6d1ee93e-1103-11eb-140f-63fca63f8b06
+
+
 # ╔═╡ 8261eb92-106e-11eb-2ccc-1348f232f5c3
 md"""
 ## **Exercise 4:** _Learning parameter values_
@@ -394,6 +375,9 @@ The iterative procedure by which we gradually adjust the parameter values to imp
 
 """
 
+# ╔═╡ 6f4aa432-1103-11eb-13da-fdd9eefc7c86
+
+
 # ╔═╡ 826bb0dc-106e-11eb-29eb-03e7ddf9e4b5
 md"""
 
@@ -430,6 +414,9 @@ We will try to find the parameters $\beta$ and $\gamma$ for which *the output of
 
 """
 
+# ╔═╡ 721079da-1103-11eb-2720-99754ea64c95
+
+
 # ╔═╡ b94b7610-106d-11eb-2852-25337ce6ec3a
 if student.name == "Jazzy Doe" || student.kerberos_id == "jazz"
 	md"""
@@ -446,7 +433,7 @@ T = LinRange(0.0, 60.0, 500)
 
 # ╔═╡ e8ea71fc-108e-11eb-2f27-e984fde247d2
 A = [0  -1
-	1    -.2]
+	1    -.3]
 
 # ╔═╡ 0af07152-108f-11eb-2c0b-d96b54bfd3a5
 f(t,x) = A*x
@@ -631,6 +618,78 @@ push!(old, pos)
 # ╔═╡ 847b089a-1083-11eb-04d6-e12a4385a8fa
 pos
 
+# ╔═╡ df42aa9e-10c9-11eb-2c19-2d7ce40a1c6c
+as_mime(m::MIME) = x -> PlutoUI.Show(m, repr(m, x))
+
+# ╔═╡ 15b60272-10ca-11eb-0a28-599ed78cf98a
+"""
+Return the argument, but force it to be shown as SVG.
+
+This is an optimization for Plots.jl GR plots: it makes them less jittery and keeps the page DOM small.
+"""
+as_svg = as_mime(MIME"image/svg+xml"())
+
+# ╔═╡ 3d44c264-10b9-11eb-0895-dbfc22ba0c37
+let
+	p = plot(zeroten, wavy, label="f(x)")
+	scatter!(p, [a_finite_diff], [wavy(a_finite_diff)], label="a", color="red")
+	vline!(p, [a_finite_diff], label=nothing, color="red", linestyle=:dash)
+	scatter!(p, [a_finite_diff+h_finite_diff], [wavy(a_finite_diff+h_finite_diff)], label="a + h", color="green")
+	
+	try
+		result = tangent_line(wavy, a_finite_diff, h_finite_diff)
+		
+		plot!(p, zeroten, result, label="tangent", color="purple")
+	catch
+	end
+	
+	plot!(p, xlim=(0,10), ylim=(-2, 8))
+end |> as_svg
+
+# ╔═╡ 70df9a48-10bb-11eb-0b95-95a224b45921
+let
+	slope = wavy_deriv(a_euler)
+	
+	p = plot(LinRange(1.0 - 0.1, 1.0 + 0.1, 2), wavy, label=nothing, lw=3)
+	scatter!(p, [1], wavy, label="f(1)", color="blue", lw=3)
+	# p = plot()
+	x = [a_euler - 0.2,a_euler + 0.2]
+	for y in -4:10
+		plot!(p, x, slope .* (x .- a_euler) .+ y, label=nothing, color="purple", opacity=.6)
+	end
+	
+	vline!(p, [a_euler], color="red", label="a", linestyle=:dash)
+	
+	plot!(p, xlim=(0,10), ylim=(-2, 8))
+end |> as_svg
+
+# ╔═╡ 990236e0-10be-11eb-333a-d3080a224d34
+let
+	a = 1
+	h = .3
+	history = euler_integrate(wavy_deriv, wavy(a), a, h, N_euler)
+	
+	slope = wavy_deriv(a_euler)
+	
+	p = plot(zeroten, wavy, label="exact solution", lw=3, opacity=.1, color="gray")
+	# p = plot()
+	
+	plot!(p, a .+ h .* (1:N_euler), history, 
+		color="blue", label=nothing)
+	scatter!(p, a .+ h .* (1:N_euler), history, 
+		color="blue", label="appromixation", 
+		markersize=2, markerstrokewidth=0)
+	
+	last_a = a + (N_euler-1)*h
+	vline!(p, [last_a], color="red", label="a", linestyle=:dash)
+	
+	plot!(p, [0,10], ([0,10] .- last_a) .* wavy_deriv(last_a) .+ history[end-1],
+		label="tangent",
+		color="purple")
+	
+	plot!(p, xlim=(0,10), ylim=(-2, 8))
+end |> as_svg
+
 # ╔═╡ b94f9df8-106d-11eb-3be8-c5a1bb79d0d4
 md"## Function library
 
@@ -638,6 +697,17 @@ Just some helper functions used in the notebook."
 
 # ╔═╡ b9586d66-106d-11eb-0204-a91c8f8355f7
 hint(text) = Markdown.MD(Markdown.Admonition("hint", "Hint", [text]))
+
+# ╔═╡ 0f0b7ec4-112c-11eb-3399-59e22df07355
+hint(md"""
+	Remember that [functions are objects](https://www.youtube.com/watch?v=_O-HBDZMLrM)! For example, here is a function that returns the square root function:
+	```julia
+	function the_square_root_function()
+		f = x -> sqrt(x)
+		return f
+	end
+	```
+	""")
 
 # ╔═╡ b9616f92-106d-11eb-1bd1-ede92a617fdb
 almost(text) = Markdown.MD(Markdown.Admonition("warning", "Almost there!", [text]))
@@ -658,7 +728,17 @@ correct(text=rand(yays)) = Markdown.MD(Markdown.Admonition("correct", "Got it!",
 not_defined(variable_name) = Markdown.MD(Markdown.Admonition("danger", "Oopsie!", [md"Make sure that you define a variable called **$(Markdown.Code(string(variable_name)))**"]))
 
 # ╔═╡ 05bfc716-106a-11eb-36cb-e7c488050d54
-TODO = html"<h1 style='display: inline; color: purple;'>TODO</h1>"
+TODO = html"<span style='display: inline; font-size: 2em; color: purple; font-weight: 900;'>TODO</span>"
+
+# ╔═╡ 17af6a00-112b-11eb-1c9c-bfd12931491d
+md"""
+Blabla about derivative, limit h -> 0, finite difference $TODO
+"""
+
+# ╔═╡ 2335cae6-112f-11eb-3c2c-254e82014567
+md"""
+👉 do this $TODO
+"""
 
 # ╔═╡ acbb9a56-106d-11eb-115b-7d067adb302c
 
@@ -671,29 +751,41 @@ TODO = html"<h1 style='display: inline; color: purple;'>TODO</h1>"
 # ╠═0587db1c-106a-11eb-0560-c3d53c516805
 # ╟─05976f0c-106a-11eb-03a4-0febbc18fae8
 # ╠═05b01f6e-106a-11eb-2a88-5f523fafe433
-# ╠═0d191540-106e-11eb-1f20-bf72a75fb650
-# ╠═46caa70a-107c-11eb-1cd8-d5f432203eac
+# ╟─0d191540-106e-11eb-1f20-bf72a75fb650
 # ╟─3cd69418-10bb-11eb-2fb5-e93bac9e54a9
-# ╠═2b79b698-10b9-11eb-3bde-53fc1c48d5f7
-# ╠═327de976-10b9-11eb-1916-69ad75fc8dc4
+# ╟─17af6a00-112b-11eb-1c9c-bfd12931491d
+# ╟─2a4050f6-112b-11eb-368a-f91d7a023c9d
+# ╠═910d30b2-112b-11eb-2d9b-0f509a5d28fb
+# ╟─bf8a4556-112b-11eb-042e-d705a2ca922a
 # ╠═01571b20-10ba-11eb-1c4a-292e427109b7
+# ╟─0f0b7ec4-112c-11eb-3399-59e22df07355
+# ╠═2b79b698-10b9-11eb-3bde-53fc1c48d5f7
 # ╠═abc54b82-10b9-11eb-1641-817e2f043d26
-# ╠═3d44c264-10b9-11eb-0895-dbfc22ba0c37
-# ╟─c9535ad6-10b9-11eb-0537-45f13931cd71
+# ╟─3d44c264-10b9-11eb-0895-dbfc22ba0c37
+# ╟─a732bbcc-112c-11eb-1d65-110c049e226c
+# ╠═c9535ad6-10b9-11eb-0537-45f13931cd71
 # ╟─7495af52-10ba-11eb-245f-a98781ba123c
+# ╟─327de976-10b9-11eb-1916-69ad75fc8dc4
 # ╟─43df67bc-10bb-11eb-1cbd-cd962a01e3ee
 # ╠═d5a8bd48-10bf-11eb-2291-fdaaff56e4e6
 # ╠═0b4e8cdc-10bd-11eb-296c-d51dc242a372
-# ╠═70df9a48-10bb-11eb-0b95-95a224b45921
+# ╟─70df9a48-10bb-11eb-0b95-95a224b45921
+# ╟─1d8ce3d6-112f-11eb-1343-079c18cdc89c
+# ╟─2335cae6-112f-11eb-3c2c-254e82014567
 # ╠═24037812-10bf-11eb-2653-e5c6cdfe95d9
 # ╠═b74d94b8-10bf-11eb-38c1-9f39dfcb1096
 # ╠═ab72fdbe-10be-11eb-3b33-eb4ab41730d6
 # ╟─990236e0-10be-11eb-333a-d3080a224d34
-# ╟─518fb3aa-106e-11eb-0fcd-31091a8f12db
+# ╠═518fb3aa-106e-11eb-0fcd-31091a8f12db
+# ╠═68274534-1103-11eb-0d62-f1acb57721bc
 # ╟─82539bbe-106e-11eb-0e9e-170dfa6a7dad
+# ╠═69ff577a-1103-11eb-15b7-536764063bc2
 # ╟─82579b90-106e-11eb-0018-4553c29e57a2
+# ╠═6d1ee93e-1103-11eb-140f-63fca63f8b06
 # ╟─8261eb92-106e-11eb-2ccc-1348f232f5c3
+# ╠═6f4aa432-1103-11eb-13da-fdd9eefc7c86
 # ╟─826bb0dc-106e-11eb-29eb-03e7ddf9e4b5
+# ╠═721079da-1103-11eb-2720-99754ea64c95
 # ╟─b94b7610-106d-11eb-2852-25337ce6ec3a
 # ╠═10853972-108f-11eb-36b5-57f656bc992e
 # ╠═2187253c-108f-11eb-04a2-512ce3c17abf
@@ -711,6 +803,8 @@ TODO = html"<h1 style='display: inline; color: purple;'>TODO</h1>"
 # ╠═4a40557c-1083-11eb-3a82-31cfed3de047
 # ╠═e926013a-1080-11eb-24b8-034df3032883
 # ╠═53dc7e0a-1081-11eb-39a3-c981848c2b1d
+# ╠═15b60272-10ca-11eb-0a28-599ed78cf98a
+# ╟─df42aa9e-10c9-11eb-2c19-2d7ce40a1c6c
 # ╟─b94f9df8-106d-11eb-3be8-c5a1bb79d0d4
 # ╟─b9586d66-106d-11eb-0204-a91c8f8355f7
 # ╟─b9616f92-106d-11eb-1bd1-ede92a617fdb
@@ -719,5 +813,5 @@ TODO = html"<h1 style='display: inline; color: purple;'>TODO</h1>"
 # ╟─b97afa48-106d-11eb-3c2c-cdee1d1cc6d7
 # ╟─b98238ce-106d-11eb-1e39-f9eda5df76af
 # ╟─b989e544-106d-11eb-3c53-3906c5c922fb
-# ╠═05bfc716-106a-11eb-36cb-e7c488050d54
+# ╟─05bfc716-106a-11eb-36cb-e7c488050d54
 # ╠═acbb9a56-106d-11eb-115b-7d067adb302c
