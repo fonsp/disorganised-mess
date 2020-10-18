@@ -732,6 +732,10 @@ TODO = html"<span style='display: inline; font-size: 2em; color: purple; font-we
 
 # ╔═╡ 17af6a00-112b-11eb-1c9c-bfd12931491d
 md"""
+Before we jump in to simulating the SIR equations, let's experiment with a simple 1D function. In calculus, we learn techniques for differentiating and integrating _symbolic_ equations, e.g. ``\frac{d}{dx} x^n = nx^{n-1}``. But in real applications, it is often impossible to apply these techniques, either because the problem is too complicated to solve symbolically, or because our problem has no symbolic expression, like when working with experimental data (e.g. monte carlo results).
+
+Instead, we use ✨ _computers_ ✨ to approximate 
+
 Blabla about derivative, limit h -> 0, finite difference $TODO
 """
 
@@ -753,7 +757,7 @@ md"""
 # ╠═05b01f6e-106a-11eb-2a88-5f523fafe433
 # ╟─0d191540-106e-11eb-1f20-bf72a75fb650
 # ╟─3cd69418-10bb-11eb-2fb5-e93bac9e54a9
-# ╟─17af6a00-112b-11eb-1c9c-bfd12931491d
+# ╠═17af6a00-112b-11eb-1c9c-bfd12931491d
 # ╟─2a4050f6-112b-11eb-368a-f91d7a023c9d
 # ╠═910d30b2-112b-11eb-2d9b-0f509a5d28fb
 # ╟─bf8a4556-112b-11eb-042e-d705a2ca922a
