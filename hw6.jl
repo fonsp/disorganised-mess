@@ -116,7 +116,22 @@ We emphasise that this material is pedagogical; there is no suggestion that thes
 
 # ╔═╡ 3cd69418-10bb-11eb-2fb5-e93bac9e54a9
 md"""
-# **Exercise 1**: _Calculus without calculus_
+## **Exercise 1**: _Calculus without calculus_
+"""
+
+# ╔═╡ 17af6a00-112b-11eb-1c9c-bfd12931491d
+md"""
+Before we jump in to simulating the SIR equations, let's experiment with a simple 1D function. In calculus, we learn techniques for differentiating and integrating _symbolic_ equations, e.g. ``\frac{d}{dx} x^n = nx^{n-1}``. But in real applications, it is often impossible to apply these techniques, either because the problem is too complicated to solve symbolically, or because our problem has no symbolic expression, like when working with experimental results.
+
+Instead, we use ✨ _computers_ ✨ to approximate derivatives and integrals. Instead of applying rules to symbolic expressions, we use much simpler strategies that _only use the output values of our function_.
+
+As a first example, we will approximate the _derivative_ of a function. Our method is inspired by the analytical definition of the derivative!
+
+$$f'(a) := \lim_{h \rightarrow 0} \frac{f(a + h) - f(a)}{h}.$$
+
+The finite difference method simply fixes a small value for $h$, say $h = 10^{-3}$, and then approximates the derivative as:
+
+$$f'(a) \simeq \frac{f(a + h) - f(a)}{h}.$$
 """
 
 # ╔═╡ 2a4050f6-112b-11eb-368a-f91d7a023c9d
@@ -127,7 +142,7 @@ md"""
 """
 
 # ╔═╡ 910d30b2-112b-11eb-2d9b-0f509a5d28fb
-function finite_difference_slope(f, a, h)
+function finite_difference_slope(f::Function, a, h=1e-3)
 	(f(a+h) - f(a)) / h
 end
 
@@ -212,87 +227,104 @@ euler_integrate(sqrt, 0, 1, .1, 100)
 # ╔═╡ ab72fdbe-10be-11eb-3b33-eb4ab41730d6
 @bind N_euler Slider(2:40)
 
-# ╔═╡ 518fb3aa-106e-11eb-0fcd-31091a8f12db
+# ╔═╡ d21fad2a-1253-11eb-304a-2bacf9064d0d
 md"""
-## **Exercise 1:** _Simulating the SIR differential equations_
+You see that our numerical antiderivate is not very accurate, but we can get a smaller error by choosing a smaller step size. Try it out!
 
-Recall from lectures that the ordinary differential equations (ODEs) for the SIR model are as follows:
+There are also alternative integration methods that are more accurate with the same step size. Some methods also use the second derivative, other methods use multiple steps at once, etc.! This is the study of Numerical Methods.
+"""
 
-$$\begin{align*}
-\dot{s} &= - \beta s \, i \\
-\dot{i} &= + \beta s \, i - \gamma i \\
-\dot{r} &= +\gamma i
-\end{align*}$$
+# ╔═╡ 517ab0c2-1244-11eb-049d-ffdc054e030d
+function euler_SIR_step(β, γ, sir_0::Vector, h::Number)
+	s, i, r = sir_0
+	
+	return missing
+end
 
-where ``\dot{s} := \frac{ds}{dt}`` is the derivative of $s$ with respect to time. 
-Recall that $s$ denotes the *proportion* (fraction) of the population that is susceptible.
+# ╔═╡ 517efa24-1244-11eb-1f81-b7f95b87ce3b
+md"""
+👉 Implement a function `euler_SIR(β, γ, sir_0, T)` that applies the previously defined function over a time range $T$.
 
-We will use the simplest possible method to simulate these, namely the **Euler method**. The Euler method is *not* a good method to solve ODEs accurately. But for our purposes it is good enough.
+You should return a vector of vectors: a 3-element vector for each point in time.
+"""
 
-For an ODE with a single variable, $\dot{x} = f(x)$, the Euler method takes steps of length $h$ in time. If we have an approximation $x_n$ at time $t_n$ it gives us an approximation for the value $x_{n+1}$ of $x$ at time $t_{n+1} = t_n + h$ as
+# ╔═╡ 51a0138a-1244-11eb-239f-a7413e2e44e4
+function euler_SIR(β, γ, sir_0::Vector, T::AbstractRange)
+	# T is a range, you get the step size and number of steps like so:
+	h = step(T)
+	
+	num_steps = length(T)
+	
+	return missing
+end
 
-$$x_{n+1} = x_n + h \, f(x_n)$$
+# ╔═╡ 0a095a94-1245-11eb-001a-b908128532aa
+euler_SIR(0.1, 0.05, 
+	[0.99, 0.01, 0.00], 
+	0 : 0.1 : 30.0)
 
-In the case of several functions $s$, $i$ and $r$, we must use a rule like this for *each* of the differential equations within a *single* time step to get new values for *each* of $s$, $i$ and $r$ at the end of the time step in terms of the values at the start of the time step. In Julia we can write `s` for the old value and `s_new` for the new value.
+# ╔═╡ 51c9a25e-1244-11eb-014f-0bcce2273cee
+md"""
+👉 Plot $s$, $i$ and $r$ as a function of time $t$.
+"""
 
-1. Implement a function `euler_SIR(β, γ, s0, i0, r0, h, T)` that integrates these equations with the given parameter values and initial values, with a step size $h$ up to a final time $T$.
+# ╔═╡ 58675b3c-1245-11eb-3548-c9cb8a6b3188
+asdf
 
-    It should return vectors of the trajectory of $s$, $i$ and $r$, as well as the collection of times at which they are calculated.
+# ╔═╡ 586d0352-1245-11eb-2504-05d0aa2352c6
+md"""
+👉 Do you see an epidemic outbreak (i.e. a rapid growth in number of infected individuals, followed by a decline)? What happens after a long time? Does everybody get infected?
+"""
 
-2. Run the SIR model with $\beta = 0.1$, $\gamma = 0.05$, and $s_0 = 0.99$, $i_0 = 0.01$ and $r_0 = 0$ for a time $T = 300$ with time step ("step size") $h=0.1$. 
+# ╔═╡ 589b2b4c-1245-11eb-1ec7-693c6bda97c4
+default_SIR_parameters_observation = md"""
+blabla
+"""
 
-3. Plot $s$, $i$ and $r$ as a function of time $t$.
-
-3. Do you see an epidemic outbreak (i.e. a rapid growth in number of infected individuals, followed by a decline)? What happens after a long time? Does everybody get infected?
-
-4. Make an interactive visualization in which vary $\beta$ and $\gamma$. What relation should $\beta$ and $\gamma$ have for an epidemic outbreak to occur?
-
+# ╔═╡ 58b45a0e-1245-11eb-04d1-23a1f3a0f242
+md"""
+👉 Make an interactive visualization in which vary $\beta$ and $\gamma$. What relation should $\beta$ and $\gamma$ have for an epidemic outbreak to occur?
 """
 
 # ╔═╡ 68274534-1103-11eb-0d62-f1acb57721bc
 
 
-# ╔═╡ 82539bbe-106e-11eb-0e9e-170dfa6a7dad
+# ╔═╡ b394b44e-1245-11eb-2f86-8d10113e8cfc
 md"""
+👉 Write functions `∂x(f, a, b)` and `∂y(f, a, b)` that calculate the **partial derivatives** $\frac{\partial f}{\partial x}$ and $\frac{\partial f}{\partial y}$ at $(a, b)$ of a function $f : \mathbb{R}^2 \to \mathbb{R}$ (i.e. a function that takes two real numbers and returns one real).
 
-## **Exercise 2:** _Numerical derivatives_
+Recall that $\frac{\partial f}{\partial x}$  is the derivative of the single-variable function $g(x) := f(x, b)$ obtained by fixing the value of $y$ to $b$.
 
-For fitting we need optimization, and for optimization we will use *derivatives* (rates of change). 
-In this exercise we will see one method for calculating derivatives numerically.
-
-1. Define a function `deriv` that takes a function `f`, representing a function $f: \mathbb{R} \to \mathbb{R}$, a number $a$ and an optional $h$ with default value 0.001, and calculates the **finite-difference approximation**
-
-    $$f'(a) \simeq \frac{f(a + h) - f(a)}{h}$$
-
-    of the derivative $f'(a)$.
-
-
-FONSI: we do the 1D case as the first thing of this homework, it helps to introduce the euler method. In this exercise we do the directional derivative
-
-$$f'_v(a) \simeq \frac{f(a + hv) - f(a)}{h}$$
-
-with ``v = (1,0,0)`` etc
-
-2. Write a function `tangent_line` that calculates the tangent line to $f$ at a point $a$. It should also accept a value of $x$ at which it will calculate the height of the tangent line. Use the function `deriv` to calculate $f'(a)$. FONSI : should return a **function** x -> slope(x-a) + value
-
-3. Make an interactive visualization of the function $f(x) = x^3 - 2x$, showing the tangent line at a point $a$ and allowing you to vary $a$.
-Make sure that the line is indeed visually tangent to the graph!
-
-FONSI: we should make it ourselves
-
-4. Write functions `∂x(f, a, b)` and `∂y(f, a, b)` that calculate the **partial derivatives** $\frac{\partial f}{\partial x}$ and $\frac{\partial f}{\partial y}$ at $(a, b)$ of a function $f : \mathbb{R}^2 \to \mathbb{R}$ (i.e. a function that takes two real numbers and returns one real).
-
-    Recall that $\frac{\partial f}{\partial x}$  is the derivative of the single-variable function $g(x) := f(x, b)$ obtained by fixing the value of $y$ to $b$.
-
-    You should use **anonymous functions** for this. These have the form `x -> x^2`, meaning "the function that sends $x$ to $x^2$".
-
-5. Write a function `gradient(f, a, b)` that calculates the **gradient** of a function $f$ at the point $(a, b)$, given by the vector $\nabla f(a, b) := (\frac{\partial f}{\partial x}(a, b), \frac{\partial f}{\partial y}(a, b))$.
-
+You should use **anonymous functions** for this. These have the form `x -> x^2`, meaning "the function that sends $x$ to $x^2$".
 
 """
 
-# ╔═╡ 69ff577a-1103-11eb-15b7-536764063bc2
+# ╔═╡ d101b79a-1245-11eb-3855-61e7b6088d68
+function ∂x(f::Function, a, b)
+	directional = h -> f(a + h, b)
+	finite_difference_slope(directional, 0)
+end
 
+# ╔═╡ 34318eee-1246-11eb-213f-455b632dba3a
+function ∂y(f::Function, a, b)
+	directional = h -> f(a, b + h)
+	finite_difference_slope(directional, 0)
+end
+
+# ╔═╡ b398a29a-1245-11eb-1476-ab65e92d1bc8
+md"""
+👉 Write a function `gradient(f, a, b)` that calculates the **gradient** of a function $f$ at the point $(a, b)$, given by the vector $\nabla f(a, b) := (\frac{\partial f}{\partial x}(a, b), \frac{\partial f}{\partial y}(a, b))$.
+"""
+
+# ╔═╡ 69ff577a-1103-11eb-15b7-536764063bc2
+function gradient(f::Function, a, b)
+	[∂x(f, a, b), ∂y(f, a, b)]
+end
+
+# ╔═╡ 4f65ced2-1246-11eb-1808-616baf4a677c
+gradient(pi,1) do x, y
+	sin(x) * y
+end
 
 # ╔═╡ 82579b90-106e-11eb-0018-4553c29e57a2
 md"""
@@ -304,28 +336,73 @@ To do so we will think of a function as a hill. To find a minimum we should "rol
 
 
 
-1. Write a function `gradient_descent_1d(f, x0)` to minimize a 1D function, i.e. a function $f: \mathbb{R} \to \mathbb{R}$.
+👉 Write a function `gradient_descent_1d(f, x0)` to minimize a 1D function, i.e. a function $f: \mathbb{R} \to \mathbb{R}$.
 
-    To do so we notice that the derivative tells us the direction in which the function *increases*. So we take steps in the *opposite* direction, of a small size $\eta$ (eta).
+To do so we notice that the derivative tells us the direction in which the function *increases*. So we take steps in the *opposite* direction, of a small size $\eta$ (eta).
 
-    Use this to write the function starting from the point `x0` and using your function `deriv` to approximate the derivative.
+Use this to write the function starting from the point `x0` and using your function `deriv` to approximate the derivative.
 
-    Take a reasonably large number of steps, say 100, with $\eta = 0.01$.
+Take a reasonably large number of steps, say 100, with $\eta = 0.01$.
 
+"""
+
+# ╔═╡ eb1c0198-1246-11eb-1792-13d6458a0142
+function gradient_descent_1d(f, x0, η=0.01)
+	reduce(1:1000; init=x0) do old, _
+		slope = finite_difference_slope(f, old)
+		
+		old - η*sign(slope)
+	end
+end
+
+# ╔═╡ 34dc4b02-1248-11eb-26b2-5d2610cfeb41
+let
+	f = x -> (x - 5)^2 - 3
+	# minimum should be at x = 5
+	gradient_descent_1d(f, 0.0)
+end
+
+# ╔═╡ e3120c18-1246-11eb-3bf4-7f4ac45856e0
+md"""
     What would be a better way to decide when to end the function?
 
-2. Write an interactive visualization showing the progress of gradient descent on the function
+Write an interactive visualization showing the progress of gradient descent on the function
 
     $$f(x) = x^{4} +3x^{3} - 3x + 5.$$
 
     Make sure that it does indeed get close to a local minimum.
 
     How can you find different local minima?
+"""
 
-3.  Write a function `gradient_descent_2d(f, x0, y0)` that does the same for functions $f(x, y)$ of two variables.
+# ╔═╡ 9fd2956a-1248-11eb-266d-f558cda55702
+md"""
+#### Exericse 123
+Multivariable calculus tells us that the gradient $\nabla f(a, b)$ at a point $(a, b)$ is the direction in which the function *increases* the fastest. So again we should take a small step in the *opposite* direction. Note that the gradient is a *vector* which tells us which direction to move in the plane $(a, b)$.
 
-    Multivariable calculus tells us that the gradient $\nabla f(a, b)$ at a point $(a, b)$ is the direction in which the function *increases* the fastest. So again we should take a small step in the *opposite* direction. Note that the gradient is a *vector* which tells us which direction to move in the plane $(a, b)$.
+👉 Write a function `gradient_descent_2d(f, x0, y0)` that does the same for functions $f(x, y)$ of two variables.
+"""
 
+# ╔═╡ ae65421e-1248-11eb-12be-af01d58e6cbc
+function gradient_descent_2d(f, x0, y0; η=0.01)
+	reduce(1:1000; init=(x0, y0)) do old, _
+		antidirection = gradient(f, old...)
+		
+		old .- η * antidirection
+	end
+end
+
+# ╔═╡ a0045046-1248-11eb-13bd-8b8ad861b29a
+himmelbau(x, y) = (x^2 + y - 11)^2 + (x + y^2 - 7)^2
+
+# ╔═╡ 92854562-1249-11eb-0b81-156982df1284
+gradient_descent_2d(himmelbau, 0, 0)
+
+# ╔═╡ fbb4a9a4-1248-11eb-00e2-fd346f0056db
+surface(-4:0.05:5, -4:0.05:4, himmelbau)
+
+# ╔═╡ a03890d6-1248-11eb-37ee-85b0a5273e0c
+md"""
 4. Apply this to the **Himmelblau function** $f(x, y) := (x^2 + y - 11)^2 + (x + y^2 - 7)^2$. Visualize the trajectory using both contours (`contour` function) and a 2D surface (`surface` function). [Use e.g. `surface(-2:0.01:2, -2:0.01:2, f)`]
 
     Can you find different minima?
@@ -341,41 +418,126 @@ To do so we will think of a function as a hill. To find a minimum we should "rol
 md"""
 ## **Exercise 4:** _Learning parameter values_
 
-In this exercise we will apply gradient descent to fit a simple function $y = f_{a, b}(x)$ to some data given as pairs $(x_i, y_i)$. Here $a$ and $b$ are **parameters** that appear in the form of the function $f$. We want to find the parameters that provide the **best fit**, i.e. the version $f_{a, b}$ of the function that is closest to the data when we vary $a$ and $b$.
+In this exercise we will apply gradient descent to fit a simple function $y = f_{\alpha, \beta}(x)$ to some data given as pairs $(x_i, y_i)$. Here $\alpha$ and $\beta$ are **parameters** that appear in the form of the function $f$. We want to find the parameters that provide the **best fit**, i.e. the version $f_{\alpha, \beta}$ of the function that is closest to the data when we vary $\alpha$ and $\beta$.
 
-To do so we need to define what "best" means. We will define a measure of the distance between the function and the data, given by a **loss function**, which itself depends on the values of $a$ and $b$. Then we will *minimize* the loss function over $a$ and $b$ to find those values that minimize this distance, and hence are "best" in this precise sense.
+To do so we need to define what "best" means. We will define a measure of the distance between the function and the data, given by a **loss function**, which itself depends on the values of $\alpha$ and $\beta$. Then we will *minimize* the loss function over $\alpha$ and $\beta$ to find those values that minimize this distance, and hence are "best" in this precise sense.
 
 The iterative procedure by which we gradually adjust the parameter values to improve the loss function is often called **machine learning** or just **learning**, since the computer is "discovering" information in a gradual way, which is supposed to remind us of how humans learn. [Hint: This is not how humans learn.]
 
-
-1. Load the data from the file `some_data.csv` into vectors `xs` and `ys`.
-
-2. Plot the data. What does it remind you of?
-
-3. Let's try to fit a gaussian (normal) distribution. Its PDF with mean $\mu$ and standard deviation $\sigma$ is
-
-    $$f_{\mu, \sigma}(x) := \frac{1}{\sigma \sqrt{2 \pi}}\exp \left[- \frac{(x - \mu)^2}{2 \sigma^2} \right]$$
-
-    Define this function as `f(x, μ, σ)`.
-
-
-4. Define a **loss function** to measure the "distance" between the actual data and the function. It will depend on the values of $\mu$ and $\sigma$ that you choose:
-
-    $$\mathcal{L}(\mu, \sigma) := \sum_i [f_{\mu, \sigma}(x_i) - y_i]^2$$
-
-5. Use your `gradient_descent` function to find a local minimum of $\mathcal{L}$, starting with initial values $\mu = 0$ and $\sigma = 1$.
-
-    What are the final values for $\mu$ and $\sigma$ that you find?
-
-6. Modify the gradient descent function to store the whole history of the values of $\mu$ and $\sigma$ that it went through.
-
-    Make an interactive visualization showing how the resulting curve $f_{\mu, \sigma}$ evolves over time, compared to the original data.
-
-    ("Time" here corresponds to the iterations in the gradient descent function.)
-
 """
 
+# ╔═╡ 65e691e4-124a-11eb-38b1-b1732403aa3d
+import Statistics
+
 # ╔═╡ 6f4aa432-1103-11eb-13da-fdd9eefc7c86
+function dice_frequencies(N_dice, N_experiments)
+	
+	experiment() = let
+		sum_of_rolls = sum(rand(1:6, N_dice))
+	end
+	
+	results = [experiment() for _ in 1:N_experiments]
+	
+	x = N_dice : N_dice*6
+	
+	y = map(x) do total
+		sum(isequal(total), results)
+	end ./ N_experiments
+	
+	x, y
+end
+
+# ╔═╡ dbe9635a-124b-11eb-111d-fb611954db56
+dice_x, dice_y = dice_frequencies(10, 20_000)
+
+# ╔═╡ 57090426-124e-11eb-0a17-1566ae96b7c2
+md"""
+Let's try to fit a gaussian (normal) distribution. Its PDF with mean $\mu$ and standard deviation $\sigma$ is
+
+$$f_{\mu, \sigma}(x) := \frac{1}{\sigma \sqrt{2 \pi}}\exp \left[- \frac{(x - \mu)^2}{2 \sigma^2} \right]$$
+
+👉 Manually fit a Gaussian distribution to our data by adjusting ``\mu`` and ``\sigma`` until you find a good fit.
+"""
+
+# ╔═╡ 66192a74-124c-11eb-0c6a-d74aecb4c624
+md"μ = $(@bind guess_μ Slider(1:0.1:last(dice_x); default = last(dice_x) * 0.4, show_value=true))"
+
+# ╔═╡ 70f0fe9c-124c-11eb-3dc6-e102e68673d9
+md"σ = $(@bind guess_σ Slider(0.1:0.1:last(dice_x)/2; default=12, show_value=true))"
+
+
+# ╔═╡ 41b2262a-124e-11eb-2634-4385e2f3c6b6
+md"Show manual fit: $(@bind show_manual_fit CheckBox())"
+
+# ╔═╡ 0dea1f70-124c-11eb-1593-e535ab21976c
+function gauss(x, μ, σ)
+	(1 / (sqrt(2π) * σ)) * exp(-(x-μ)^2 / σ^2 / 2)
+end
+
+# ╔═╡ ac320522-124b-11eb-1552-51c2adaf2521
+let
+	p = plot(dice_x, dice_y, size=(400,200), label="data")
+	plot!(p, dice_x, gauss.(dice_x, [guess_μ], [guess_σ]), label="manual fit")
+end
+
+# ╔═╡ c57a3d26-124e-11eb-1a26-6d39c2da76ec
+md"""
+What we just did was adjusting the function parameters until we found the best possible fit. Let's automate this process! To do so, we need to quantify how _good or bad_, a fit is.
+"""
+
+# ╔═╡ 471cbd84-124c-11eb-356e-371d23011af5
+md"""
+👉 Define a **loss function** to measure the "distance" between the actual data and the function. It will depend on the values of $\mu$ and $\sigma$ that you choose:
+
+$$\mathcal{L}(\mu, \sigma) := \sum_i [f_{\mu, \sigma}(x_i) - y_i]^2$$
+"""
+
+# ╔═╡ cdb5de86-124f-11eb-09c8-bd28710d1d44
+function loss_dice(μ, σ)
+	fit = gauss.(dice_x, [μ], [σ])
+	sum((fit - dice_y) .^ 2)
+end
+
+# ╔═╡ 2fc55daa-124f-11eb-399e-659e59148ef5
+# function loss_dice(μ, σ)
+	
+# 	return missing
+# end
+
+# ╔═╡ 3a6ec2e4-124f-11eb-0f68-791475bab5cd
+loss_dice(guess_μ, guess_σ)
+
+# ╔═╡ 43ed3f00-124f-11eb-07bd-87f9a5e6f575
+loss_dice(guess_μ + 3, guess_σ)
+
+# ╔═╡ 2fcb93aa-124f-11eb-10de-55fced6f4b83
+md"""
+👉 Use your `gradient_descent_2d` function to find a local minimum of $\mathcal{L}$, starting with initial values $\mu = 30$ and $\sigma = 1$.
+"""
+
+# ╔═╡ b3045130-124f-11eb-3ae0-a96d6393257d
+found_μ, found_σ = let
+	
+	gradient_descent_2d(loss_dice, 30, 1, η=1)
+end
+
+# ╔═╡ a150fd60-124f-11eb-35d6-85104bcfd0fe
+# found_μ, found_σ = let
+	
+# 	# your code here
+	
+# 	missing, missing
+# end
+
+# ╔═╡ b239642a-124f-11eb-3fd0-71b67f7a540c
+let
+	stat_mean = sum(dice_x .* dice_y)
+	stdev_mean = sqrt(sum(dice_x.^2 .* dice_y) - stat_mean .^ 2)
+	
+	stat_mean, stdev_mean
+end
+
+# ╔═╡ 5898b680-124c-11eb-08e7-a5ad622066de
 
 
 # ╔═╡ 826bb0dc-106e-11eb-29eb-03e7ddf9e4b5
@@ -433,7 +595,7 @@ T = LinRange(0.0, 60.0, 500)
 
 # ╔═╡ e8ea71fc-108e-11eb-2f27-e984fde247d2
 A = [0  -1
-	1    -.3]
+	1    -.5]
 
 # ╔═╡ 0af07152-108f-11eb-2c0b-d96b54bfd3a5
 f(t,x) = A*x
@@ -445,6 +607,21 @@ function compute_path(first)
 	end
 end
 
+# ╔═╡ 47175004-1229-11eb-27d3-b52ea9a3e848
+
+
+# ╔═╡ 51e7e6c6-1229-11eb-132b-63de60b667fe
+begin
+	p = 123
+	PlutoRunner.Bond(Slider(1:10), :p)
+end
+
+# ╔═╡ 729ea04e-1229-11eb-2759-fb5b768c2fda
+p
+
+# ╔═╡ d920aef8-1232-11eb-226c-437c153adbf3
+methodswith("asdf" |> typeof)
+
 # ╔═╡ a10aad32-109a-11eb-1f62-a148b945d4f7
 x0_ref = Ref([0.5, 0.5])
 
@@ -455,9 +632,6 @@ x0_ref = Ref([0.5, 0.5])
 # 	end
 # 	wow(x0, :x0)
 # end
-
-# ╔═╡ 34cae8c6-109a-11eb-381c-f74fe8f52e21
-# x0_ref = Ref([0.5, 0.5])
 
 # ╔═╡ 4a40557c-1083-11eb-3a82-31cfed3de047
 old = []
@@ -563,6 +737,9 @@ begin
 	@bind x0 wow(x0)
 	
 end |> with_d3_libs
+
+# ╔═╡ 337ece1a-1225-11eb-3e24-9b4a816a1ee1
+x0
 
 # ╔═╡ ad5b94c6-1071-11eb-25f6-bf800b21b265
 let
@@ -724,24 +901,111 @@ yays = [md"Fantastic!", md"Splendid!", md"Great!", md"Yay ❤", md"Great! 🎉",
 # ╔═╡ b98238ce-106d-11eb-1e39-f9eda5df76af
 correct(text=rand(yays)) = Markdown.MD(Markdown.Admonition("correct", "Got it!", [text]))
 
+# ╔═╡ f46aeaf0-1246-11eb-17aa-2580fdbcfa5a
+let
+	result = gradient_descent_1d(10) do x
+		(x - 5pi) ^ 2 + 10
+	end
+	
+	if result isa Missing
+		still_missing()
+	elseif !(result isa Real)
+		keep_working(md"You need to return a number.")
+	else
+		error = abs(result - 5pi)
+		if error > 5.0
+			almost(md"It's not accurate enough yet. Maybe you need to increase the number of steps?")
+		elseif error > 0.01
+			keep_working()
+		else
+			correct()
+		end
+	end
+end
+
 # ╔═╡ b989e544-106d-11eb-3c53-3906c5c922fb
 not_defined(variable_name) = Markdown.MD(Markdown.Admonition("danger", "Oopsie!", [md"Make sure that you define a variable called **$(Markdown.Code(string(variable_name)))**"]))
 
 # ╔═╡ 05bfc716-106a-11eb-36cb-e7c488050d54
 TODO = html"<span style='display: inline; font-size: 2em; color: purple; font-weight: 900;'>TODO</span>"
 
-# ╔═╡ 17af6a00-112b-11eb-1c9c-bfd12931491d
-md"""
-Before we jump in to simulating the SIR equations, let's experiment with a simple 1D function. In calculus, we learn techniques for differentiating and integrating _symbolic_ equations, e.g. ``\frac{d}{dx} x^n = nx^{n-1}``. But in real applications, it is often impossible to apply these techniques, either because the problem is too complicated to solve symbolically, or because our problem has no symbolic expression, like when working with experimental data (e.g. monte carlo results).
-
-Instead, we use ✨ _computers_ ✨ to approximate 
-
-Blabla about derivative, limit h -> 0, finite difference $TODO
-"""
-
 # ╔═╡ 2335cae6-112f-11eb-3c2c-254e82014567
 md"""
 👉 do this $TODO
+"""
+
+# ╔═╡ 518fb3aa-106e-11eb-0fcd-31091a8f12db
+md"""
+## **Exercise 1:** _Simulating the SIR differential equations_
+
+Recall from lectures that the ordinary differential equations (ODEs) for the SIR model are as follows:
+
+$$\begin{align*}
+\dot{s} &= - \beta s \, i \\
+\dot{i} &= + \beta s \, i - \gamma i \\
+\dot{r} &= +\gamma i
+\end{align*}$$
+
+where ``\dot{s} := \frac{ds}{dt}`` is the derivative of $s$ with respect to time. 
+Recall that $s$ denotes the *proportion* (fraction) of the population that is susceptible.
+
+We will use the simplest possible method to simulate these, namely the **Euler method**. The Euler method is not always a good method to solve ODEs accurately, but for our purposes it is good enough.
+
+ $TODO maybe explain this without _f_. Go straight to discretised equations
+
+For an ODE with a single variable, $\dot{x} = f(x)$, the Euler method takes steps of length $h$ in time. If we have an approximation $x_n$ at time $t_n$ it gives us an approximation for the value $x_{n+1}$ of $x$ at time $t_{n+1} = t_n + h$ as
+
+$$x_{n+1} = x_n + h \, f(x_n)$$
+
+In the case of several functions $s$, $i$ and $r$, we must use a rule like this for *each* of the differential equations within a *single* time step to get new values for *each* of $s$, $i$ and $r$ at the end of the time step in terms of the values at the start of the time step. In Julia we can write `s` for the old value and `s_new` for the new value.
+
+👉 Implement a function `euler_SIR_step(β, γ, sir_0, h)` that performs a single Euler step for these equations with the given parameter values and initial values, with a step size $h$.
+
+`sir_0` is a 3-element vector, and you should return a new 3-element vector with the values after the timestep.
+"""
+
+# ╔═╡ 84daf7c4-1244-11eb-0382-d1da633a63e2
+TODO
+
+# ╔═╡ 902dd1b4-1244-11eb-390b-3dc935d458a2
+TODO
+
+# ╔═╡ 82539bbe-106e-11eb-0e9e-170dfa6a7dad
+md"""
+
+## **Exercise 2:** _Numerical derivatives_
+
+For fitting we need optimization, and for optimization we will use *derivatives* (rates of change). 
+In this exercise we will see one method for calculating derivatives numerically.
+
+ $TODO
+
+FONSI: we do the 1D case as the first thing of this homework, it helps to introduce the euler method. In this exercise we do the directional derivative
+
+$$f'_v(a) \simeq \frac{f(a + hv) - f(a)}{h}$$
+
+with ``v = (1,0,0)`` etc
+"""
+
+# ╔═╡ 9fcc46d8-1248-11eb-3954-f5047790ef8d
+TODO
+
+# ╔═╡ 6e328252-124f-11eb-052f-3717321933d6
+TODO
+
+# ╔═╡ a737990a-1251-11eb-1114-c57ceee75181
+TODO
+
+# ╔═╡ a1575cb6-124f-11eb-1ecb-c33fd953b553
+md"""
+ $TODO
+
+6. Modify the gradient descent function to store the whole history of the values of $\mu$ and $\sigma$ that it went through.
+
+    Make an interactive visualization showing how the resulting curve $f_{\mu, \sigma}$ evolves over time, compared to the original data.
+
+    ("Time" here corresponds to the iterations in the gradient descent function.)
+
 """
 
 # ╔═╡ acbb9a56-106d-11eb-115b-7d067adb302c
@@ -757,7 +1021,7 @@ md"""
 # ╠═05b01f6e-106a-11eb-2a88-5f523fafe433
 # ╟─0d191540-106e-11eb-1f20-bf72a75fb650
 # ╟─3cd69418-10bb-11eb-2fb5-e93bac9e54a9
-# ╠═17af6a00-112b-11eb-1c9c-bfd12931491d
+# ╟─17af6a00-112b-11eb-1c9c-bfd12931491d
 # ╟─2a4050f6-112b-11eb-368a-f91d7a023c9d
 # ╠═910d30b2-112b-11eb-2d9b-0f509a5d28fb
 # ╟─bf8a4556-112b-11eb-042e-d705a2ca922a
@@ -780,14 +1044,64 @@ md"""
 # ╠═b74d94b8-10bf-11eb-38c1-9f39dfcb1096
 # ╠═ab72fdbe-10be-11eb-3b33-eb4ab41730d6
 # ╟─990236e0-10be-11eb-333a-d3080a224d34
+# ╟─d21fad2a-1253-11eb-304a-2bacf9064d0d
 # ╠═518fb3aa-106e-11eb-0fcd-31091a8f12db
+# ╠═517ab0c2-1244-11eb-049d-ffdc054e030d
+# ╠═84daf7c4-1244-11eb-0382-d1da633a63e2
+# ╟─517efa24-1244-11eb-1f81-b7f95b87ce3b
+# ╠═51a0138a-1244-11eb-239f-a7413e2e44e4
+# ╠═902dd1b4-1244-11eb-390b-3dc935d458a2
+# ╠═0a095a94-1245-11eb-001a-b908128532aa
+# ╟─51c9a25e-1244-11eb-014f-0bcce2273cee
+# ╠═58675b3c-1245-11eb-3548-c9cb8a6b3188
+# ╠═586d0352-1245-11eb-2504-05d0aa2352c6
+# ╠═589b2b4c-1245-11eb-1ec7-693c6bda97c4
+# ╟─58b45a0e-1245-11eb-04d1-23a1f3a0f242
 # ╠═68274534-1103-11eb-0d62-f1acb57721bc
 # ╟─82539bbe-106e-11eb-0e9e-170dfa6a7dad
+# ╟─b394b44e-1245-11eb-2f86-8d10113e8cfc
+# ╠═d101b79a-1245-11eb-3855-61e7b6088d68
+# ╠═34318eee-1246-11eb-213f-455b632dba3a
+# ╠═b398a29a-1245-11eb-1476-ab65e92d1bc8
 # ╠═69ff577a-1103-11eb-15b7-536764063bc2
+# ╠═4f65ced2-1246-11eb-1808-616baf4a677c
 # ╟─82579b90-106e-11eb-0018-4553c29e57a2
+# ╠═eb1c0198-1246-11eb-1792-13d6458a0142
+# ╠═34dc4b02-1248-11eb-26b2-5d2610cfeb41
+# ╟─f46aeaf0-1246-11eb-17aa-2580fdbcfa5a
+# ╠═e3120c18-1246-11eb-3bf4-7f4ac45856e0
+# ╠═9fcc46d8-1248-11eb-3954-f5047790ef8d
+# ╟─9fd2956a-1248-11eb-266d-f558cda55702
+# ╠═ae65421e-1248-11eb-12be-af01d58e6cbc
+# ╠═92854562-1249-11eb-0b81-156982df1284
+# ╠═fbb4a9a4-1248-11eb-00e2-fd346f0056db
+# ╠═a0045046-1248-11eb-13bd-8b8ad861b29a
+# ╠═a03890d6-1248-11eb-37ee-85b0a5273e0c
 # ╠═6d1ee93e-1103-11eb-140f-63fca63f8b06
 # ╟─8261eb92-106e-11eb-2ccc-1348f232f5c3
-# ╠═6f4aa432-1103-11eb-13da-fdd9eefc7c86
+# ╠═65e691e4-124a-11eb-38b1-b1732403aa3d
+# ╟─6f4aa432-1103-11eb-13da-fdd9eefc7c86
+# ╠═dbe9635a-124b-11eb-111d-fb611954db56
+# ╟─ac320522-124b-11eb-1552-51c2adaf2521
+# ╟─57090426-124e-11eb-0a17-1566ae96b7c2
+# ╟─66192a74-124c-11eb-0c6a-d74aecb4c624
+# ╟─70f0fe9c-124c-11eb-3dc6-e102e68673d9
+# ╟─41b2262a-124e-11eb-2634-4385e2f3c6b6
+# ╠═0dea1f70-124c-11eb-1593-e535ab21976c
+# ╟─c57a3d26-124e-11eb-1a26-6d39c2da76ec
+# ╟─471cbd84-124c-11eb-356e-371d23011af5
+# ╠═cdb5de86-124f-11eb-09c8-bd28710d1d44
+# ╠═2fc55daa-124f-11eb-399e-659e59148ef5
+# ╠═3a6ec2e4-124f-11eb-0f68-791475bab5cd
+# ╠═43ed3f00-124f-11eb-07bd-87f9a5e6f575
+# ╠═6e328252-124f-11eb-052f-3717321933d6
+# ╟─2fcb93aa-124f-11eb-10de-55fced6f4b83
+# ╠═b3045130-124f-11eb-3ae0-a96d6393257d
+# ╠═a150fd60-124f-11eb-35d6-85104bcfd0fe
+# ╠═a737990a-1251-11eb-1114-c57ceee75181
+# ╠═b239642a-124f-11eb-3fd0-71b67f7a540c
+# ╠═a1575cb6-124f-11eb-1ecb-c33fd953b553
+# ╠═5898b680-124c-11eb-08e7-a5ad622066de
 # ╟─826bb0dc-106e-11eb-29eb-03e7ddf9e4b5
 # ╠═721079da-1103-11eb-2720-99754ea64c95
 # ╟─b94b7610-106d-11eb-2852-25337ce6ec3a
@@ -796,12 +1110,16 @@ md"""
 # ╠═bcac8f60-1086-11eb-1756-bb2b19f7a25f
 # ╠═e8ea71fc-108e-11eb-2f27-e984fde247d2
 # ╠═0af07152-108f-11eb-2c0b-d96b54bfd3a5
+# ╠═47175004-1229-11eb-27d3-b52ea9a3e848
+# ╠═51e7e6c6-1229-11eb-132b-63de60b667fe
+# ╠═729ea04e-1229-11eb-2759-fb5b768c2fda
 # ╠═99a6a906-1086-11eb-3528-fb705460853e
+# ╠═d920aef8-1232-11eb-226c-437c153adbf3
+# ╠═337ece1a-1225-11eb-3e24-9b4a816a1ee1
 # ╠═a10aad32-109a-11eb-1f62-a148b945d4f7
 # ╠═6ed4ebaa-109a-11eb-10d4-0f51dcacbd8b
-# ╠═34cae8c6-109a-11eb-381c-f74fe8f52e21
 # ╠═04b79b02-1086-11eb-322b-cd995fa4196e
-# ╟─ad5b94c6-1071-11eb-25f6-bf800b21b265
+# ╠═ad5b94c6-1071-11eb-25f6-bf800b21b265
 # ╠═4ce12694-1083-11eb-2aa1-17ad10bbe366
 # ╠═847b089a-1083-11eb-04d6-e12a4385a8fa
 # ╠═4a40557c-1083-11eb-3a82-31cfed3de047
