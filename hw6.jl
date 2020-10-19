@@ -138,13 +138,16 @@ $$f'(a) \simeq \frac{f(a + h) - f(a)}{h}.$$
 md"""
 #### Exercise 1.1 - _tangent line_
 
-👉 Write a function `finite_difference_slope` that takes a function `f` and numbers `a` and `h`. It returns the slope ``f'(a)``, approximated using the finite difference formula.
+👉 Write a function `finite_difference_slope` that takes a function `f` and numbers `a` and `h`. It returns the slope ``f'(a)``, approximated using the finite difference formula above.
 """
 
 # ╔═╡ 910d30b2-112b-11eb-2d9b-0f509a5d28fb
 function finite_difference_slope(f::Function, a, h=1e-3)
 	(f(a+h) - f(a)) / h
 end
+
+# ╔═╡ f0576e48-1261-11eb-0579-0b1372565ca7
+finite_difference_slope(sqrt, 4.0, 5.0)
 
 # ╔═╡ bf8a4556-112b-11eb-042e-d705a2ca922a
 md"""
@@ -161,7 +164,7 @@ end
 
 # ╔═╡ 2b79b698-10b9-11eb-3bde-53fc1c48d5f7
 # this is our test function
-wavy(x) = .1x^3 - 1.6x^2 + 7x - 3
+wavy(x) = .1x^3 - 1.6x^2 + 7x - 3;
 
 # ╔═╡ a732bbcc-112c-11eb-1d65-110c049e226c
 md"""
@@ -177,7 +180,7 @@ Notice that, as you decrease ``h``, the tangent line gets more accurate, but wha
 h_finite_diff = 10.0^log_h
 
 # ╔═╡ 327de976-10b9-11eb-1916-69ad75fc8dc4
-zeroten = LinRange(0.0, 10.0, 300)
+zeroten = LinRange(0.0, 10.0, 300);
 
 # ╔═╡ abc54b82-10b9-11eb-1641-817e2f043d26
 @bind a_finite_diff Slider(zeroten, default=4)
@@ -197,15 +200,15 @@ This antiderivative problem is illustrated below. The only information that we h
 """
 
 # ╔═╡ d5a8bd48-10bf-11eb-2291-fdaaff56e4e6
-# in this exercise, we only the derivative is given
-wavy_deriv(x) = .3x^2 - 3.2x + 7
+# in this exercise, only the derivative is given
+wavy_deriv(x) = .3x^2 - 3.2x + 7;
 
 # ╔═╡ 0b4e8cdc-10bd-11eb-296c-d51dc242a372
 @bind a_euler Slider(zeroten, default=1)
 
 # ╔═╡ 1d8ce3d6-112f-11eb-1343-079c18cdc89c
 md"""
-Using only this information, we want to reconstruct ``f``.
+Using only this information, we want to **reconstruct** ``f``.
 
 By rearranging [the equation above](#theslopeequation), we get:
 
@@ -214,8 +217,15 @@ $$f(a+h) \simeq hf'(a) + f(a)$$
 Using this formula, we only need to know the _value_ ``f(a)`` and the _slope_ ``f'(a)`` of a function at ``a`` to get the value at ``a+h``. Doing this repeatedly can give us the value at ``a+2h``, at ``a+3h``, etc., all from one initial value ``f(a)``.
 """
 
+# ╔═╡ 2335cae6-112f-11eb-3c2c-254e82014567
+md"""
+👉 Write a function `euler_integrate` that takes the known function ``f'``, the initial value ``f(a)``, ``a``, ``h`` and the number of steps.
+"""
+
 # ╔═╡ 24037812-10bf-11eb-2653-e5c6cdfe95d9
-function euler_integrate(fprime::Function, fa, a, h, N_steps)
+function euler_integrate(fprime::Function, fa::Number, 
+		a::Number, h::Number, N_steps::Integer)
+	
 	accumulate(0:(N_steps-1), init=fa) do prev, i
 		prev + h*fprime(a + i*h)
 	end
@@ -269,7 +279,7 @@ md"""
 """
 
 # ╔═╡ 58675b3c-1245-11eb-3548-c9cb8a6b3188
-asdf
+
 
 # ╔═╡ 586d0352-1245-11eb-2504-05d0aa2352c6
 md"""
@@ -283,7 +293,7 @@ blabla
 
 # ╔═╡ 58b45a0e-1245-11eb-04d1-23a1f3a0f242
 md"""
-👉 Make an interactive visualization in which vary $\beta$ and $\gamma$. What relation should $\beta$ and $\gamma$ have for an epidemic outbreak to occur?
+👉 Make an interactive visualization in which you vary $\beta$ and $\gamma$. What relation should $\beta$ and $\gamma$ have for an epidemic outbreak to occur?
 """
 
 # ╔═╡ 68274534-1103-11eb-0d62-f1acb57721bc
@@ -291,6 +301,7 @@ md"""
 
 # ╔═╡ b394b44e-1245-11eb-2f86-8d10113e8cfc
 md"""
+#### Exercise 3.1
 👉 Write functions `∂x(f, a, b)` and `∂y(f, a, b)` that calculate the **partial derivatives** $\frac{\partial f}{\partial x}$ and $\frac{\partial f}{\partial y}$ at $(a, b)$ of a function $f : \mathbb{R}^2 \to \mathbb{R}$ (i.e. a function that takes two real numbers and returns one real).
 
 Recall that $\frac{\partial f}{\partial x}$  is the derivative of the single-variable function $g(x) := f(x, b)$ obtained by fixing the value of $y$ to $b$.
@@ -313,6 +324,7 @@ end
 
 # ╔═╡ b398a29a-1245-11eb-1476-ab65e92d1bc8
 md"""
+#### Exercise 3.2
 👉 Write a function `gradient(f, a, b)` that calculates the **gradient** of a function $f$ at the point $(a, b)$, given by the vector $\nabla f(a, b) := (\frac{\partial f}{\partial x}(a, b), \frac{\partial f}{\partial y}(a, b))$.
 """
 
@@ -328,13 +340,13 @@ end
 
 # ╔═╡ 82579b90-106e-11eb-0018-4553c29e57a2
 md"""
-## **Exercise 3:** _Minimisation using gradient descent_
+## **Exercise 4:** _Minimisation using gradient descent_
 
 In this exercise we will use **gradient descent** to find local **minima** of (smooth enough) functions.
 
 To do so we will think of a function as a hill. To find a minimum we should "roll down the hill".
 
-
+#### Exercise 4.1
 
 👉 Write a function `gradient_descent_1d(f, x0)` to minimize a 1D function, i.e. a function $f: \mathbb{R} \to \mathbb{R}$.
 
@@ -342,7 +354,7 @@ To do so we notice that the derivative tells us the direction in which the funct
 
 Use this to write the function starting from the point `x0` and using your function `deriv` to approximate the derivative.
 
-Take a reasonably large number of steps, say 100, with $\eta = 0.01$.
+Take a reasonably large number of steps, say 1000, with $\eta = 0.01$.
 
 """
 
@@ -401,22 +413,12 @@ gradient_descent_2d(himmelbau, 0, 0)
 # ╔═╡ fbb4a9a4-1248-11eb-00e2-fd346f0056db
 surface(-4:0.05:5, -4:0.05:4, himmelbau)
 
-# ╔═╡ a03890d6-1248-11eb-37ee-85b0a5273e0c
-md"""
-4. Apply this to the **Himmelblau function** $f(x, y) := (x^2 + y - 11)^2 + (x + y^2 - 7)^2$. Visualize the trajectory using both contours (`contour` function) and a 2D surface (`surface` function). [Use e.g. `surface(-2:0.01:2, -2:0.01:2, f)`]
-
-    Can you find different minima?
-
-    You can try to install the `PlotlyJS` package and activate it with `using Plots; plotlyjs()`. This will / should give an *interactive* 3D plot. (But don't spend time on this if it doesn't immediately work.) (FONS: this wont work i think. WGLMakie is an alternative) But experimenting with plotting packages shouldnt be part of the homework
-
-"""
-
 # ╔═╡ 6d1ee93e-1103-11eb-140f-63fca63f8b06
 
 
 # ╔═╡ 8261eb92-106e-11eb-2ccc-1348f232f5c3
 md"""
-## **Exercise 4:** _Learning parameter values_
+## **Exercise 5:** _Learning parameter values_
 
 In this exercise we will apply gradient descent to fit a simple function $y = f_{\alpha, \beta}(x)$ to some data given as pairs $(x_i, y_i)$. Here $\alpha$ and $\beta$ are **parameters** that appear in the form of the function $f$. We want to find the parameters that provide the **best fit**, i.e. the version $f_{\alpha, \beta}$ of the function that is closest to the data when we vary $\alpha$ and $\beta$.
 
@@ -424,6 +426,8 @@ To do so we need to define what "best" means. We will define a measure of the di
 
 The iterative procedure by which we gradually adjust the parameter values to improve the loss function is often called **machine learning** or just **learning**, since the computer is "discovering" information in a gradual way, which is supposed to remind us of how humans learn. [Hint: This is not how humans learn.]
 
+#### Exercise 5.1 - _🎲 frequencies_
+We generate a small dataset by throwing 10 dice, and counting the sum. We repeat this experiment many times, giving us a frequency distribution in a familiar shape.
 """
 
 # ╔═╡ 65e691e4-124a-11eb-38b1-b1732403aa3d
@@ -477,12 +481,16 @@ end
 # ╔═╡ ac320522-124b-11eb-1552-51c2adaf2521
 let
 	p = plot(dice_x, dice_y, size=(400,200), label="data")
-	plot!(p, dice_x, gauss.(dice_x, [guess_μ], [guess_σ]), label="manual fit")
+	if show_manual_fit
+		plot!(p, dice_x, gauss.(dice_x, [guess_μ], [guess_σ]), label="manual fit")
+	else
+		p
+	end
 end
 
 # ╔═╡ c57a3d26-124e-11eb-1a26-6d39c2da76ec
 md"""
-What we just did was adjusting the function parameters until we found the best possible fit. Let's automate this process! To do so, we need to quantify how _good or bad_, a fit is.
+What we just did was adjusting the function parameters until we found the best possible fit. Let's automate this process! To do so, we need to quantify how _good or bad_ a fit is.
 """
 
 # ╔═╡ 471cbd84-124c-11eb-356e-371d23011af5
@@ -537,13 +545,10 @@ let
 	stat_mean, stdev_mean
 end
 
-# ╔═╡ 5898b680-124c-11eb-08e7-a5ad622066de
-
-
 # ╔═╡ 826bb0dc-106e-11eb-29eb-03e7ddf9e4b5
 md"""
 
-## **Exercise 5:** _Putting it all together — fitting an SIR model to data_
+## **Exercise 6:** _Putting it all together — fitting an SIR model to data_
 
 In this exercise we will fit the (non-spatial) SIR ODE model from Exercise 1 to some data generated from the spatial model in Problem Set 4. 
 If we are able to find a good fit, that would suggest that the spatial aspect "does not matter" too much for the dynamics of these models. 
@@ -607,21 +612,6 @@ function compute_path(first)
 	end
 end
 
-# ╔═╡ 47175004-1229-11eb-27d3-b52ea9a3e848
-
-
-# ╔═╡ 51e7e6c6-1229-11eb-132b-63de60b667fe
-begin
-	p = 123
-	PlutoRunner.Bond(Slider(1:10), :p)
-end
-
-# ╔═╡ 729ea04e-1229-11eb-2759-fb5b768c2fda
-p
-
-# ╔═╡ d920aef8-1232-11eb-226c-437c153adbf3
-methodswith("asdf" |> typeof)
-
 # ╔═╡ a10aad32-109a-11eb-1f62-a148b945d4f7
 x0_ref = Ref([0.5, 0.5])
 
@@ -632,9 +622,6 @@ x0_ref = Ref([0.5, 0.5])
 # 	end
 # 	wow(x0, :x0)
 # end
-
-# ╔═╡ 4a40557c-1083-11eb-3a82-31cfed3de047
-old = []
 
 # ╔═╡ e926013a-1080-11eb-24b8-034df3032883
 with_d3_libs(content) = HTML("""
@@ -737,63 +724,6 @@ begin
 	@bind x0 wow(x0)
 	
 end |> with_d3_libs
-
-# ╔═╡ 337ece1a-1225-11eb-3e24-9b4a816a1ee1
-x0
-
-# ╔═╡ ad5b94c6-1071-11eb-25f6-bf800b21b265
-let
-	previous = if @isdefined(pos)
-		pos
-	else
-		100
-	end
-	
-	x = previous * (1:10)
-	
-	c = """
-	<script id="helloaza">
-	
-	const x = $(JSON.json(x))
-
-	const svg = this == null ? DOM.svg(600,200) : this
-	const s = this == null ? d3.select(svg) : this.s
-	
-	svg.value = $(previous)
-	
-	const down_handler =(e) => {
-		svg.value = e.clientX - svg.getBoundingClientRect().left
-		svg.dispatchEvent(new CustomEvent("input", {}))
-		console.log(svg.value)
-	}
-	
-	svg.addEventListener("pointerdown", down_handler)
-	invalidation.then(() => svg.removeEventListener("pointerdown", down_handler))
-	
-	s.selectAll("circle")
-		.data(x)
-		.join("circle")
-		.transition()
-		.duration(300)
-		.attr("cx", d => d)
-		.attr("cy", 100)
-		.attr("r", 10)
-		.attr("fill", "gray")
-
-	const output = svg
-	output.s = s
-	return output
-	</script>
-
-	"""
-	with_d3_libs(@bind pos BondDefault(HTML(c), previous))
-end
-
-# ╔═╡ 4ce12694-1083-11eb-2aa1-17ad10bbe366
-push!(old, pos)
-
-# ╔═╡ 847b089a-1083-11eb-04d6-e12a4385a8fa
-pos
 
 # ╔═╡ df42aa9e-10c9-11eb-2c19-2d7ce40a1c6c
 as_mime(m::MIME) = x -> PlutoUI.Show(m, repr(m, x))
@@ -926,19 +856,63 @@ end
 # ╔═╡ b989e544-106d-11eb-3c53-3906c5c922fb
 not_defined(variable_name) = Markdown.MD(Markdown.Admonition("danger", "Oopsie!", [md"Make sure that you define a variable called **$(Markdown.Code(string(variable_name)))**"]))
 
+# ╔═╡ cd7583b0-1261-11eb-2a98-537bfab2463e
+if !@isdefined(finite_difference_slope)
+	not_defined(:finite_difference_slope)
+else
+	let
+		result = finite_difference_slope(sqrt, 4.0, 5.0)
+		
+		if result isa Missing
+			still_missing()
+		elseif !(result isa Real)
+			keep_working(md"Make sure that you return a number.")
+		else
+			if result ≈ 0.2
+				correct()
+			else
+				keep_working()
+			end
+		end
+	end
+end
+
+# ╔═╡ 66198242-1262-11eb-1b0f-37c58199c754
+if !@isdefined(tangent_line)
+	not_defined(:tangent_line)
+else
+	let
+		result = tangent_line(sqrt, 4.0, 5.0)
+		
+		if result isa Missing
+			still_missing()
+		elseif !(result isa Function)
+			keep_working(md"Make sure that you return a function.")
+		else
+			if finite_difference_slope(result, 14.0, 15.0) ≈ 0.2
+				if result(4.0) ≈ 2.0
+					correct()
+				else
+					almost(md"The tangent line should pass through $(a, f(a))$.")
+				end
+			else
+				keep_working()
+			end
+		end
+	end
+end
+
 # ╔═╡ 05bfc716-106a-11eb-36cb-e7c488050d54
 TODO = html"<span style='display: inline; font-size: 2em; color: purple; font-weight: 900;'>TODO</span>"
 
-# ╔═╡ 2335cae6-112f-11eb-3c2c-254e82014567
-md"""
-👉 do this $TODO
-"""
+# ╔═╡ 15b50428-1264-11eb-163e-23e2f3590502
+TODO
 
 # ╔═╡ 518fb3aa-106e-11eb-0fcd-31091a8f12db
 md"""
-## **Exercise 1:** _Simulating the SIR differential equations_
+## **Exercise 2:** _Simulating the SIR differential equations_
 
-Recall from lectures that the ordinary differential equations (ODEs) for the SIR model are as follows:
+Recall from the lectures that the ordinary differential equations (ODEs) for the SIR model are as follows:
 
 $$\begin{align*}
 \dot{s} &= - \beta s \, i \\
@@ -947,7 +921,7 @@ $$\begin{align*}
 \end{align*}$$
 
 where ``\dot{s} := \frac{ds}{dt}`` is the derivative of $s$ with respect to time. 
-Recall that $s$ denotes the *proportion* (fraction) of the population that is susceptible.
+Recall that $s$ denotes the *proportion* (fraction) of the population that is susceptible, a number between $0$ and $1$.
 
 We will use the simplest possible method to simulate these, namely the **Euler method**. The Euler method is not always a good method to solve ODEs accurately, but for our purposes it is good enough.
 
@@ -973,7 +947,7 @@ TODO
 # ╔═╡ 82539bbe-106e-11eb-0e9e-170dfa6a7dad
 md"""
 
-## **Exercise 2:** _Numerical derivatives_
+## **Exercise 3:** _Numerical derivatives_
 
 For fitting we need optimization, and for optimization we will use *derivatives* (rates of change). 
 In this exercise we will see one method for calculating derivatives numerically.
@@ -989,6 +963,14 @@ with ``v = (1,0,0)`` etc
 
 # ╔═╡ 9fcc46d8-1248-11eb-3954-f5047790ef8d
 TODO
+
+# ╔═╡ a03890d6-1248-11eb-37ee-85b0a5273e0c
+md"""
+ $TODO
+4. Apply this to the **Himmelblau function** $f(x, y) := (x^2 + y - 11)^2 + (x + y^2 - 7)^2$. Visualize the trajectory using both contours (`contour` function) and a 2D surface (`surface` function). [Use e.g. `surface(-2:0.01:2, -2:0.01:2, f)`]
+
+    Can you find different minima?
+"""
 
 # ╔═╡ 6e328252-124f-11eb-052f-3717321933d6
 TODO
@@ -1008,9 +990,6 @@ md"""
 
 """
 
-# ╔═╡ acbb9a56-106d-11eb-115b-7d067adb302c
-
-
 # ╔═╡ Cell order:
 # ╟─048890ee-106a-11eb-1a81-5744150543e8
 # ╟─0565af4c-106a-11eb-0d38-2fb84493d86f
@@ -1024,25 +1003,29 @@ md"""
 # ╟─17af6a00-112b-11eb-1c9c-bfd12931491d
 # ╟─2a4050f6-112b-11eb-368a-f91d7a023c9d
 # ╠═910d30b2-112b-11eb-2d9b-0f509a5d28fb
+# ╠═f0576e48-1261-11eb-0579-0b1372565ca7
+# ╟─cd7583b0-1261-11eb-2a98-537bfab2463e
 # ╟─bf8a4556-112b-11eb-042e-d705a2ca922a
-# ╠═01571b20-10ba-11eb-1c4a-292e427109b7
 # ╟─0f0b7ec4-112c-11eb-3399-59e22df07355
-# ╠═2b79b698-10b9-11eb-3bde-53fc1c48d5f7
-# ╠═abc54b82-10b9-11eb-1641-817e2f043d26
+# ╠═01571b20-10ba-11eb-1c4a-292e427109b7
+# ╟─66198242-1262-11eb-1b0f-37c58199c754
+# ╟─abc54b82-10b9-11eb-1641-817e2f043d26
 # ╟─3d44c264-10b9-11eb-0895-dbfc22ba0c37
+# ╠═2b79b698-10b9-11eb-3bde-53fc1c48d5f7
 # ╟─a732bbcc-112c-11eb-1d65-110c049e226c
-# ╠═c9535ad6-10b9-11eb-0537-45f13931cd71
+# ╟─c9535ad6-10b9-11eb-0537-45f13931cd71
 # ╟─7495af52-10ba-11eb-245f-a98781ba123c
 # ╟─327de976-10b9-11eb-1916-69ad75fc8dc4
 # ╟─43df67bc-10bb-11eb-1cbd-cd962a01e3ee
 # ╠═d5a8bd48-10bf-11eb-2291-fdaaff56e4e6
-# ╠═0b4e8cdc-10bd-11eb-296c-d51dc242a372
+# ╟─0b4e8cdc-10bd-11eb-296c-d51dc242a372
 # ╟─70df9a48-10bb-11eb-0b95-95a224b45921
 # ╟─1d8ce3d6-112f-11eb-1343-079c18cdc89c
-# ╟─2335cae6-112f-11eb-3c2c-254e82014567
+# ╠═2335cae6-112f-11eb-3c2c-254e82014567
 # ╠═24037812-10bf-11eb-2653-e5c6cdfe95d9
 # ╠═b74d94b8-10bf-11eb-38c1-9f39dfcb1096
-# ╠═ab72fdbe-10be-11eb-3b33-eb4ab41730d6
+# ╠═15b50428-1264-11eb-163e-23e2f3590502
+# ╟─ab72fdbe-10be-11eb-3b33-eb4ab41730d6
 # ╟─990236e0-10be-11eb-333a-d3080a224d34
 # ╟─d21fad2a-1253-11eb-304a-2bacf9064d0d
 # ╠═518fb3aa-106e-11eb-0fcd-31091a8f12db
@@ -1054,7 +1037,7 @@ md"""
 # ╠═0a095a94-1245-11eb-001a-b908128532aa
 # ╟─51c9a25e-1244-11eb-014f-0bcce2273cee
 # ╠═58675b3c-1245-11eb-3548-c9cb8a6b3188
-# ╠═586d0352-1245-11eb-2504-05d0aa2352c6
+# ╟─586d0352-1245-11eb-2504-05d0aa2352c6
 # ╠═589b2b4c-1245-11eb-1ec7-693c6bda97c4
 # ╟─58b45a0e-1245-11eb-04d1-23a1f3a0f242
 # ╠═68274534-1103-11eb-0d62-f1acb57721bc
@@ -1062,7 +1045,7 @@ md"""
 # ╟─b394b44e-1245-11eb-2f86-8d10113e8cfc
 # ╠═d101b79a-1245-11eb-3855-61e7b6088d68
 # ╠═34318eee-1246-11eb-213f-455b632dba3a
-# ╠═b398a29a-1245-11eb-1476-ab65e92d1bc8
+# ╟─b398a29a-1245-11eb-1476-ab65e92d1bc8
 # ╠═69ff577a-1103-11eb-15b7-536764063bc2
 # ╠═4f65ced2-1246-11eb-1808-616baf4a677c
 # ╟─82579b90-106e-11eb-0018-4553c29e57a2
@@ -1101,8 +1084,7 @@ md"""
 # ╠═a737990a-1251-11eb-1114-c57ceee75181
 # ╠═b239642a-124f-11eb-3fd0-71b67f7a540c
 # ╠═a1575cb6-124f-11eb-1ecb-c33fd953b553
-# ╠═5898b680-124c-11eb-08e7-a5ad622066de
-# ╟─826bb0dc-106e-11eb-29eb-03e7ddf9e4b5
+# ╠═826bb0dc-106e-11eb-29eb-03e7ddf9e4b5
 # ╠═721079da-1103-11eb-2720-99754ea64c95
 # ╟─b94b7610-106d-11eb-2852-25337ce6ec3a
 # ╠═10853972-108f-11eb-36b5-57f656bc992e
@@ -1110,19 +1092,10 @@ md"""
 # ╠═bcac8f60-1086-11eb-1756-bb2b19f7a25f
 # ╠═e8ea71fc-108e-11eb-2f27-e984fde247d2
 # ╠═0af07152-108f-11eb-2c0b-d96b54bfd3a5
-# ╠═47175004-1229-11eb-27d3-b52ea9a3e848
-# ╠═51e7e6c6-1229-11eb-132b-63de60b667fe
-# ╠═729ea04e-1229-11eb-2759-fb5b768c2fda
 # ╠═99a6a906-1086-11eb-3528-fb705460853e
-# ╠═d920aef8-1232-11eb-226c-437c153adbf3
-# ╠═337ece1a-1225-11eb-3e24-9b4a816a1ee1
 # ╠═a10aad32-109a-11eb-1f62-a148b945d4f7
 # ╠═6ed4ebaa-109a-11eb-10d4-0f51dcacbd8b
 # ╠═04b79b02-1086-11eb-322b-cd995fa4196e
-# ╠═ad5b94c6-1071-11eb-25f6-bf800b21b265
-# ╠═4ce12694-1083-11eb-2aa1-17ad10bbe366
-# ╠═847b089a-1083-11eb-04d6-e12a4385a8fa
-# ╠═4a40557c-1083-11eb-3a82-31cfed3de047
 # ╠═e926013a-1080-11eb-24b8-034df3032883
 # ╠═53dc7e0a-1081-11eb-39a3-c981848c2b1d
 # ╠═15b60272-10ca-11eb-0a28-599ed78cf98a
@@ -1136,4 +1109,3 @@ md"""
 # ╟─b98238ce-106d-11eb-1e39-f9eda5df76af
 # ╟─b989e544-106d-11eb-3c53-3906c5c922fb
 # ╟─05bfc716-106a-11eb-36cb-e7c488050d54
-# ╠═acbb9a56-106d-11eb-115b-7d067adb302c
