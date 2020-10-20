@@ -299,6 +299,14 @@ md"""
 # ╔═╡ 68274534-1103-11eb-0d62-f1acb57721bc
 
 
+# ╔═╡ 82539bbe-106e-11eb-0e9e-170dfa6a7dad
+md"""
+
+## **Exercise 3:** _Numerical gradient_
+
+For fitting we need optimization, and for optimization we will use *derivatives* (rates of change). In Exercise 1, we wrote a function `finite_difference_slope(f, a)` to approximate ``f'(a)``. In this exercise we will write a function to compute _partial derivatives_.
+"""
+
 # ╔═╡ b394b44e-1245-11eb-2f86-8d10113e8cfc
 md"""
 #### Exercise 3.1
@@ -316,11 +324,23 @@ function ∂x(f::Function, a, b)
 	finite_difference_slope(directional, 0)
 end
 
+# ╔═╡ 321964ac-126d-11eb-0a04-0d3e3fb9b17c
+∂x(
+	(x, y) -> 7x^2 + y, 
+	3, 7
+)
+
 # ╔═╡ 34318eee-1246-11eb-213f-455b632dba3a
 function ∂y(f::Function, a, b)
 	directional = h -> f(a, b + h)
 	finite_difference_slope(directional, 0)
 end
+
+# ╔═╡ a15509ee-126c-11eb-1fa3-cdda55a47fcb
+∂y(
+	(x, y) -> 7x^2 + y, 
+	3, 7
+)
 
 # ╔═╡ b398a29a-1245-11eb-1476-ab65e92d1bc8
 md"""
@@ -337,6 +357,12 @@ end
 gradient(pi,1) do x, y
 	sin(x) * y
 end
+
+# ╔═╡ 66b8e15e-126c-11eb-095e-39c2f6abc81d
+gradient(
+	(x, y) -> 7x^2 + y, 
+	3, 7
+)
 
 # ╔═╡ 82579b90-106e-11eb-0018-4553c29e57a2
 md"""
@@ -386,6 +412,11 @@ Write an interactive visualization showing the progress of gradient descent on t
 
     How can you find different local minima?
 """
+
+# ╔═╡ 981af516-126d-11eb-2232-73d1423add70
+From fonsi:
+
+should we skip these exercises about "modify X to return the array of intermediate results"?
 
 # ╔═╡ 9fd2956a-1248-11eb-266d-f558cda55702
 md"""
@@ -580,8 +611,8 @@ We will try to find the parameters $\beta$ and $\gamma$ for which *the output of
 
 """
 
-# ╔═╡ 721079da-1103-11eb-2720-99754ea64c95
-
+# ╔═╡ e562be6e-126d-11eb-2b43-ff0580dc9588
+this exercise still needs 👉 and we need to run hw5 and generate the dataset. Put it on github and URL address it
 
 # ╔═╡ b94b7610-106d-11eb-2852-25337ce6ec3a
 if student.name == "Jazzy Doe" || student.kerberos_id == "jazz"
@@ -901,11 +932,74 @@ else
 	end
 end
 
+# ╔═╡ 5ea6c1f0-126c-11eb-3963-c98548f0b36e
+if !@isdefined(∂x)
+	not_defined(:∂x)
+else
+	let
+		result = ∂x((x, y) -> 2x^2 + 3y^2, 6, 7)
+		
+		if result isa Missing
+			still_missing()
+		elseif !(result isa Number)
+			keep_working(md"Make sure that you return a number.")
+		else
+			if abs(result - 24) < 1.0
+				correct()
+			else
+				keep_working()
+			end
+		end
+	end
+end
+
+# ╔═╡ c82b2148-126c-11eb-1c03-c157c9bd7eba
+if !@isdefined(∂y)
+	not_defined(:∂y)
+else
+	let
+		result = ∂y((x, y) -> 2x^2 + 3y^2, 6, 7)
+		
+		if result isa Missing
+			still_missing()
+		elseif !(result isa Number)
+			keep_working(md"Make sure that you return a number.")
+		else
+			if abs(result - 42) < 1.0
+				correct()
+			else
+				keep_working()
+			end
+		end
+	end
+end
+
+# ╔═╡ 46b07b1c-126d-11eb-0966-6ff5ab87ac9d
+if !@isdefined(gradient)
+	not_defined(:gradient)
+else
+	let
+		result = gradient((x, y) -> 2x^2 + 3y^2, 6, 7)
+		
+		if result isa Missing
+			still_missing()
+		elseif !(result isa Vector)
+			keep_working(md"Make sure that you return a 2-element vector.")
+		else
+			if abs(result[1] - 24) < 1 && abs(result[2] - 42) < 1
+				correct()
+			else
+				keep_working()
+			end
+		end
+	end
+end
+
 # ╔═╡ 05bfc716-106a-11eb-36cb-e7c488050d54
 TODO = html"<span style='display: inline; font-size: 2em; color: purple; font-weight: 900;'>TODO</span>"
 
 # ╔═╡ 15b50428-1264-11eb-163e-23e2f3590502
-TODO
+md" $TODO test?"
 
 # ╔═╡ 518fb3aa-106e-11eb-0fcd-31091a8f12db
 md"""
@@ -943,29 +1037,12 @@ TODO
 # ╔═╡ 902dd1b4-1244-11eb-390b-3dc935d458a2
 TODO
 
-# ╔═╡ 82539bbe-106e-11eb-0e9e-170dfa6a7dad
-md"""
-
-## **Exercise 3:** _Numerical derivatives_
-
-For fitting we need optimization, and for optimization we will use *derivatives* (rates of change). 
-In this exercise we will see one method for calculating derivatives numerically.
-
- $TODO
-
-FONSI: we do the 1D case as the first thing of this homework, it helps to introduce the euler method. In this exercise we do the directional derivative
-
-$$f'_v(a) \simeq \frac{f(a + hv) - f(a)}{h}$$
-
-with ``v = (1,0,0)`` etc
-"""
-
 # ╔═╡ 9fcc46d8-1248-11eb-3954-f5047790ef8d
 TODO
 
 # ╔═╡ a03890d6-1248-11eb-37ee-85b0a5273e0c
 md"""
- $TODO
+ $TODO hmmm what to do here
 4. Apply this to the **Himmelblau function** $f(x, y) := (x^2 + y - 11)^2 + (x + y^2 - 7)^2$. Visualize the trajectory using both contours (`contour` function) and a 2D surface (`surface` function). [Use e.g. `surface(-2:0.01:2, -2:0.01:2, f)`]
 
     Can you find different minima?
@@ -985,6 +1062,12 @@ md"""
     ("Time" here corresponds to the iterations in the gradient descent function.)
 
 """
+
+# ╔═╡ 721079da-1103-11eb-2720-99754ea64c95
+TODO
+
+# ╔═╡ 10f67064-126e-11eb-3849-05cedcb340e6
+md" $TODO everything below this can be deleted"
 
 # ╔═╡ Cell order:
 # ╟─048890ee-106a-11eb-1a81-5744150543e8
@@ -1017,7 +1100,7 @@ md"""
 # ╟─0b4e8cdc-10bd-11eb-296c-d51dc242a372
 # ╟─70df9a48-10bb-11eb-0b95-95a224b45921
 # ╟─1d8ce3d6-112f-11eb-1343-079c18cdc89c
-# ╠═2335cae6-112f-11eb-3c2c-254e82014567
+# ╟─2335cae6-112f-11eb-3c2c-254e82014567
 # ╠═24037812-10bf-11eb-2653-e5c6cdfe95d9
 # ╠═b74d94b8-10bf-11eb-38c1-9f39dfcb1096
 # ╠═15b50428-1264-11eb-163e-23e2f3590502
@@ -1040,15 +1123,22 @@ md"""
 # ╟─82539bbe-106e-11eb-0e9e-170dfa6a7dad
 # ╟─b394b44e-1245-11eb-2f86-8d10113e8cfc
 # ╠═d101b79a-1245-11eb-3855-61e7b6088d68
+# ╠═321964ac-126d-11eb-0a04-0d3e3fb9b17c
+# ╟─5ea6c1f0-126c-11eb-3963-c98548f0b36e
 # ╠═34318eee-1246-11eb-213f-455b632dba3a
+# ╠═a15509ee-126c-11eb-1fa3-cdda55a47fcb
+# ╟─c82b2148-126c-11eb-1c03-c157c9bd7eba
 # ╟─b398a29a-1245-11eb-1476-ab65e92d1bc8
 # ╠═69ff577a-1103-11eb-15b7-536764063bc2
 # ╠═4f65ced2-1246-11eb-1808-616baf4a677c
+# ╠═66b8e15e-126c-11eb-095e-39c2f6abc81d
+# ╟─46b07b1c-126d-11eb-0966-6ff5ab87ac9d
 # ╟─82579b90-106e-11eb-0018-4553c29e57a2
 # ╠═eb1c0198-1246-11eb-1792-13d6458a0142
 # ╠═34dc4b02-1248-11eb-26b2-5d2610cfeb41
 # ╟─f46aeaf0-1246-11eb-17aa-2580fdbcfa5a
 # ╠═e3120c18-1246-11eb-3bf4-7f4ac45856e0
+# ╠═981af516-126d-11eb-2232-73d1423add70
 # ╠═9fcc46d8-1248-11eb-3954-f5047790ef8d
 # ╟─9fd2956a-1248-11eb-266d-f558cda55702
 # ╠═ae65421e-1248-11eb-12be-af01d58e6cbc
@@ -1082,7 +1172,9 @@ md"""
 # ╠═a1575cb6-124f-11eb-1ecb-c33fd953b553
 # ╠═826bb0dc-106e-11eb-29eb-03e7ddf9e4b5
 # ╠═721079da-1103-11eb-2720-99754ea64c95
-# ╟─b94b7610-106d-11eb-2852-25337ce6ec3a
+# ╠═e562be6e-126d-11eb-2b43-ff0580dc9588
+# ╠═b94b7610-106d-11eb-2852-25337ce6ec3a
+# ╟─10f67064-126e-11eb-3849-05cedcb340e6
 # ╠═10853972-108f-11eb-36b5-57f656bc992e
 # ╠═2187253c-108f-11eb-04a2-512ce3c17abf
 # ╠═bcac8f60-1086-11eb-1756-bb2b19f7a25f
