@@ -488,13 +488,10 @@ let
 	end
 end
 
-# ╔═╡ c57a3d26-124e-11eb-1a26-6d39c2da76ec
-md"""
-What we just did was adjusting the function parameters until we found the best possible fit. Let's automate this process! To do so, we need to quantify how _good or bad_ a fit is.
-"""
-
 # ╔═╡ 471cbd84-124c-11eb-356e-371d23011af5
 md"""
+What we just did was adjusting the function parameters until we found the best possible fit. Let's automate this process! To do so, we need to quantify how _good or bad_ a fit is.
+
 👉 Define a **loss function** to measure the "distance" between the actual data and the function. It will depend on the values of $\mu$ and $\sigma$ that you choose:
 
 $$\mathcal{L}(\mu, \sigma) := \sum_i [f_{\mu, \sigma}(x_i) - y_i]^2$$
@@ -513,10 +510,8 @@ end
 # end
 
 # ╔═╡ 3a6ec2e4-124f-11eb-0f68-791475bab5cd
+loss_dice(guess_μ + 3, guess_σ) >
 loss_dice(guess_μ, guess_σ)
-
-# ╔═╡ 43ed3f00-124f-11eb-07bd-87f9a5e6f575
-loss_dice(guess_μ + 3, guess_σ)
 
 # ╔═╡ 2fcb93aa-124f-11eb-10de-55fced6f4b83
 md"""
@@ -526,7 +521,7 @@ md"""
 # ╔═╡ b3045130-124f-11eb-3ae0-a96d6393257d
 found_μ, found_σ = let
 	
-	gradient_descent_2d(loss_dice, 30, 1, η=1)
+	gradient_descent_2d(loss_dice, 30, 1, η=20)
 end
 
 # ╔═╡ a150fd60-124f-11eb-35d6-85104bcfd0fe
@@ -537,13 +532,17 @@ end
 # 	missing, missing
 # end
 
-# ╔═╡ b239642a-124f-11eb-3fd0-71b67f7a540c
-let
-	stat_mean = sum(dice_x .* dice_y)
-	stdev_mean = sqrt(sum(dice_x.^2 .* dice_y) - stat_mean .^ 2)
-	
-	stat_mean, stdev_mean
-end
+# ╔═╡ 65aa13fe-1266-11eb-03c2-5927dbeca36e
+stats_μ = sum(dice_x .* dice_y)
+
+# ╔═╡ c569a5d8-1267-11eb-392f-452de141161b
+abs(stats_μ - found_μ)
+
+# ╔═╡ 6faf4074-1266-11eb-1a0a-991fc2e991bb
+stats_σ = sqrt(sum(dice_x.^2 .* dice_y) - stats_μ .^ 2)
+
+# ╔═╡ e55d9c1e-1267-11eb-1b3c-5d772662518a
+abs(stats_σ - found_σ)
 
 # ╔═╡ 826bb0dc-106e-11eb-29eb-03e7ddf9e4b5
 md"""
@@ -972,9 +971,6 @@ md"""
     Can you find different minima?
 """
 
-# ╔═╡ 6e328252-124f-11eb-052f-3717321933d6
-TODO
-
 # ╔═╡ a737990a-1251-11eb-1114-c57ceee75181
 TODO
 
@@ -1028,7 +1024,7 @@ md"""
 # ╟─ab72fdbe-10be-11eb-3b33-eb4ab41730d6
 # ╟─990236e0-10be-11eb-333a-d3080a224d34
 # ╟─d21fad2a-1253-11eb-304a-2bacf9064d0d
-# ╠═518fb3aa-106e-11eb-0fcd-31091a8f12db
+# ╟─518fb3aa-106e-11eb-0fcd-31091a8f12db
 # ╠═517ab0c2-1244-11eb-049d-ffdc054e030d
 # ╠═84daf7c4-1244-11eb-0382-d1da633a63e2
 # ╟─517efa24-1244-11eb-1f81-b7f95b87ce3b
@@ -1071,18 +1067,18 @@ md"""
 # ╟─70f0fe9c-124c-11eb-3dc6-e102e68673d9
 # ╟─41b2262a-124e-11eb-2634-4385e2f3c6b6
 # ╠═0dea1f70-124c-11eb-1593-e535ab21976c
-# ╟─c57a3d26-124e-11eb-1a26-6d39c2da76ec
 # ╟─471cbd84-124c-11eb-356e-371d23011af5
 # ╠═cdb5de86-124f-11eb-09c8-bd28710d1d44
 # ╠═2fc55daa-124f-11eb-399e-659e59148ef5
 # ╠═3a6ec2e4-124f-11eb-0f68-791475bab5cd
-# ╠═43ed3f00-124f-11eb-07bd-87f9a5e6f575
-# ╠═6e328252-124f-11eb-052f-3717321933d6
 # ╟─2fcb93aa-124f-11eb-10de-55fced6f4b83
 # ╠═b3045130-124f-11eb-3ae0-a96d6393257d
 # ╠═a150fd60-124f-11eb-35d6-85104bcfd0fe
+# ╠═c569a5d8-1267-11eb-392f-452de141161b
+# ╠═e55d9c1e-1267-11eb-1b3c-5d772662518a
 # ╠═a737990a-1251-11eb-1114-c57ceee75181
-# ╠═b239642a-124f-11eb-3fd0-71b67f7a540c
+# ╠═65aa13fe-1266-11eb-03c2-5927dbeca36e
+# ╠═6faf4074-1266-11eb-1a0a-991fc2e991bb
 # ╠═a1575cb6-124f-11eb-1ecb-c33fd953b553
 # ╠═826bb0dc-106e-11eb-29eb-03e7ddf9e4b5
 # ╠═721079da-1103-11eb-2720-99754ea64c95
