@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.2
+# v0.12.4
 
 using Markdown
 using InteractiveUtils
@@ -769,6 +769,20 @@ end
 # ╔═╡ 7f635722-04d0-11eb-3209-4b603c9e843c
 sir_mean_plot(simulations)
 
+# ╔═╡ a4c9ccdc-12ca-11eb-072f-e34595520548
+let
+	T = length(first(simulations).S)
+	
+	all_S_counts = map(result -> result.S, simulations)
+	all_I_counts = map(result -> result.I, simulations)
+	all_R_counts = map(result -> result.R, simulations)
+	
+	(S=round.(sum(all_S_counts) ./ length(simulations) ./ 100, digits=4),
+	I=round.(sum(all_I_counts) ./ length(simulations) ./ 100, digits=4),
+	R=round.(sum(all_R_counts) ./ length(simulations) ./ 100, digits=4))
+	
+end |> string
+
 # ╔═╡ dfb99ace-04cf-11eb-0739-7d694c837d59
 md"""
 👉 Allow $p_\text{infection}$ and $p_\text{recovery}$ to be changed interactively and find parameter values for which you observe an epidemic outbreak.
@@ -1261,6 +1275,7 @@ bigbreak
 # ╠═10cf6db8-04b8-11eb-2267-3db6d7f9c89a
 # ╠═843fd63c-04d0-11eb-0113-c58d346179d6
 # ╠═7f635722-04d0-11eb-3209-4b603c9e843c
+# ╠═a4c9ccdc-12ca-11eb-072f-e34595520548
 # ╟─dfb99ace-04cf-11eb-0739-7d694c837d59
 # ╠═1c6aa208-04d1-11eb-0b87-cf429e6ff6d0
 # ╟─95eb9f88-0403-11eb-155b-7b2d3a07cff0
