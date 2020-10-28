@@ -67,7 +67,6 @@ struct Ray
 
     # Color
     c::RGB
-
 end
 
 # ╔═╡ 8bccfb90-1910-11eb-07e2-89c2354c0ec5
@@ -352,7 +351,7 @@ function propagate(ray::Ray, objects::Vector{O},
 
             if intersect_final != nothing
                 ray.p .+= intersect_final
-                if typeof(intersected_object) == Sphere
+                if intersected_object isa Sphere
                     if !isapprox(intersected_object.s.t, 0)
                         ior = 1/intersected_object.s.ior
                         if dot(ray.v,
@@ -371,9 +370,9 @@ function propagate(ray::Ray, objects::Vector{O},
                         ray = Ray(ray_vel, ray.p, ray_color)
                     end
 
-                elseif typeof(intersected_object) == Mirror
+                elseif intersected_object isa Mirror
                     ray = reflect(ray, intersected_object.n)
-                elseif typeof(intersected_object) == SkyBox
+                elseif intersected_object isa SkyBox
                     ray_color = pixel_color(ray.p)
                     ray_vel = zeros(length(ray.v))
                     ray = Ray(ray_vel, ray.p, ray_color)
@@ -397,6 +396,9 @@ function convert_to_img(rays::Array{Ray}, filename)
     save(filename, color_array)
 end
 
+# ╔═╡ b1537ff0-1911-11eb-01c4-39237e7c8123
+CartesianIndex(1,2)
+
 # ╔═╡ 8cf0e220-1910-11eb-0933-b168f7031f46
 function init_rays(cam::Camera)
 
@@ -406,18 +408,15 @@ function init_rays(cam::Camera)
     pixel_width = dim ./ res
 
     # create a set of rays that go through every pixel in our grid.
-    rays = Array{Ray}(undef, res[1], res[2])
-    for i = 1:res[1]
-        for j = 1:res[2]
-            pixel_loc = [cam.p[1] + 0.5*dim[1] - i*dim[1]/res[1] + 
-                         0.5*pixel_width[1],
-                         cam.p[2] + 0.5*dim[2] - j*dim[2]/res[2] +
-                         0.5*pixel_width[2],
-                         cam.p[3]+cam.focal_length]
-            l = normalize(pixel_loc - cam.p)
-            rays[i, j] = Ray(l, pixel_loc, RGB(0))
-        end
-    end
+	rays = map(CartesianIndices(cam.pixels)) do I
+		pixel_loc = [cam.p[1] + 0.5*dim[1] - I[1]*dim[1]/res[1] + 
+					 0.5*pixel_width[1],
+					 cam.p[2] + 0.5*dim[2] - I[2]*dim[2]/res[2] +
+					 0.5*pixel_width[2],
+					 cam.p[3]+cam.focal_length]
+		l = normalize(pixel_loc - cam.p)
+		Ray(l, pixel_loc, RGB(0))
+	end
 
     return rays
 
@@ -434,7 +433,6 @@ function ray_trace(objects::Vector{O}, cam::Camera; filename="check.png",
     # convert_to_img(rays, filename)
 
     return rays
-
 end
 
 # ╔═╡ b766c970-1910-11eb-1457-9f5986c4807f
@@ -453,16 +451,24 @@ spheres = [Lens([50,0,-25], 20, 1.5), ReflectingSphere([0,0,-25],20),
 objects = vcat(sky, spheres)
 
 # ╔═╡ 8d20cbc0-1910-11eb-0d98-31a55e7becde
-let
+doit() = let
 	# blank_img = Array{RGB}(undef, 1920,1080)
 	blank_img = Array{RGB}(undef, 200, 150)
 	repeat
 	blank_img[:] .= RGB(0)
 
-	cam = Camera(blank_img, [160,90], -100, [0,0,100])
+	cam = Camera(blank_img, [16,9], -10, [0,0,100])
 
 	ray_trace(objects, cam) |> as_image
 end |> transpose
+
+# ╔═╡ 210789e0-1912-11eb-11b6-bdb806bee14d
+doit()
+
+# ╔═╡ 25ab9680-1912-11eb-0650-6361aaf781ec
+# [doit() for _ in 1:10];
+
+# 3.1
 
 # ╔═╡ Cell order:
 # ╟─853789be-1911-11eb-1121-679f89fe62db
@@ -496,10 +502,13 @@ end |> transpose
 # ╠═8cc03530-1910-11eb-3404-15f5c8f69f8f
 # ╠═8cd93b70-1910-11eb-050a-5713b545f28e
 # ╠═8cd93b70-1910-11eb-39eb-a7dd6c180bcf
+# ╠═b1537ff0-1911-11eb-01c4-39237e7c8123
 # ╠═8cf0e220-1910-11eb-0933-b168f7031f46
 # ╠═8cf0e220-1910-11eb-1237-23da08615add
 # ╠═b766c970-1910-11eb-1457-9f5986c4807f
 # ╠═8d079e70-1910-11eb-01df-e5817d349353
-# ╠═8d079e70-1910-11eb-0f98-95762a22a7f2
 # ╠═8d1e5abe-1910-11eb-2a84-79f43f4a7e65
+# ╠═8d079e70-1910-11eb-0f98-95762a22a7f2
 # ╠═8d20cbc0-1910-11eb-0d98-31a55e7becde
+# ╠═210789e0-1912-11eb-11b6-bdb806bee14d
+# ╠═25ab9680-1912-11eb-0650-6361aaf781ec
