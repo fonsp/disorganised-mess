@@ -4,6 +4,15 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        el
+    end
+end
+
 # ╔═╡ 8989d43e-190e-11eb-3e48-7d10df903b5d
 begin
 	import Pkg
@@ -27,6 +36,8 @@ using Test
 
 # ╔═╡ 853789be-1911-11eb-1121-679f89fe62db
 md"""
+# 0123456789 www
+
 Pluto notebook adaptation of https://github.com/leios/simuleios/tree/master/raytracing
 
 See
@@ -244,7 +255,7 @@ function plot_rays(positions, objects::Vector{O},
         end 
     end
 
-    savefig(plt, filename)
+    plt
 end
 
 # ╔═╡ 8c99c170-1910-11eb-054a-1b007276a744
@@ -253,11 +264,52 @@ function step(ray::Ray, dt)
     return ray
 end
 
+# ╔═╡ 8e89388e-1914-11eb-0f2f-619c7fe79430
+# begin
+# 	function intersection(ray::Ray, skybox::SkyBox;
+# 						  threshold = 0.01)
+
+# 		return skybox.r * ray.v
+# 	end
+	
+# 	function intersection(ray::Ray, sphere::Sphere;
+# 						  threshold = 0.01)
+# 		relative_dist = ray.p-sphere.p
+
+# 		a = dot(ray.v, ray.v)
+# 		b = 2.0 * dot(relative_dist, ray.v)
+# 		c = dot(relative_dist, relative_dist) - sphere.r*sphere.r
+# 		discriminant = b*b - 4*a*c
+
+# 		if discriminant < 0
+# 			return nothing
+# 		elseif discriminant > 0
+# 			roots = [(-b + sqrt(discriminant)) / (2*a),
+# 					 (-b - sqrt(discriminant)) / (2*a)]
+# 			min = minimum(roots)
+# 			max = maximum(roots)
+
+# 			if min > threshold
+# 				return (min)*ray.v
+# 			elseif max > threshold
+# 				return (max)*ray.v
+# 			else
+# 				return nothing
+# 			end
+# 		else
+# 			# Returns nothing if tangential
+# 			return nothing
+# 			#return (-b/(2*a))*ray.v
+# 		end 
+# 	end
+# end
+
 # ╔═╡ 8c99c170-1910-11eb-2e24-49ed98b4dd2c
 function intersection(ray::Ray, sphere::S;
                       threshold = 0.01) where
                       {S <: Union{Sphere, SkyBox}}
     relative_dist = ray.p-sphere.p
+	
     a = dot(ray.v, ray.v)
     b = 2.0 * dot(relative_dist, ray.v)
     c = dot(relative_dist, relative_dist) - sphere.r*sphere.r
@@ -270,7 +322,7 @@ function intersection(ray::Ray, sphere::S;
                  (-b - sqrt(discriminant)) / (2*a)]
         min = minimum(roots)
         max = maximum(roots)
-
+		
         if min > threshold
             return (min)*ray.v
         elseif max > threshold
@@ -296,6 +348,12 @@ function intersection(ray::Ray, wall::W) where {W <: Wall}
         return nothing
     end
 end
+
+# ╔═╡ c1f06690-1914-11eb-2426-29e3027f4f32
+intersection(
+	Ray([1.0, 0.0, 0.0], [0.0, 0.0, 0.0], RGB(0,0,0)),
+	SkyBox([2.0,0,0], 10000)
+)
 
 # ╔═╡ 8cc03530-1910-11eb-107e-3db62b460115
 function propagate(rays::Array{Ray}, objects::Vector{O},
@@ -340,6 +398,8 @@ function propagate(ray::Ray, objects::Vector{O},
         if ray.v != zeros(length(ray.v))
             intersect_final = [Inf, Inf]
             intersected_object = nothing
+			
+			
             for object in objects
                 intersect = intersection(ray, object)
                 if intersect != nothing &&
@@ -349,8 +409,9 @@ function propagate(ray::Ray, objects::Vector{O},
                 end
             end
 
-            if intersect_final != nothing
+            if intersected_object != nothing
                 ray.p .+= intersect_final
+				
                 if intersected_object isa Sphere
                     if !isapprox(intersected_object.s.t, 0)
                         ior = 1/intersected_object.s.ior
@@ -372,6 +433,7 @@ function propagate(ray::Ray, objects::Vector{O},
 
                 elseif intersected_object isa Mirror
                     ray = reflect(ray, intersected_object.n)
+				
                 elseif intersected_object isa SkyBox
                     ray_color = pixel_color(ray.p)
                     ray_vel = zeros(length(ray.v))
@@ -443,35 +505,56 @@ end
 # ╔═╡ 8d079e70-1910-11eb-01df-e5817d349353
 sky = [SkyBox([0.0, 0.0, 0.0], 1000)]
 
+# ╔═╡ 0bc3e570-1939-11eb-1e86-e97a9b07ea7c
+t
+
+# ╔═╡ 0bba2172-1939-11eb-3822-95510610cd6f
+
+
 # ╔═╡ 8d079e70-1910-11eb-0f98-95762a22a7f2
-spheres = [Lens([50,0,-25], 20, 1.5), ReflectingSphere([0,0,-25],20),
-		   ColoredSphere([-50,0,-25], 20, RGB(0.25, 1, 0.75))]
+spheres(t) = [
+	ReflectingSphere([50 * sin(t), 0, 50 * cos(t) - 25], 15),
+	ColoredSphere([0,0,-25], 5, RGB(0.75, .65, 0.1)),
+	Lens([-50 * sin(t), 0, -50*cos(t) - 25], 15, 1.5),
+	Lens([-50 * sin(t + 2pi/3), 0, -50*cos(t + 2pi/3) - 25], 15, 1.5),
+	Lens([-50 * sin(t + 4pi/3), 0, -50*cos(t + 4pi/3) - 25], 15, 1.5),
+]
 
 # ╔═╡ 8d1e5abe-1910-11eb-2a84-79f43f4a7e65
-objects = vcat(sky, spheres)
+objects(t) = vcat(sky, spheres(t))
+
+# ╔═╡ ae201320-1939-11eb-3af5-5915c327f9b5
+@bind T Clock()
 
 # ╔═╡ 8d20cbc0-1910-11eb-0d98-31a55e7becde
-doit() = let
+doit(T) = let
+	
+	
+	
 	# blank_img = Array{RGB}(undef, 1920,1080)
-	blank_img = Array{RGB}(undef, 200, 150)
+	blank_img = Array{RGB}(undef, 150, 60)
 	repeat
 	blank_img[:] .= RGB(0)
 
-	cam = Camera(blank_img, [16,9], -10, [0,0,100])
+	cam = Camera(blank_img, [16,6], -10, [0,0,100])
 
-	ray_trace(objects, cam) |> as_image
+	ray_trace(objects(T / 50), cam) |> as_image
 end |> transpose
 
+# ╔═╡ 88865f70-1939-11eb-2941-c538b8c9175b
+
+
 # ╔═╡ 210789e0-1912-11eb-11b6-bdb806bee14d
-doit()
+doit(T)
 
 # ╔═╡ 25ab9680-1912-11eb-0650-6361aaf781ec
 # [doit() for _ in 1:10];
 
 # 3.1
+# 2.8
 
 # ╔═╡ Cell order:
-# ╟─853789be-1911-11eb-1121-679f89fe62db
+# ╠═853789be-1911-11eb-1121-679f89fe62db
 # ╠═8989d43e-190e-11eb-3e48-7d10df903b5d
 # ╠═4417b3e0-190f-11eb-1efe-53d279a306e6
 # ╠═45a028a0-190f-11eb-355d-ad3c55fb1e2f
@@ -493,9 +576,11 @@ doit()
 # ╠═8c45ae00-1910-11eb-0726-79ba8d8e8085
 # ╠═8c63e460-1910-11eb-3a9f-cf493ae0a063
 # ╠═8c67b4f0-1910-11eb-0efe-5f123cc14d53
-# ╠═8c7f3490-1910-11eb-3e86-d36bf13976d0
-# ╠═8c809420-1910-11eb-2f0d-e17ea7a04a51
+# ╟─8c7f3490-1910-11eb-3e86-d36bf13976d0
+# ╟─8c809420-1910-11eb-2f0d-e17ea7a04a51
 # ╠═8c99c170-1910-11eb-054a-1b007276a744
+# ╠═c1f06690-1914-11eb-2426-29e3027f4f32
+# ╠═8e89388e-1914-11eb-0f2f-619c7fe79430
 # ╠═8c99c170-1910-11eb-2e24-49ed98b4dd2c
 # ╠═8cb27992-1910-11eb-3602-1ba932c81088
 # ╠═8cc03530-1910-11eb-107e-3db62b460115
@@ -508,7 +593,11 @@ doit()
 # ╠═b766c970-1910-11eb-1457-9f5986c4807f
 # ╠═8d079e70-1910-11eb-01df-e5817d349353
 # ╠═8d1e5abe-1910-11eb-2a84-79f43f4a7e65
+# ╠═0bc3e570-1939-11eb-1e86-e97a9b07ea7c
+# ╠═0bba2172-1939-11eb-3822-95510610cd6f
 # ╠═8d079e70-1910-11eb-0f98-95762a22a7f2
+# ╠═ae201320-1939-11eb-3af5-5915c327f9b5
 # ╠═8d20cbc0-1910-11eb-0d98-31a55e7becde
+# ╠═88865f70-1939-11eb-2941-c538b8c9175b
 # ╠═210789e0-1912-11eb-11b6-bdb806bee14d
 # ╠═25ab9680-1912-11eb-0650-6361aaf781ec
