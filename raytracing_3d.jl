@@ -22,10 +22,12 @@ begin
 			Pkg.PackageSpec(name="Images", version="0.23"),
 			Pkg.PackageSpec(name="ImageMagick"),
 			Pkg.PackageSpec(name="PlutoUI", version="0.6.8-0.6"),
+			Pkg.PackageSpec(name="ThreadsX"),
 			])
 	using Images
 	using Plots
 	using PlutoUI
+	using ThreadsX
 end
 
 # ╔═╡ 4417b3e0-190f-11eb-1efe-53d279a306e6
@@ -358,7 +360,7 @@ intersection(
 # ╔═╡ 8cc03530-1910-11eb-107e-3db62b460115
 function propagate(rays::Array{Ray}, objects::Vector{O},
                     num_intersections) where {O <: Object}
-    for j = 1:length(rays)
+    Threads.@threads for j = 1:length(rays)
         rays[j] = propagate(rays[j], objects, num_intersections)
     end
 
@@ -513,8 +515,10 @@ t
 
 # ╔═╡ 8d079e70-1910-11eb-0f98-95762a22a7f2
 spheres(t) = [
-	ReflectingSphere([50 * sin(t), 0, 50 * cos(t) - 25], 15),
-	ColoredSphere([0,0,-25], 5, RGB(0.75, .65, 0.1)),
+	ReflectingSphere([0,0,-25], 10),
+	# ColoredSphere([0,0,-25], 5, RGB(0.75, .65, 0.1)),
+	# ReflectingSphere([50 * sin(t), 0, 50 * cos(t) - 25], 15),
+	Lens([50 * sin(t), 0, 50 * cos(t) - 25], 15, 1.5),
 	Lens([-50 * sin(t), 0, -50*cos(t) - 25], 15, 1.5),
 	Lens([-50 * sin(t + 2pi/3), 0, -50*cos(t + 2pi/3) - 25], 15, 1.5),
 	Lens([-50 * sin(t + 4pi/3), 0, -50*cos(t + 4pi/3) - 25], 15, 1.5),
@@ -523,29 +527,36 @@ spheres(t) = [
 # ╔═╡ 8d1e5abe-1910-11eb-2a84-79f43f4a7e65
 objects(t) = vcat(sky, spheres(t))
 
-# ╔═╡ ae201320-1939-11eb-3af5-5915c327f9b5
-@bind T Clock()
-
 # ╔═╡ 8d20cbc0-1910-11eb-0d98-31a55e7becde
-doit(T) = let
+doit(T, highres) = let
 	
 	
 	
 	# blank_img = Array{RGB}(undef, 1920,1080)
-	blank_img = Array{RGB}(undef, 150, 60)
+	blank_img = if highres
+		Array{RGB}(undef, 800, 320)
+	else
+		Array{RGB}(undef, 200, 80)
+	end
 	repeat
 	blank_img[:] .= RGB(0)
 
 	cam = Camera(blank_img, [16,6], -10, [0,0,100])
 
-	ray_trace(objects(T / 50), cam) |> as_image
+	ray_trace(objects(T / 100), cam) |> as_image
 end |> transpose
 
 # ╔═╡ 88865f70-1939-11eb-2941-c538b8c9175b
+@bind T Slider(1:200)
 
+# ╔═╡ ca7d2270-193d-11eb-3dd6-e1f6d2678a21
+let
+	# T
+	md"High resolution: $(@bind highres CheckBox())"
+end
 
 # ╔═╡ 210789e0-1912-11eb-11b6-bdb806bee14d
-doit(T)
+doit(T, highres)
 
 # ╔═╡ 25ab9680-1912-11eb-0650-6361aaf781ec
 # [doit() for _ in 1:10];
@@ -553,8 +564,14 @@ doit(T)
 # 3.1
 # 2.8
 
+# ╔═╡ 8be2dea0-193e-11eb-0591-c3dcc4c84403
+
+
+# ╔═╡ 8b77c0c0-193e-11eb-1ba8-d99a89ab1cc5
+
+
 # ╔═╡ Cell order:
-# ╠═853789be-1911-11eb-1121-679f89fe62db
+# ╟─853789be-1911-11eb-1121-679f89fe62db
 # ╠═8989d43e-190e-11eb-3e48-7d10df903b5d
 # ╠═4417b3e0-190f-11eb-1efe-53d279a306e6
 # ╠═45a028a0-190f-11eb-355d-ad3c55fb1e2f
@@ -596,8 +613,10 @@ doit(T)
 # ╠═0bc3e570-1939-11eb-1e86-e97a9b07ea7c
 # ╠═0bba2172-1939-11eb-3822-95510610cd6f
 # ╠═8d079e70-1910-11eb-0f98-95762a22a7f2
-# ╠═ae201320-1939-11eb-3af5-5915c327f9b5
 # ╠═8d20cbc0-1910-11eb-0d98-31a55e7becde
 # ╠═88865f70-1939-11eb-2941-c538b8c9175b
+# ╟─ca7d2270-193d-11eb-3dd6-e1f6d2678a21
 # ╠═210789e0-1912-11eb-11b6-bdb806bee14d
-# ╠═25ab9680-1912-11eb-0650-6361aaf781ec
+# ╟─25ab9680-1912-11eb-0650-6361aaf781ec
+# ╟─8be2dea0-193e-11eb-0591-c3dcc4c84403
+# ╟─8b77c0c0-193e-11eb-1ba8-d99a89ab1cc5
