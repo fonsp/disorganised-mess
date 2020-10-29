@@ -1,14 +1,21 @@
 ### A Pluto.jl notebook ###
-# v0.7.6
+# v0.12.4
 
 using Markdown
+using InteractiveUtils
+
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.peek, el) ? Base.peek(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
         el
     end
 end
+
+# ╔═╡ 3be156d4-8a0a-11ea-1a4f-c95a1fd2b4c1
+using PlutoUI
+
 # ╔═╡ b61aaff4-89fd-11ea-1b7d-bbf9d10c8327
 0b0100111011
 
@@ -40,8 +47,11 @@ ts = []
 # ╔═╡ 9e497290-8986-11ea-0b02-17e42d1970fb
 push!(ts, t1); length(ts)
 
-# ╔═╡ 29b41e06-8a0c-11ea-1ff9-3fd09f53d808
-t
+# ╔═╡ 3f95df48-8a0a-11ea-2380-494bca1ccfc3
+@bind t3 PlutoUI.Timer()
+
+# ╔═╡ 49c2e088-8a0a-11ea-1a62-cd8fd12803ba
+t3
 
 # ╔═╡ aceb3ec4-8a05-11ea-0df9-890ddc329557
 struct Timer
@@ -50,14 +60,17 @@ struct Timer
 	Timer(interval=1.0, fixed=false) = interval >= 0 ? new(interval, fixed) : error("interval must be non-negative")
 end
 
-# ╔═╡ afdde47c-89a5-11ea-0d5a-e741eaabff79
-@bind t Timer()
-
 # ╔═╡ bc22de9a-89a5-11ea-140b-8b8f9d69a1dd
 @bind t2 Timer(0.5, true)
 
 # ╔═╡ c4ffcbea-89a5-11ea-1c6f-7558a8060ff6
 t2
+
+# ╔═╡ afdde47c-89a5-11ea-0d5a-e741eaabff79
+@bind t Timer()
+
+# ╔═╡ 29b41e06-8a0c-11ea-1ff9-3fd09f53d808
+t
 
 # ╔═╡ 350de788-8a06-11ea-24d5-d786fc362fc3
 Timer(1.2)
@@ -424,15 +437,6 @@ md""
 
 # ╔═╡ f7555734-7f34-11ea-069a-6bb67e201bdc
 md"That's it for now! Let us know what you think using the feedback button below! 👇"
-
-# ╔═╡ 3be156d4-8a0a-11ea-1a4f-c95a1fd2b4c1
-using PlutoUI
-
-# ╔═╡ 3f95df48-8a0a-11ea-2380-494bca1ccfc3
-@bind t3 PlutoUI.Timer()
-
-# ╔═╡ 49c2e088-8a0a-11ea-1a62-cd8fd12803ba
-t3
 
 # ╔═╡ Cell order:
 # ╠═b61aaff4-89fd-11ea-1b7d-bbf9d10c8327

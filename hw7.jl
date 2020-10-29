@@ -4,6 +4,15 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        el
+    end
+end
+
 # ╔═╡ c3e52bf2-ca9a-11ea-13aa-03a4335f2906
 begin
 	import Pkg
@@ -14,11 +23,11 @@ begin
 			])
 	using Plots
 	using PlutoUI
-	import LinearAlgebra: norm
+	using LinearAlgebra
 end
 
 # ╔═╡ 1df32310-19c4-11eb-0824-6766cd21aaf4
-md"_homework 6, version 0_"
+md"_homework 7, version 0_"
 
 # ╔═╡ 1e01c912-19c4-11eb-269a-9796cccdf274
 # WARNING FOR OLD PLUTO VERSIONS, DONT DELETE ME
@@ -81,9 +90,6 @@ Submission by: **_$(student.name)_** ($(student.kerberos_id)@mit.edu)
 # ╔═╡ 1e2cd0b0-19c4-11eb-3583-0b82092139aa
 md"_Let's create a package environment:_"
 
-# ╔═╡ f69d7540-19c8-11eb-37dd-25e4b7a7da68
-import LinearAlgebra: normalize
-
 # ╔═╡ cbf50820-1929-11eb-1353-fd694a1d3289
 md"
 # Raytracing set 1
@@ -126,13 +132,13 @@ To start, define a struct `Ray` that takes the light's direction vector $\hat \e
 
 # ╔═╡ 24b0d4ba-192c-11eb-0f66-e77b544b0510
 struct Photon
-	# Position vector
+	"Position vector"
 	p::Vector{Float64}
 
-	# Direction vector
+	"Direction vector"
 	v::Vector{Float64}
 
-    # Current Index of Refraction
+    "Current Index of Refraction"
 	ior::Real
 end
 
@@ -308,9 +314,6 @@ end
 # ╔═╡ 823f957e-19cc-11eb-2bb4-35ebc3fc236e
 test_photon.v
 
-# ╔═╡ 6b5aaee0-19cc-11eb-0113-8fdd40620b5f
-refract(test_photon, [0,1], 5)
-
 # ╔═╡ a4b06ae0-19cc-11eb-1a29-e9873a414c6b
 
 
@@ -367,9 +370,9 @@ end
 
 # ╔═╡ e5c0e960-19cc-11eb-107d-39b397a783ab
 test_sphere = Sphere(
-	[6, 0],
+	[6, 0.6],
 	2,
-	3,
+	1.5,
 )
 
 # ╔═╡ cea1ef8c-193f-11eb-2e35-ed266690b762
@@ -413,29 +416,8 @@ function plot_object!(p::Plots.Plot, sphere::Sphere)
 		for ϕ in LinRange(0,2π,50)
 	]
 	
-	plot!(p, points .|> first, points .|> last, seriestype=[:shape,])
+	plot!(p, points .|> first, points .|> last, seriestype=:shape, label="Sphere", fillopacity=0.2)
 	p
-end
-
-# ╔═╡ 8f295f30-19cf-11eb-2854-d3bf221b55c0
-function interact(photon::Photon, old_photon::Photon, sphere::Sphere)
-	if isinside(photon, sphere) && !isinside(old_photon, sphere)
-		refract(photon, sphere_normal_at(photon.p, sphere), sphere.ior)
-	elseif !isinside(photon, sphere) && isinside(old_photon, sphere)
-		refract(photon, sphere_normal_at(photon.p, sphere), 1.0)
-	else
-		photon
-	end
-end
-
-# ╔═╡ a1280a9e-19d0-11eb-2dbb-b93196307957
-function propagate(photon::Photon, T::AbstractRange, objects)
-	accumulate(T, init=photon) do old_photon, t
-		new_photon = photon_step(old_photon, step(T))
-		reduce(objects; init=new_photon) do p, obj
-			interact(p, old_photon, obj)
-		end
-	end
 end
 
 # ╔═╡ aa05d0ae-19cd-11eb-054f-9321fca4e5a6
@@ -478,61 +460,114 @@ end
 
 # ╔═╡ 0906b340-19d3-11eb-112c-e568f69deb5d
 test_wall = Wall(
-	[6,1],
+	[8,-1],
 	normalize([-3,1]),
 )
-
-# ╔═╡ 28045ae0-19d3-11eb-0a62-01b4201af5a3
-struct Ray
-	"Position vector"
-	p::Vector{Float64}
-
-	"Direction vector"
-	v::Vector{Float64}
-
-    "Current Index of Refraction"
-	ior::Real
-end
-
-# ╔═╡ aa43ef1c-1941-11eb-04de-552719a08da0
-md"""
-Now to create a function that finds the location where we hit the wall.
-As a note, this part can be done in a number of different ways. For the purposes of this homework, we will allow this function to return 2 things:
-1. The location it hit the wall
-2. A value of `nothing` if it does not intersect with the wall
-
-So, how do we find the location where it hits the wall? Well, because our walls are infinitely long, we are essentially trying to find the point at which 2 lines intersect.
-
-To do this, we can combine a few dot products: one to find how far away we are, and another to scale that distance. Mathematically, it would look like:
-
-$p_i = -\frac{(p_{\text{ray}} - p_{\text{wall}})\cdot \hat n}{\hat \ell \cdot \hat n},$
-
-where $p$ is the position, $\hat \ell$ is the direction of the light, and $\hat n$ is the normal vector for the wall. subscripts $i$, $r$, and $w$ represent the intersection point, ray, and wall respectively.
-
-In code, we essentially need to find $x_i$ and return it if it is positive and finite.
-"""
-
-# ╔═╡ 6544be90-19d3-11eb-153c-218025f738c6
-test_ray = Ray([0, 1], [1,0], 1.0)
 
 # ╔═╡ 84895a42-19d3-11eb-1a2f-d934246e07bf
 
 
-# ╔═╡ ca925a12-19eb-11eb-2f94-3fdb700e1f71
-import LinearAlgebra: dot
+# ╔═╡ 6544be90-19d3-11eb-153c-218025f738c6
+snoopy = Photon([0, 1], normalize([1,.1]), 1.0)
 
-# ╔═╡ aa19faa4-1941-11eb-2b61-9b78aaf42876
-function intersection(ray::Ray, wall::Wall)
-	dist = -dot(ray.p - wall.position, wall.normal) / dot(ray.v, wall.normal)
-	
-	ray.p + dist * ray.v
+# ╔═╡ 8acef4b0-1a09-11eb-068d-79a259244ed1
+struct Miss end
+
+# ╔═╡ 8018fbf0-1a05-11eb-3032-95aae07ca78f
+struct Intersection{T<:Object}
+	object::T
+	distance::Float64
+	point::Vector{Float64}
 end
 
-# ╔═╡ 5501a700-19ec-11eb-0ded-53e41f7f821a
-let
-	p = plot()
+# ╔═╡ aa19faa4-1941-11eb-2b61-9b78aaf42876
+function intersection(ray::Photon, wall::Wall; ϵ=1e-3)
+	dist = -dot(ray.p - wall.position, wall.normal) / dot(ray.v, wall.normal)
 	
-	plot_photon_path!(p, test_ray)
+	if dist > ϵ
+		point = ray.p + dist * ray.v
+		
+		Intersection(wall, dist, point)
+	else
+		Miss()
+	end
+end
+
+# ╔═╡ 93a5691e-1a01-11eb-3a29-a71a2b48ae14
+func
+
+# ╔═╡ 6de1bafc-1a01-11eb-3d67-c9d9b6c3cea8
+function plot_object!(p, wall::Wall)
+	# old_xlims = xlims(p)
+	# old_ylims = ylims(p)
+	
+	adjacent = [wall.normal[2], -wall.normal[1]]
+	
+	a = wall.position + adjacent * 20
+	b = wall.position - adjacent * 20
+	
+	line = [a, b]
+	
+	plot!(p, first.(line), last.(line), label="Wall")
+	# xlims!(p, old_xlims)
+	# xlims!(p, old_xlims)
+end
+
+# ╔═╡ d257a728-1a04-11eb-281d-bde30644f5f5
+ex_2_scene_walls = [
+	Wall(
+		[10,0],
+		[-1,0]
+		),
+	Wall(
+		[-10,0],
+		[1,0]
+		),
+	Wall(
+		[0,10],
+		[0,-1]
+		),
+	Wall(
+		[0,-10],
+		[0,1]
+		),
+	]
+
+# ╔═╡ eff9329e-1a05-11eb-261f-734127d36750
+function plot_scene(objects::Vector{<:Object}; kwargs...)
+	p = plot(aspect_ratio=:equal; kwargs...)
+	
+	for o in objects
+		plot_object!(p, o)
+	end
+	p
+end
+
+# ╔═╡ e45e1d36-1a12-11eb-2720-294c4be6e9fd
+plot_scene([test_wall], size=(400,200))
+
+# ╔═╡ 0393dd3a-1a06-11eb-18a9-494ae7a26bc0
+plot_scene(ex_2_scene_walls, legend=false, size=(400,200))
+
+# ╔═╡ 2158a356-1a05-11eb-3f5b-4dfa810fc602
+ex_2_scene = [ex_2_scene_walls..., test_wall]
+
+# ╔═╡ 5501a700-19ec-11eb-0ded-53e41f7f821a
+plot_scene(ex_2_scene, legend=false, size=(400,200))
+
+# ╔═╡ 80e889d4-1a09-11eb-2240-15bddf3b61bc
+Miss() < Miss()
+
+# ╔═╡ 6c37c5f4-1a09-11eb-08ae-9dce752f29cb
+begin
+	Base.isless(a::Miss, b::Miss) = false
+	Base.isless(a::Miss, b::Intersection) = false
+	Base.isless(a::Intersection, b::Miss) = true
+	Base.isless(a::Intersection, b::Intersection) = a.distance < b.distance
+end
+
+# ╔═╡ 3cd36ac0-1a09-11eb-1818-75b36e67594a
+@bind mirror_test_ray_N Slider(1:30; default=4)
 
 # ╔═╡ b6614d80-194b-11eb-1edb-dba3c29672f8
 md"
@@ -566,8 +601,14 @@ Now we just need to write that in code:
 "
 
 # ╔═╡ 43306bd4-194d-11eb-2e30-07eabb8b29ef
-function reflect!(ray::Ray, n)
-    # Write code here
+function reflect(velocity::Vector{Float64}, normal::Vector{Float64})
+	velocity - 2 * dot(velocity, normal) * normal
+end
+
+# ╔═╡ e70b9e24-1a07-11eb-13db-b95c07880893
+function interact(ray::Photon, hit::Intersection{Wall})
+	
+	Photon(hit.point, reflect(ray.v, hit.object.normal), ray.ior)
 end
 
 # ╔═╡ 522e6b22-194d-11eb-167c-052e65f6b703
@@ -641,7 +682,7 @@ where $a = \ell\cdot\ell$, $b = 2\ell\cdot(\mathbf{R}_0-\mathbf{S})$, and $c=(\m
 
 If the quadratic equation returns no roots, there is no intersection. If it returns 1 root, the ray just barely hits the edge of the sphere. If it returns 2 roots, it goes right through!
 
-The easiest way to check this is by looking at the discriminant $d = \sqrt{b^2-4ac}$.
+The easiest way to check this is by looking at the discriminant $d = b^2-4ac$.
 
 ```math
 \text{Number of roots} = \left\{
@@ -660,11 +701,175 @@ With all this said, we are ready to write some code:
 "
 
 # ╔═╡ 885ac814-1953-11eb-30d9-85dcd198a1d8
-function intersection(ray::Ray, sphere::Sphere)
+function intersection(ray::Photon, sphere::Sphere; ϵ=1e-3)
+	a = dot(ray.v, ray.v)
+	b = 2 * dot(ray.v, ray.p - sphere.center)
+	c = dot(ray.p - sphere.center, ray.p - sphere.center) - sphere.radius^2
+	
+	d = b^2 - 4*a*c
+	
+	if d <= 0
+		Miss()
+	else
+		t1 = (-b-sqrt(d))/2a
+		t2 = (-b+sqrt(d))/2a
+		
+		t = if t1 > ϵ
+			t1
+		elseif t2 > ϵ
+			t2
+		else
+			return Miss()
+		end
+		
+		point = ray.p + t * ray.v
+		
+		Intersection(sphere, t, point)
+	end
 end
 
 # ╔═╡ a306e880-19eb-11eb-0ff1-d7ef49777f63
-intersection(test_ray, test_wall)
+intersection(snoopy, test_wall)
+
+# ╔═╡ 3663bf80-1a06-11eb-3596-8fbbed28cc38
+let
+	p = plot_scene(ex_2_scene, legend=false, xlim=(-11,11), ylim=(-11,11))
+	
+	hit = intersection(snoopy, test_wall)
+	
+	line = [snoopy.p, hit.point]
+	plot!(p, first.(line), last.(line), lw=5)
+	
+	p
+end
+
+# ╔═╡ c3090e4a-1a09-11eb-0f32-d3bbfd9992e0
+sort(intersection.([snoopy], ex_2_scene))
+
+# ╔═╡ 754eeec4-1a07-11eb-1329-8d9ae0948613
+function closest_hit(ray::Photon, objects::Vector{<:Object})
+	hits = intersection.([ray], objects)
+	
+	minimum(hits)
+end
+
+# ╔═╡ 251f0262-1a0c-11eb-39a3-09be67091dc8
+intersection(snoopy, test_sphere)
+
+# ╔═╡ 83aa9cea-1a0c-11eb-281d-699665da2b4f
+let
+	p = plot_scene([test_sphere])
+	
+	hit = intersection(snoopy, test_sphere)
+	
+	line = [snoopy.p, hit.point]
+	plot!(p, first.(line), last.(line), lw=5)
+	
+	p
+end
+
+# ╔═╡ 14dc73d2-1a0d-11eb-1a3c-0f793e74da9b
+function refract(velocity::Vector{Float64}, normal::Vector{Float64},
+	old_ior, new_ior)
+	
+	r = new_ior / old_ior
+	
+	# this probably isn't correct but it _feels right_
+	# just a placeholder
+	normalize(velocity + (r - 1)*normal * sign(dot(velocity, normal)))
+end
+
+# ╔═╡ 6b5aaee0-19cc-11eb-0113-8fdd40620b5f
+refract(test_photon, [0,1], 5)
+
+# ╔═╡ 8f295f30-19cf-11eb-2854-d3bf221b55c0
+function interact(photon::Photon, old_photon::Photon, sphere::Sphere)
+	if isinside(photon, sphere) && !isinside(old_photon, sphere)
+		refract(photon, sphere_normal_at(photon.p, sphere), sphere.ior)
+	elseif !isinside(photon, sphere) && isinside(old_photon, sphere)
+		refract(photon, sphere_normal_at(photon.p, sphere), 1.0)
+	else
+		photon
+	end
+end
+
+# ╔═╡ c25caf08-1a13-11eb-3c4d-0567faf4e662
+md"""
+We use `ray.ior == 1.0` to check whether this is a ray _entering_ or _leaving_ the sphere.
+"""
+
+# ╔═╡ e1cb1622-1a0c-11eb-224c-559af7b90f49
+function interact(ray::Photon, hit::Intersection{Sphere})
+	old_ior = ray.ior
+	new_ior = if ray.ior == 1.0
+		hit.object.ior
+	else
+		1.0
+	end
+	
+	normal = sphere_normal_at(hit.point, hit.object)
+	
+	Photon(hit.point, refract(ray.v, normal, old_ior, new_ior), new_ior)
+end
+
+# ╔═╡ a1280a9e-19d0-11eb-2dbb-b93196307957
+function propagate(photon::Photon, T::AbstractRange, objects)
+	accumulate(T, init=photon) do old_photon, t
+		new_photon = photon_step(old_photon, step(T))
+		reduce(objects; init=new_photon) do p, obj
+			interact(p, old_photon, obj)
+		end
+	end
+end
+
+# ╔═╡ 76ef6e46-1a06-11eb-03e3-9f40a86dc9aa
+function step_ray(ray::Photon, objects::Vector{<:Object})
+	hit = closest_hit(ray, objects)
+	
+	interact(ray, hit)
+end
+
+# ╔═╡ 9f73bfb6-1a06-11eb-1c02-43331228da14
+step_ray(snoopy, ex_2_scene)
+
+# ╔═╡ 900d6622-1a08-11eb-1475-bfadc2aac749
+accumulate(1:5; init=snoopy) do old_photon, i
+		step_ray(old_photon, ex_2_scene)
+	end
+
+# ╔═╡ 1ee0787e-1a08-11eb-233b-43a654f70117
+let
+	p = plot_scene(ex_2_scene, legend=false, xlim=(-11,11), ylim=(-11,11))
+	
+	path = accumulate(1:mirror_test_ray_N; init=snoopy) do old_photon, i
+		step_ray(old_photon, ex_2_scene)
+	end
+	
+	line = [snoopy.p, [r.p for r in path]...]
+	plot!(p, first.(line), last.(line), lw=5)
+	
+	p
+end |> as_svg
+
+# ╔═╡ c492a1f8-1a0c-11eb-2c38-5921c39cf5f8
+@bind sphere_test_ray_N Slider(1:30; default=4)
+
+# ╔═╡ b3ab93d2-1a0b-11eb-0f5a-cdca19af3d89
+ex_3_scene = [test_sphere, ex_2_scene_walls...]
+
+# ╔═╡ b65d9a0c-1a0c-11eb-3cd5-e5a2c4302c7e
+let
+	p = plot_scene(ex_3_scene, legend=false, xlim=(-11,11), ylim=(-11,11))
+	
+	path = accumulate(1:sphere_test_ray_N; init=snoopy) do old_photon, i
+		step_ray(old_photon, ex_3_scene)
+	end
+	
+	line = [snoopy.p, [r.p for r in path]...]
+	plot!(p, first.(line), last.(line), lw=5, color=:red)
+	
+	p
+end |> as_svg
 
 # ╔═╡ c00eb0a6-cab2-11ea-3887-070ebd8d56e2
 md"
@@ -702,13 +907,9 @@ propagate(test_photon, 0:.1:1, ex_1_scene)
 
 # ╔═╡ dcfd9b12-19cd-11eb-0938-41f7279f52ca
 let
-	p = plot(legend=false, aspect_ratio=:equal)
+	p = plot_scene(ex_1_scene, legend=false)
 	
 	T = 0:.01:.5
-	
-	for o in ex_1_scene
-		plot_object!(p, o)
-	end
 	
 	for y in LinRange(-1.6,-1.6,1)
 		start = Photon([0, y], [1,0], 1.0)
@@ -761,11 +962,138 @@ yays = [md"Fantastic!", md"Splendid!", md"Great!", md"Yay ❤", md"Great! 🎉",
 # ╔═╡ ec698eb0-19c3-11eb-340a-e319abb8ebb5
 correct(text=rand(yays)) = Markdown.MD(Markdown.Admonition("correct", "Got it!", [text]))
 
+# ╔═╡ 867e6168-1a11-11eb-1434-570cbfe4d49b
+md"""
+# Note to James
+
+Hi James!
+
+I did not finish it today, but what I did do is go through all the exercises and write out solutions in a way that kind of matches what they learned in the previous weeks.
+
+I also made a mess of the notebook, sorry 😢
+
+---
+
+There is a green post-it before Problem 1 and before Problem 2 to go over the main changes that I made. Let me know what you think!
+
+""" |> correct
+
 # ╔═╡ ec7638e0-19c3-11eb-1ca1-0b3aa3b40240
 not_defined(variable_name) = Markdown.MD(Markdown.Admonition("danger", "Oopsie!", [md"Make sure that you define a variable called **$(Markdown.Code(string(variable_name)))**"]))
 
 # ╔═╡ ec85c940-19c3-11eb-3375-a90735beaec1
 TODO = html"<span style='display: inline; font-size: 2em; color: purple; font-weight: 900;'>TODO</span>"
+
+# ╔═╡ 3149791e-1a00-11eb-042d-67adb29b3da0
+md"""
+# $TODO fonsi's idea for problem 1 :
+
+The problem as it is right now is too difficult, but a solution would be to onyl use a single circle.
+
+Instead of only refracting at a timestep where the lens boundary is crossed, we refract at every timestep. In most timesteps, the ior before and after the timestep are the same, so nothing happens.
+
+Only using one lens makes the code a lot easier, because the normal vector for refraction does not depend on which circle is being refracted from.
+
+---
+
+The plotting functions will be pre-written, and the `struct`s too.
+
+---
+
+I worked more on Problem 2 and 3, maybe read those first
+""" |> correct
+
+# ╔═╡ 78782214-1a13-11eb-348a-7b0c819898a9
+md"""
+$TODO this isn't correct yet, very WIP
+"""
+
+# ╔═╡ 19c6d3ae-1a0f-11eb-0e7a-4768e080408a
+md"""
+# $TODO fonsi's idea for problem 2 :
+
+This is a cool exercise! I made two changes/additions:
+
+### Intersection type
+
+Instead of slowly building up a `propagate` function with a growing if statement, we use types and multiple dispatch to build up functionality. The main idea is that we have a new type:
+
+
+```julia
+struct Intersection{T<:Object}
+	object::T
+	distance::Float64
+	point::Vector{Float64}
+end
+
+```
+
+that contains the intersection result. It is a possible return type of the `intersection(::Photon, ::Object)` function. Because it is a _parametric_ type, we can later dispatch on the type of object that the intersection happened on, and do something different (i.e. refract / reflect) based on this type.
+
+#### Sorting intersections
+
+We also introduce a second type to signify a miss:
+
+```julia
+struct Miss end
+```
+
+We could create an abstract type `MaybeIntersection` that is the supertype of `Miss` and `Intersection`, but this is not necessary.
+
+And we define methods to compare different `MaybeIntersection`s:
+
+```julia
+Base.isless(a::Miss, b::Miss) = false
+Base.isless(a::Miss, b::Intersection) = false
+Base.isless(a::Intersection, b::Miss) = true
+Base.isless(a::Intersection, b::Intersection) = a.distance < b.distance
+```
+
+This allows us to get the closest intersection using:
+```julia
+minimum(vect_of_intersections)
+```
+
+Neat!
+
+This allows us to naturally extend our work to ex 3, where we add methods to existing functions to support spheres.
+""" |> correct
+
+# ╔═╡ aa43ef1c-1941-11eb-04de-552719a08da0
+md"""
+Now to create a function that finds the location where we hit the wall.
+As a note, this part can be done in a number of different ways. For the purposes of this homework, we will allow this function to return 2 things: $TODO
+1. The location it hit the wall
+2. A value of `nothing` if it does not intersect with the wall
+
+So, how do we find the location where it hits the wall? Well, because our walls are infinitely long, we are essentially trying to find the point at which 2 lines intersect.
+
+To do this, we can combine a few dot products: one to find how far away we are, and another to scale that distance. Mathematically, it would look like:
+
+$p_i = -\frac{(p_{\text{ray}} - p_{\text{wall}})\cdot \hat n}{\hat \ell \cdot \hat n},$
+
+where $p$ is the position, $\hat \ell$ is the direction of the light, and $\hat n$ is the normal vector for the wall. subscripts $i$, $r$, and $w$ represent the intersection point, ray, and wall respectively.
+
+In code, we essentially need to find $x_i$ and return it if it is positive and finite.
+"""
+
+# ╔═╡ 42a54138-1a01-11eb-285b-25b72e75a8bd
+md"""
+$TODO ``p_i`` is the distance that the ray needs to travel before it hits the wall, right? Then we should also say that `ray.p + p_i * ray.v` will give the collision point
+"""
+
+# ╔═╡ b157247e-1a0c-11eb-3980-bdaaa74f7aff
+md"""
+$TODO add some more (at least visual) test cases: 
+- miss the ball, 
+- start after the ball, 
+- start inside the ball
+"""
+
+# ╔═╡ 53eaf592-194c-11eb-09e5-d9dbca43a006
+function propagate(ray::Ray, objects::Vector{O}, n) where {O <: Object}
+	
+end
 
 # ╔═╡ ed140a84-caa9-11ea-25f3-dd19092088fb
 function propagate(ray::Ray, objects::Vector{O}, n) where {O <: Object}
@@ -775,21 +1103,17 @@ end
 function propagate(ray::Ray, objects::Vector{O}, n) where {O <: Object}
 end
 
-# ╔═╡ 53eaf592-194c-11eb-09e5-d9dbca43a006
-function propagate(ray::Ray, objects::Vector{O}, n) where {O <: Object}
-	
-end
-
 # ╔═╡ Cell order:
 # ╟─1df32310-19c4-11eb-0824-6766cd21aaf4
 # ╟─1df82c20-19c4-11eb-0959-8543a0d5630d
 # ╟─1e01c912-19c4-11eb-269a-9796cccdf274
+# ╟─867e6168-1a11-11eb-1434-570cbfe4d49b
 # ╟─1e109620-19c4-11eb-013e-1bc95c14c2ba
 # ╟─1e202680-19c4-11eb-29a7-99061b886b3c
 # ╟─1e2cd0b0-19c4-11eb-3583-0b82092139aa
 # ╠═c3e52bf2-ca9a-11ea-13aa-03a4335f2906
-# ╠═f69d7540-19c8-11eb-37dd-25e4b7a7da68
 # ╟─cbf50820-1929-11eb-1353-fd694a1d3289
+# ╠═3149791e-1a00-11eb-042d-67adb29b3da0
 # ╟─acf4c5a6-ca9a-11ea-26c8-f740c13dcd83
 # ╠═24b0d4ba-192c-11eb-0f66-e77b544b0510
 # ╟─45499234-192c-11eb-2257-cff3b45fb0c9
@@ -834,19 +1158,40 @@ end
 # ╠═a1280a9e-19d0-11eb-2dbb-b93196307957
 # ╟─d564d820-19d0-11eb-18b0-01fbb50038d2
 # ╠═aa05d0ae-19cd-11eb-054f-9321fca4e5a6
+# ╟─78782214-1a13-11eb-348a-7b0c819898a9
 # ╠═dcfd9b12-19cd-11eb-0938-41f7279f52ca
 # ╠═d49ddea2-19d0-11eb-0aeb-9dce91de6fb7
+# ╟─19c6d3ae-1a0f-11eb-0e7a-4768e080408a
 # ╟─92290e54-1940-11eb-1a24-5d1eaee9f6ca
 # ╠═99c61b74-1941-11eb-2323-2bdb7c120a28
 # ╠═0906b340-19d3-11eb-112c-e568f69deb5d
-# ╠═28045ae0-19d3-11eb-0a62-01b4201af5a3
+# ╠═e45e1d36-1a12-11eb-2720-294c4be6e9fd
 # ╟─aa43ef1c-1941-11eb-04de-552719a08da0
-# ╠═6544be90-19d3-11eb-153c-218025f738c6
-# ╠═84895a42-19d3-11eb-1a2f-d934246e07bf
-# ╠═ca925a12-19eb-11eb-2f94-3fdb700e1f71
+# ╟─42a54138-1a01-11eb-285b-25b72e75a8bd
 # ╠═aa19faa4-1941-11eb-2b61-9b78aaf42876
+# ╠═84895a42-19d3-11eb-1a2f-d934246e07bf
+# ╠═6544be90-19d3-11eb-153c-218025f738c6
+# ╠═8acef4b0-1a09-11eb-068d-79a259244ed1
+# ╠═8018fbf0-1a05-11eb-3032-95aae07ca78f
 # ╠═a306e880-19eb-11eb-0ff1-d7ef49777f63
+# ╠═93a5691e-1a01-11eb-3a29-a71a2b48ae14
+# ╠═6de1bafc-1a01-11eb-3d67-c9d9b6c3cea8
+# ╠═d257a728-1a04-11eb-281d-bde30644f5f5
+# ╠═0393dd3a-1a06-11eb-18a9-494ae7a26bc0
+# ╠═eff9329e-1a05-11eb-261f-734127d36750
+# ╠═2158a356-1a05-11eb-3f5b-4dfa810fc602
 # ╠═5501a700-19ec-11eb-0ded-53e41f7f821a
+# ╠═3663bf80-1a06-11eb-3596-8fbbed28cc38
+# ╠═76ef6e46-1a06-11eb-03e3-9f40a86dc9aa
+# ╠═80e889d4-1a09-11eb-2240-15bddf3b61bc
+# ╠═6c37c5f4-1a09-11eb-08ae-9dce752f29cb
+# ╠═c3090e4a-1a09-11eb-0f32-d3bbfd9992e0
+# ╠═754eeec4-1a07-11eb-1329-8d9ae0948613
+# ╠═e70b9e24-1a07-11eb-13db-b95c07880893
+# ╠═9f73bfb6-1a06-11eb-1c02-43331228da14
+# ╠═900d6622-1a08-11eb-1475-bfadc2aac749
+# ╠═3cd36ac0-1a09-11eb-1818-75b36e67594a
+# ╠═1ee0787e-1a08-11eb-233b-43a654f70117
 # ╟─b6614d80-194b-11eb-1edb-dba3c29672f8
 # ╠═53eaf592-194c-11eb-09e5-d9dbca43a006
 # ╟─711a5ea2-194c-11eb-2e66-079f417ef3bb
@@ -861,6 +1206,15 @@ end
 # ╟─337918f4-194f-11eb-0b45-b13fef3b23bf
 # ╟─492b257a-194f-11eb-17fb-f770b4d3da2e
 # ╠═885ac814-1953-11eb-30d9-85dcd198a1d8
+# ╠═251f0262-1a0c-11eb-39a3-09be67091dc8
+# ╠═83aa9cea-1a0c-11eb-281d-699665da2b4f
+# ╟─b157247e-1a0c-11eb-3980-bdaaa74f7aff
+# ╠═14dc73d2-1a0d-11eb-1a3c-0f793e74da9b
+# ╟─c25caf08-1a13-11eb-3c4d-0567faf4e662
+# ╠═e1cb1622-1a0c-11eb-224c-559af7b90f49
+# ╠═c492a1f8-1a0c-11eb-2c38-5921c39cf5f8
+# ╠═b65d9a0c-1a0c-11eb-3cd5-e5a2c4302c7e
+# ╠═b3ab93d2-1a0b-11eb-0f5a-cdca19af3d89
 # ╟─c00eb0a6-cab2-11ea-3887-070ebd8d56e2
 # ╠═ed140a84-caa9-11ea-25f3-dd19092088fb
 # ╟─f5cce52a-cab2-11ea-07ea-ef2b5e48ece4
