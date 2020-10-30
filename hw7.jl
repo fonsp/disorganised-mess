@@ -136,7 +136,7 @@ struct Photon
 	p::Vector{Float64}
 
 	"Direction vector"
-	v::Vector{Float64}
+	l::Vector{Float64}
 
     "Current Index of Refraction"
 	ior::Real
@@ -165,7 +165,7 @@ c = 3e1
 # ╔═╡ 5ed52588-192c-11eb-2255-2d951196701b
 function photon_step(photon::Photon, timestep::Real)
 	
-	Photon(photon.p + photon.v * timestep * c, photon.v, photon.ior)
+	Photon(photon.p + photon.l * timestep * c, photon.l, photon.ior)
 end
 
 # ╔═╡ e148565e-19c8-11eb-39c6-196ba4adbbe3
@@ -300,19 +300,19 @@ The last step is to write this in code with a function that takes the ray, the n
 # end
 
 # ╔═╡ 4a27d346-1937-11eb-0204-2bb4e253b8b0
-function refract(ray::Photon, normal, new_ior)
-	r = ray.ior / new_ior
+function refract(photon::Photon, normal, new_ior)
+	r = photon.ior / new_ior
 	
-	new_velocity = normalize(
-		r * ray.v + 
+	new_direction = normalize(
+		r * photon.l + 
 		(r*c - sqrt(1 - r^2 * (1 - c^2))) * normal
 		)
 	
-	Photon(ray.p, new_velocity, new_ior)
+	Photon(photon.p, new_direction, new_ior)
 end
 
 # ╔═╡ 823f957e-19cc-11eb-2bb4-35ebc3fc236e
-test_photon.v
+test_photon.l
 
 # ╔═╡ a4b06ae0-19cc-11eb-1a29-e9873a414c6b
 
@@ -434,6 +434,9 @@ ex_1_scene = [
 	# ),
 ]
 
+# ╔═╡ 368572f4-1abc-11eb-2058-cbd188fc07c5
+problem 1 done by us, as an introduction to problems 2 and 3
+
 # ╔═╡ 92290e54-1940-11eb-1a24-5d1eaee9f6ca
 md"
 That's it for problem 1! Now on to problem 2, where we deal with events and mirrors!
@@ -451,10 +454,10 @@ To start, let's create the concept of a wall. Similar to Spheres, these will be 
 
 # ╔═╡ 99c61b74-1941-11eb-2323-2bdb7c120a28
 struct Wall <: Object
-	# Position
+	"Position"
 	position::Vector{Float64}
 
-	# Normal vector
+	"Normal vector"
 	normal::Vector{Float64}
 end
 
@@ -463,38 +466,6 @@ test_wall = Wall(
 	[8,-1],
 	normalize([-3,1]),
 )
-
-# ╔═╡ 84895a42-19d3-11eb-1a2f-d934246e07bf
-
-
-# ╔═╡ 6544be90-19d3-11eb-153c-218025f738c6
-snoopy = Photon([0, 1], normalize([1,.1]), 1.0)
-
-# ╔═╡ 8acef4b0-1a09-11eb-068d-79a259244ed1
-struct Miss end
-
-# ╔═╡ 8018fbf0-1a05-11eb-3032-95aae07ca78f
-struct Intersection{T<:Object}
-	object::T
-	distance::Float64
-	point::Vector{Float64}
-end
-
-# ╔═╡ aa19faa4-1941-11eb-2b61-9b78aaf42876
-function intersection(ray::Photon, wall::Wall; ϵ=1e-3)
-	dist = -dot(ray.p - wall.position, wall.normal) / dot(ray.v, wall.normal)
-	
-	if dist > ϵ
-		point = ray.p + dist * ray.v
-		
-		Intersection(wall, dist, point)
-	else
-		Miss()
-	end
-end
-
-# ╔═╡ 93a5691e-1a01-11eb-3a29-a71a2b48ae14
-func
 
 # ╔═╡ 6de1bafc-1a01-11eb-3d67-c9d9b6c3cea8
 function plot_object!(p, wall::Wall)
@@ -513,26 +484,6 @@ function plot_object!(p, wall::Wall)
 	# xlims!(p, old_xlims)
 end
 
-# ╔═╡ d257a728-1a04-11eb-281d-bde30644f5f5
-ex_2_scene_walls = [
-	Wall(
-		[10,0],
-		[-1,0]
-		),
-	Wall(
-		[-10,0],
-		[1,0]
-		),
-	Wall(
-		[0,10],
-		[0,-1]
-		),
-	Wall(
-		[0,-10],
-		[0,1]
-		),
-	]
-
 # ╔═╡ eff9329e-1a05-11eb-261f-734127d36750
 function plot_scene(objects::Vector{<:Object}; kwargs...)
 	p = plot(aspect_ratio=:equal; kwargs...)
@@ -546,25 +497,169 @@ end
 # ╔═╡ e45e1d36-1a12-11eb-2720-294c4be6e9fd
 plot_scene([test_wall], size=(400,200))
 
+# ╔═╡ 5f551588-1ac4-11eb-1f86-197442f1ef1d
+md"""
+In our simulations, we will enclose our scene in a box of **four walls**, to make sure that no rays can escape the scene. We have written this box (i.e. vector of walls) below, but we are still missing the roof.
+"""
+
+# ╔═╡ d257a728-1a04-11eb-281d-bde30644f5f5
+box_scene = [
+	Wall(
+		[10,0],
+		[-1,0]
+		),
+	Wall(
+		[-10,0],
+		[1,0]
+		),
+	Wall(
+		[0,-10],
+		[0,1]
+		),
+	Wall(
+		[0,10],
+		[0,-1]
+		),
+	]
+
+# ╔═╡ ac9bafaa-1ac4-11eb-16c4-0df8133f9c98
+# box_scene = [
+# 	Wall(
+# 		[10,0],
+# 		[-1,0]
+# 		),
+# 	Wall(
+# 		[-10,0],
+# 		[1,0]
+# 		),
+# 	Wall(
+# 		[0,-10],
+# 		[0,1]
+# 		),
+# 	# your code here
+# 	]
+
 # ╔═╡ 0393dd3a-1a06-11eb-18a9-494ae7a26bc0
-plot_scene(ex_2_scene_walls, legend=false, size=(400,200))
+plot_scene(box_scene, legend=false, size=(400,200))
+
+# ╔═╡ 293776f8-1ac4-11eb-21db-9d023c09e89f
+md"""
+👉 Modify the definition of `box_scene` to be a vector of 4 walls, instead of 3. The fourth wall should be positioned at `[0,10]`, and point downwards.
+"""
+
+# ╔═╡ aa43ef1c-1941-11eb-04de-552719a08da0
+md"""
+We will write a function that finds the location where we hit the wall. Instead of moving the photon forward in small timesteps, we will use geometry to compute the intersection directly, making use of the fact that the wall is a geometrically simple object.
+
+Our function will return one of two possible types: a `Miss` or a `Intersection`. We define these types below, and both definitions need some elaboration.
+"""
+
+# ╔═╡ 8acef4b0-1a09-11eb-068d-79a259244ed1
+struct Miss end
+
+# ╔═╡ 8018fbf0-1a05-11eb-3032-95aae07ca78f
+struct Intersection{T<:Object}
+	object::T
+	distance::Float64
+	point::Vector{Float64}
+end
+
+# ╔═╡ e9c5d68c-1ac2-11eb-04ec-3b72eb133239
+md"""
+### `Miss` 
+is a struct with _no fields_. It does not contain any information, except the fact that it is a `Miss`. You create a new `Miss` object like so:
+"""
+
+# ╔═╡ 5a9d00f6-1ac3-11eb-01fb-53c35796e766
+a_miss = Miss()
+
+# ╔═╡ 5aa7c4e8-1ac3-11eb-23f3-03bd58e75c4b
+md"""
+
+### `Intersection`
+is a **parametric type**. The first field (`object`) is of type `T`, and `T` is a subtype of `Object`. 
+
+We also could have used `Object` directly as the type for the field `object`. But what's special about parametric types is that `T` becomes "part of the type". Let's have a look at an example:
+
+"""
+
+# ╔═╡ 9df1d0f2-1ac3-11eb-0eac-d90eccca669c
+test_intersection_1 = Intersection(test_wall, 3.0, [1.0,2.0])
+
+# ╔═╡ bc10541e-1ac3-11eb-0b5f-916922f1a8e8
+typeof(test_intersection_1)
+
+# ╔═╡ d39f149e-1ac3-11eb-39a2-41c2030d7d49
+md"""
+You see that `Wall` is **included in the type**. This will be very useful later, when we want to do something different _depending on the intersected object_ (wall, sphere, etc.) using multiple dispatch. We can write one method for `::Intersection{Sphere}`, and one for `::Intersection{Wall}`.
+"""
+
+# ╔═╡ e135d490-1ac2-11eb-053e-914051f16e31
+md"""
+### Wall geometry
+So, how do we find the location where it hits the wall? Well, because our walls are infinitely long, we are essentially trying to find the point at which 2 lines intersect.
+
+To do this, we can combine a few dot products: one to find how far away we are, and another to scale that distance. Mathematically, it would look like:
+
+$D = -\frac{(p_{\text{ray}} - p_{\text{wall}})\cdot \hat n}{\hat \ell \cdot \hat n},$
+
+where $p$ is the position, $\hat \ell$ is the direction of the light, and $\hat n$ is the normal vector for the wall. subscripts $i$, $r$, and $w$ represent the intersection point, ray, and wall respectively. The result is $D$, the amount that the photon needs to travel until it hits the wall.
+
+👉 Write a function `intersection_distance` that implements this formula, and returns $D$. You can use `dot(a,b)` to compute the vector dot product ``a \cdot b``.
+"""
+
+# ╔═╡ f76ab794-1ac9-11eb-26e3-b9d0baa05d49
+function intersection_distance(photon::Photon, wall::Wall)
+	-dot(photon.p - wall.position, wall.normal) / dot(photon.l, wall.normal)
+end
+
+# ╔═╡ 42d65f56-1aca-11eb-1079-e32f85554349
+md"""
+👉 Write a function `intersection` that takes a `photon` and a `wall`, and returns either a `Miss` or an `Intersection`, based on the result of `intersection_distance(photon, wall)` ``= D``.
+
+If $D$ is _positive_, then the photon will hit the wall, and we should return an `Intersection`. We already have the intersected object, and we have $D$, our intersection distance. To find the intersection _point_, we use the photon's position and velocity.
+
+$p_{\text{intersection}} = p_{\text{ray}} + D\hat \ell$
+
+If $D$ is _negative_ (or zero), then the wall is _behind_ the photon - we should return a `Miss`.
+
+#### Floating points
+We are using _floating points_ (`Float64`) to store positions, distances, etc., which means that we need to account for small errors. Like in the lecture, we will not check for `D > 0`, but `D > ϵ` with `ϵ = 1e-3`.
+"""
+
+# ╔═╡ aa19faa4-1941-11eb-2b61-9b78aaf42876
+function intersection(photon::Photon, wall::Wall; ϵ=1e-3)
+	D = intersection_distance(photon, wall)
+	
+	if D > ϵ
+		point = photon.p + D * photon.l
+		
+		Intersection(wall, D, point)
+	else
+		Miss()
+	end
+end
+
+# ╔═╡ 6544be90-19d3-11eb-153c-218025f738c6
+snoopy = Photon([0, 1], normalize([1,.1]), 1.0)
 
 # ╔═╡ 2158a356-1a05-11eb-3f5b-4dfa810fc602
-ex_2_scene = [ex_2_scene_walls..., test_wall]
+ex_2_scene = [box_scene..., test_wall]
 
 # ╔═╡ 5501a700-19ec-11eb-0ded-53e41f7f821a
 plot_scene(ex_2_scene, legend=false, size=(400,200))
-
-# ╔═╡ 80e889d4-1a09-11eb-2240-15bddf3b61bc
-Miss() < Miss()
 
 # ╔═╡ 6c37c5f4-1a09-11eb-08ae-9dce752f29cb
 begin
 	Base.isless(a::Miss, b::Miss) = false
 	Base.isless(a::Miss, b::Intersection) = false
 	Base.isless(a::Intersection, b::Miss) = true
+	
 	Base.isless(a::Intersection, b::Intersection) = a.distance < b.distance
 end
+
+# ╔═╡ 80e889d4-1a09-11eb-2240-15bddf3b61bc
+Base.isless(Miss(), Miss())
 
 # ╔═╡ 3cd36ac0-1a09-11eb-1818-75b36e67594a
 @bind mirror_test_ray_N Slider(1:30; default=4)
@@ -606,9 +701,9 @@ function reflect(velocity::Vector{Float64}, normal::Vector{Float64})
 end
 
 # ╔═╡ e70b9e24-1a07-11eb-13db-b95c07880893
-function interact(ray::Photon, hit::Intersection{Wall})
+function interact(photon::Photon, hit::Intersection{Wall})
 	
-	Photon(hit.point, reflect(ray.v, hit.object.normal), ray.ior)
+	Photon(hit.point, reflect(photon.l, hit.object.normal), photon.ior)
 end
 
 # ╔═╡ 522e6b22-194d-11eb-167c-052e65f6b703
@@ -701,10 +796,10 @@ With all this said, we are ready to write some code:
 "
 
 # ╔═╡ 885ac814-1953-11eb-30d9-85dcd198a1d8
-function intersection(ray::Photon, sphere::Sphere; ϵ=1e-3)
-	a = dot(ray.v, ray.v)
-	b = 2 * dot(ray.v, ray.p - sphere.center)
-	c = dot(ray.p - sphere.center, ray.p - sphere.center) - sphere.radius^2
+function intersection(photon::Photon, sphere::Sphere; ϵ=1e-3)
+	a = dot(photon.l, photon.l)
+	b = 2 * dot(photon.l, photon.p - sphere.center)
+	c = dot(photon.p - sphere.center, photon.p - sphere.center) - sphere.radius^2
 	
 	d = b^2 - 4*a*c
 	
@@ -722,7 +817,7 @@ function intersection(ray::Photon, sphere::Sphere; ϵ=1e-3)
 			return Miss()
 		end
 		
-		point = ray.p + t * ray.v
+		point = photon.p + t * photon.l
 		
 		Intersection(sphere, t, point)
 	end
@@ -747,8 +842,8 @@ end
 sort(intersection.([snoopy], ex_2_scene))
 
 # ╔═╡ 754eeec4-1a07-11eb-1329-8d9ae0948613
-function closest_hit(ray::Photon, objects::Vector{<:Object})
-	hits = intersection.([ray], objects)
+function closest_hit(photon::Photon, objects::Vector{<:Object})
+	hits = intersection.([photon], objects)
 	
 	minimum(hits)
 end
@@ -799,9 +894,9 @@ We use `ray.ior == 1.0` to check whether this is a ray _entering_ or _leaving_ t
 """
 
 # ╔═╡ e1cb1622-1a0c-11eb-224c-559af7b90f49
-function interact(ray::Photon, hit::Intersection{Sphere})
-	old_ior = ray.ior
-	new_ior = if ray.ior == 1.0
+function interact(photon::Photon, hit::Intersection{Sphere})
+	old_ior = photon.ior
+	new_ior = if photon.ior == 1.0
 		hit.object.ior
 	else
 		1.0
@@ -809,7 +904,7 @@ function interact(ray::Photon, hit::Intersection{Sphere})
 	
 	normal = sphere_normal_at(hit.point, hit.object)
 	
-	Photon(hit.point, refract(ray.v, normal, old_ior, new_ior), new_ior)
+	Photon(hit.point, refract(photon.l, normal, old_ior, new_ior), new_ior)
 end
 
 # ╔═╡ a1280a9e-19d0-11eb-2dbb-b93196307957
@@ -821,64 +916,6 @@ function propagate(photon::Photon, T::AbstractRange, objects)
 		end
 	end
 end
-
-# ╔═╡ 76ef6e46-1a06-11eb-03e3-9f40a86dc9aa
-function step_ray(ray::Photon, objects::Vector{<:Object})
-	hit = closest_hit(ray, objects)
-	
-	interact(ray, hit)
-end
-
-# ╔═╡ 9f73bfb6-1a06-11eb-1c02-43331228da14
-step_ray(snoopy, ex_2_scene)
-
-# ╔═╡ 900d6622-1a08-11eb-1475-bfadc2aac749
-accumulate(1:5; init=snoopy) do old_photon, i
-		step_ray(old_photon, ex_2_scene)
-	end
-
-# ╔═╡ 1ee0787e-1a08-11eb-233b-43a654f70117
-let
-	p = plot_scene(ex_2_scene, legend=false, xlim=(-11,11), ylim=(-11,11))
-	
-	path = accumulate(1:mirror_test_ray_N; init=snoopy) do old_photon, i
-		step_ray(old_photon, ex_2_scene)
-	end
-	
-	line = [snoopy.p, [r.p for r in path]...]
-	plot!(p, first.(line), last.(line), lw=5)
-	
-	p
-end |> as_svg
-
-# ╔═╡ c492a1f8-1a0c-11eb-2c38-5921c39cf5f8
-@bind sphere_test_ray_N Slider(1:30; default=4)
-
-# ╔═╡ b3ab93d2-1a0b-11eb-0f5a-cdca19af3d89
-ex_3_scene = [test_sphere, ex_2_scene_walls...]
-
-# ╔═╡ b65d9a0c-1a0c-11eb-3cd5-e5a2c4302c7e
-let
-	p = plot_scene(ex_3_scene, legend=false, xlim=(-11,11), ylim=(-11,11))
-	
-	path = accumulate(1:sphere_test_ray_N; init=snoopy) do old_photon, i
-		step_ray(old_photon, ex_3_scene)
-	end
-	
-	line = [snoopy.p, [r.p for r in path]...]
-	plot!(p, first.(line), last.(line), lw=5, color=:red)
-	
-	p
-end |> as_svg
-
-# ╔═╡ c00eb0a6-cab2-11ea-3887-070ebd8d56e2
-md"
-Now we can put it all together into an image of spherical aberration!
-
-### Problem 3b: Creating spherical aberration image
-
-Firstly, we need to go back to the propagate function from before and add in a caveat for when we interact with the sphere. Similar to how we stated that all walls are mirrors, we will make the assumption that all spheres are lenses. Don't worry, we will make it more interesting next week!
-"
 
 # ╔═╡ 4bae5810-19c9-11eb-184f-dd279bbd9142
 test_path = propagate(test_photon, 0:.1:1)
@@ -892,7 +929,7 @@ let
 	for (i,ϕ) in enumerate(LinRange(0,2π, 20))
 		start = Photon(
 			[30cos(ϕ), 30sin(ϕ)],
-			normalize([cos(ϕ+1), sin(ϕ+1)]),
+			normalize([cos(ϕ), sin(ϕ)]),
 			1.0
 		)
 		scatter!(p, start.p[1:1], start.p[2:2], color=i)
@@ -924,12 +961,97 @@ end
 # ╔═╡ d49ddea2-19d0-11eb-0aeb-9dce91de6fb7
 propagate(Photon([0, 1], [1,0], 1.0), 0:.01:.5, ex_1_scene)
 
+# ╔═╡ 76ef6e46-1a06-11eb-03e3-9f40a86dc9aa
+function step_ray(photon::Photon, objects::Vector{<:Object})
+	hit = closest_hit(photon, objects)
+	
+	interact(photon, hit)
+end
+
+# ╔═╡ 9f73bfb6-1a06-11eb-1c02-43331228da14
+step_ray(snoopy, ex_2_scene)
+
+# ╔═╡ 900d6622-1a08-11eb-1475-bfadc2aac749
+accumulate(1:5; init=snoopy) do old_photon, i
+		step_ray(old_photon, ex_2_scene)
+	end
+
+# ╔═╡ 1ee0787e-1a08-11eb-233b-43a654f70117
+let
+	p = plot_scene(ex_2_scene, legend=false, xlim=(-11,11), ylim=(-11,11))
+	
+	path = accumulate(1:mirror_test_ray_N; init=snoopy) do old_photon, i
+		step_ray(old_photon, ex_2_scene)
+	end
+	
+	line = [snoopy.p, [r.p for r in path]...]
+	plot!(p, first.(line), last.(line), lw=5)
+	
+	p
+end |> as_svg
+
+# ╔═╡ c492a1f8-1a0c-11eb-2c38-5921c39cf5f8
+@bind sphere_test_ray_N Slider(1:30; default=4)
+
+# ╔═╡ b3ab93d2-1a0b-11eb-0f5a-cdca19af3d89
+ex_3_scene = [test_sphere, box_scene...]
+
+# ╔═╡ b65d9a0c-1a0c-11eb-3cd5-e5a2c4302c7e
+let
+	p = plot_scene(ex_3_scene, legend=false, xlim=(-11,11), ylim=(-11,11))
+	
+	path = accumulate(1:sphere_test_ray_N; init=snoopy) do old_photon, i
+		step_ray(old_photon, ex_3_scene)
+	end
+	
+	line = [snoopy.p, [r.p for r in path]...]
+	plot!(p, first.(line), last.(line), lw=5, color=:red)
+	
+	p
+end |> as_svg
+
+# ╔═╡ c00eb0a6-cab2-11ea-3887-070ebd8d56e2
+md"
+Now we can put it all together into an image of spherical aberration!
+
+### Problem 3b: Creating spherical aberration image
+
+Firstly, we need to go back to the propagate function from before and add in a caveat for when we interact with the sphere. Similar to how we stated that all walls are mirrors, we will make the assumption that all spheres are lenses. Don't worry, we will make it more interesting next week!
+"
+
 # ╔═╡ f5cce52a-cab2-11ea-07ea-ef2b5e48ece4
 md"
 Once this is done, we should create a bounding box of 4 mirrors and a sphere inside of them. Then we just need to create a bunch of rays of light that all point towards the sphere, similar to the `parallel_propagate(...)` function from before.
 
 Once this is done, you should see a spherical aberration image!
 "
+
+# ╔═╡ eb35ac4a-1acc-11eb-0729-ff85c8406c45
+@bind aberration_viz_ior Slider(1.0:0.0001:5.0, show_value=true)
+
+# ╔═╡ bff04784-1acc-11eb-36c2-9335a58be23a
+function aberration_viz(ior)
+	s = Sphere([5,0], 1, ior)
+	aberration_scene = [s, box_scene...]
+	
+	p = plot_scene(aberration_scene, legend=false, xlim=(3,8), ylim=(-1.5,1.5))
+	
+	for y in LinRange(-0.9, 0.9, 8)
+		start = Photon([0,y], [1,0], 1.0)
+		
+		path = accumulate(1:3; init=start) do old_photon, i
+			step_ray(old_photon, aberration_scene)
+		end
+		
+		line = [start.p, [r.p for r in path]...]
+		plot!(p, first.(line), last.(line), lw=2, color=:darkred)
+	end
+
+	p |> as_svg
+end
+
+# ╔═╡ f83da7f8-1acc-11eb-02d7-f33ffe518531
+aberration_viz(aberration_viz_ior)
 
 # ╔═╡ ebd05bf0-19c3-11eb-2559-7d0745a84025
 if student.name == "Jazzy Doe" || student.kerberos_id == "jazz"
@@ -962,21 +1084,75 @@ yays = [md"Fantastic!", md"Splendid!", md"Great!", md"Yay ❤", md"Great! 🎉",
 # ╔═╡ ec698eb0-19c3-11eb-340a-e319abb8ebb5
 correct(text=rand(yays)) = Markdown.MD(Markdown.Admonition("correct", "Got it!", [text]))
 
-# ╔═╡ 867e6168-1a11-11eb-1434-570cbfe4d49b
-md"""
-# Note to James
+# ╔═╡ 0e9a240c-1ac5-11eb-1a7e-b3c43c459484
+let
+	if length(box_scene) != 4
+		keep_working()
+	elseif !(box_scene isa Vector{Wall})
+		keep_working(md"`box_scene` should be a Vector of `Wall` objects.")
+	else
+		w = last(box_scene)
+		
+		if w.position != [0,10]
+			keep_working(md"The wall's position is not correct.")
+		elseif w.normal != [0,-1]
+			keep_working(md"The wall's direction is not correct.")
+		else
+			correct()
+		end
+	end
+end
 
-Hi James!
+# ╔═╡ 0787f130-1aca-11eb-24b4-2ff2ddd0bc48
+let
+	p = Photon([5,0], [1,0], 1.0)
+	w = Wall([10,10], normalize([-1,-1]))
+	
+	result = intersection_distance(p, w)
+	
+	
+	if result isa Missing
+		still_missing()
+	elseif !(result isa Real)
+		keep_working(md"You need to return a number.")
+	else
+		if abs(result - (20 - 5)) > 0.1
+			if abs(-result - (20 - 5)) > 0.1
+				keep_working(md"The returned distance is not correct.")
+			else
+				keep_working(md"Did you forget the minus sign?")
+			end
+		else
+			correct()
+		end
+	end
+end
 
-I did not finish it today, but what I did do is go through all the exercises and write out solutions in a way that kind of matches what they learned in the previous weeks.
-
-I also made a mess of the notebook, sorry 😢
-
----
-
-There is a green post-it before Problem 1 and before Problem 2 to go over the main changes that I made. Let me know what you think!
-
-""" |> correct
+# ╔═╡ 038d5e88-1ac7-11eb-2020-a9d7e19feebc
+let
+	p = Photon([5,0], [1,0], 1.0)
+	w = Wall([10,10], normalize([-1,-1]))
+	
+	result = intersection(p, w)
+	
+	
+	if result isa Missing
+		still_missing()
+	elseif !(result isa Miss || result isa Intersection)
+		keep_working(md"You need to return a `Miss` or a `Intersection`.")
+	else
+		if result isa Miss
+			keep_working(md"You returned a `Miss` for a photon that hit the wall.")
+		else
+			if abs(result.distance - (20 - 5)) > 0.1
+				keep_working(md"The returned distance is not correct.")
+			else
+				
+				correct()
+			end
+		end
+	end
+end
 
 # ╔═╡ ec7638e0-19c3-11eb-1ca1-0b3aa3b40240
 not_defined(variable_name) = Markdown.MD(Markdown.Admonition("danger", "Oopsie!", [md"Make sure that you define a variable called **$(Markdown.Code(string(variable_name)))**"]))
@@ -1059,27 +1235,9 @@ Neat!
 This allows us to naturally extend our work to ex 3, where we add methods to existing functions to support spheres.
 """ |> correct
 
-# ╔═╡ aa43ef1c-1941-11eb-04de-552719a08da0
+# ╔═╡ 4e535f52-1ac8-11eb-163c-7b26f4896650
 md"""
-Now to create a function that finds the location where we hit the wall.
-As a note, this part can be done in a number of different ways. For the purposes of this homework, we will allow this function to return 2 things: $TODO
-1. The location it hit the wall
-2. A value of `nothing` if it does not intersect with the wall
-
-So, how do we find the location where it hits the wall? Well, because our walls are infinitely long, we are essentially trying to find the point at which 2 lines intersect.
-
-To do this, we can combine a few dot products: one to find how far away we are, and another to scale that distance. Mathematically, it would look like:
-
-$p_i = -\frac{(p_{\text{ray}} - p_{\text{wall}})\cdot \hat n}{\hat \ell \cdot \hat n},$
-
-where $p$ is the position, $\hat \ell$ is the direction of the light, and $\hat n$ is the normal vector for the wall. subscripts $i$, $r$, and $w$ represent the intersection point, ray, and wall respectively.
-
-In code, we essentially need to find $x_i$ and return it if it is positive and finite.
-"""
-
-# ╔═╡ 42a54138-1a01-11eb-285b-25b72e75a8bd
-md"""
-$TODO ``p_i`` is the distance that the ray needs to travel before it hits the wall, right? Then we should also say that `ray.p + p_i * ray.v` will give the collision point
+$TODO more tests, dont make them hidden
 """
 
 # ╔═╡ b157247e-1a0c-11eb-3980-bdaaa74f7aff
@@ -1095,10 +1253,6 @@ function propagate(ray::Ray, objects::Vector{O}, n) where {O <: Object}
 	
 end
 
-# ╔═╡ ed140a84-caa9-11ea-25f3-dd19092088fb
-function propagate(ray::Ray, objects::Vector{O}, n) where {O <: Object}
-end
-
 # ╔═╡ 9157a1ea-194d-11eb-0058-edbd6aa098e3
 function propagate(ray::Ray, objects::Vector{O}, n) where {O <: Object}
 end
@@ -1107,7 +1261,6 @@ end
 # ╟─1df32310-19c4-11eb-0824-6766cd21aaf4
 # ╟─1df82c20-19c4-11eb-0959-8543a0d5630d
 # ╟─1e01c912-19c4-11eb-269a-9796cccdf274
-# ╟─867e6168-1a11-11eb-1434-570cbfe4d49b
 # ╟─1e109620-19c4-11eb-013e-1bc95c14c2ba
 # ╟─1e202680-19c4-11eb-29a7-99061b886b3c
 # ╟─1e2cd0b0-19c4-11eb-3583-0b82092139aa
@@ -1161,24 +1314,38 @@ end
 # ╟─78782214-1a13-11eb-348a-7b0c819898a9
 # ╠═dcfd9b12-19cd-11eb-0938-41f7279f52ca
 # ╠═d49ddea2-19d0-11eb-0aeb-9dce91de6fb7
+# ╠═368572f4-1abc-11eb-2058-cbd188fc07c5
 # ╟─19c6d3ae-1a0f-11eb-0e7a-4768e080408a
 # ╟─92290e54-1940-11eb-1a24-5d1eaee9f6ca
 # ╠═99c61b74-1941-11eb-2323-2bdb7c120a28
 # ╠═0906b340-19d3-11eb-112c-e568f69deb5d
 # ╠═e45e1d36-1a12-11eb-2720-294c4be6e9fd
+# ╟─6de1bafc-1a01-11eb-3d67-c9d9b6c3cea8
+# ╟─eff9329e-1a05-11eb-261f-734127d36750
+# ╟─5f551588-1ac4-11eb-1f86-197442f1ef1d
+# ╠═d257a728-1a04-11eb-281d-bde30644f5f5
+# ╠═ac9bafaa-1ac4-11eb-16c4-0df8133f9c98
+# ╠═0393dd3a-1a06-11eb-18a9-494ae7a26bc0
+# ╟─293776f8-1ac4-11eb-21db-9d023c09e89f
+# ╟─0e9a240c-1ac5-11eb-1a7e-b3c43c459484
 # ╟─aa43ef1c-1941-11eb-04de-552719a08da0
-# ╟─42a54138-1a01-11eb-285b-25b72e75a8bd
-# ╠═aa19faa4-1941-11eb-2b61-9b78aaf42876
-# ╠═84895a42-19d3-11eb-1a2f-d934246e07bf
-# ╠═6544be90-19d3-11eb-153c-218025f738c6
 # ╠═8acef4b0-1a09-11eb-068d-79a259244ed1
 # ╠═8018fbf0-1a05-11eb-3032-95aae07ca78f
+# ╟─e9c5d68c-1ac2-11eb-04ec-3b72eb133239
+# ╠═5a9d00f6-1ac3-11eb-01fb-53c35796e766
+# ╟─5aa7c4e8-1ac3-11eb-23f3-03bd58e75c4b
+# ╠═9df1d0f2-1ac3-11eb-0eac-d90eccca669c
+# ╠═bc10541e-1ac3-11eb-0b5f-916922f1a8e8
+# ╟─d39f149e-1ac3-11eb-39a2-41c2030d7d49
+# ╟─e135d490-1ac2-11eb-053e-914051f16e31
+# ╠═f76ab794-1ac9-11eb-26e3-b9d0baa05d49
+# ╟─0787f130-1aca-11eb-24b4-2ff2ddd0bc48
+# ╟─42d65f56-1aca-11eb-1079-e32f85554349
+# ╠═aa19faa4-1941-11eb-2b61-9b78aaf42876
+# ╠═038d5e88-1ac7-11eb-2020-a9d7e19feebc
+# ╠═4e535f52-1ac8-11eb-163c-7b26f4896650
+# ╠═6544be90-19d3-11eb-153c-218025f738c6
 # ╠═a306e880-19eb-11eb-0ff1-d7ef49777f63
-# ╠═93a5691e-1a01-11eb-3a29-a71a2b48ae14
-# ╠═6de1bafc-1a01-11eb-3d67-c9d9b6c3cea8
-# ╠═d257a728-1a04-11eb-281d-bde30644f5f5
-# ╠═0393dd3a-1a06-11eb-18a9-494ae7a26bc0
-# ╠═eff9329e-1a05-11eb-261f-734127d36750
 # ╠═2158a356-1a05-11eb-3f5b-4dfa810fc602
 # ╠═5501a700-19ec-11eb-0ded-53e41f7f821a
 # ╠═3663bf80-1a06-11eb-3596-8fbbed28cc38
@@ -1216,8 +1383,10 @@ end
 # ╠═b65d9a0c-1a0c-11eb-3cd5-e5a2c4302c7e
 # ╠═b3ab93d2-1a0b-11eb-0f5a-cdca19af3d89
 # ╟─c00eb0a6-cab2-11ea-3887-070ebd8d56e2
-# ╠═ed140a84-caa9-11ea-25f3-dd19092088fb
 # ╟─f5cce52a-cab2-11ea-07ea-ef2b5e48ece4
+# ╟─eb35ac4a-1acc-11eb-0729-ff85c8406c45
+# ╟─f83da7f8-1acc-11eb-02d7-f33ffe518531
+# ╟─bff04784-1acc-11eb-36c2-9335a58be23a
 # ╟─ebd05bf0-19c3-11eb-2559-7d0745a84025
 # ╟─ec275590-19c3-11eb-23d0-cb3d9f62ba92
 # ╟─ec31dce0-19c3-11eb-1487-23cc20cd5277
