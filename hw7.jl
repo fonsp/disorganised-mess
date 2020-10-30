@@ -90,18 +90,6 @@ Submission by: **_$(student.name)_** ($(student.kerberos_id)@mit.edu)
 # ╔═╡ 1e2cd0b0-19c4-11eb-3583-0b82092139aa
 md"_Let's create a package environment:_"
 
-# ╔═╡ 24b0d4ba-192c-11eb-0f66-e77b544b0510
-struct Photon
-	"Position vector"
-	p::Vector{Float64}
-
-	"Direction vector"
-	l::Vector{Float64}
-
-    "Current Index of Refraction"
-	ior::Real
-end
-
 # ╔═╡ 333d815a-193f-11eb-0f43-b515f8055468
 abstract type Object end
 
@@ -184,11 +172,23 @@ md"""
 👉 Modify the definition of `box_scene` to be a vector of 4 walls, instead of 3. The fourth wall should be positioned at `[0,10]`, and point downwards.
 """
 
+# ╔═╡ 24b0d4ba-192c-11eb-0f66-e77b544b0510
+struct Photon
+	"Position vector"
+	p::Vector{Float64}
+
+	"Direction vector"
+	l::Vector{Float64}
+
+    "Current Index of Refraction"
+	ior::Real
+end
+
 # ╔═╡ aa43ef1c-1941-11eb-04de-552719a08da0
 md"""
 $(html"<br><br><br><br>")
 #### Exercise 1.2 - _how far is the wall?_
-We will write a function that finds the location where a photon hits the wall. Instead of moving the photon forward in small timesteps until we reach the wall, we will use geometry to compute the intersection directly, making use of the fact that the wall is a geometrically simple object.
+We will write a function that finds the location where a photon hits the wall. Instead of moving the photon forward in small timesteps until we reach the wall, we will compute the intersection directly, making use of the fact that the wall is a geometrically simple object.
 
 Our function will return one of two possible types: a `Miss` or a `Intersection`. We define these types below, and both definitions need some elaboration.
 """
@@ -310,9 +310,6 @@ begin
 	Base.isless(a::Intersection, b::Intersection) = a.distance < b.distance
 end
 
-# ╔═╡ 80e889d4-1a09-11eb-2240-15bddf3b61bc
-Base.isless(Miss(), Miss())
-
 # ╔═╡ e9c6a0b8-1ad0-11eb-1606-0319caf0948a
 md"""
  $(html"<br><br><br><br>")
@@ -355,6 +352,11 @@ function interact(photon::Photon, hit::Intersection{Wall})
 	Photon(hit.point, reflect(photon.l, hit.object.normal), photon.ior)
 end
 
+# ╔═╡ a45e1012-194d-11eb-3252-bb89daed3c8d
+md"
+With that, we should be able to create a mirror that points diagonally (normal of $(-1/\sqrt{2}, 1/\sqrt{2})$), and shoot rays at them to make sure they reflect upwards!
+"
+
 # ╔═╡ 7ba5dda0-1ad1-11eb-1c4e-2391c11f54b3
 md"""
 #### Exercise 2.3 - _accumulate_
@@ -362,11 +364,6 @@ md"""
 
 # ╔═╡ 3cd36ac0-1a09-11eb-1818-75b36e67594a
 @bind mirror_test_ray_N Slider(1:30; default=4)
-
-# ╔═╡ a45e1012-194d-11eb-3252-bb89daed3c8d
-md"
-With that, we should be able to create a mirror that points diagonally (normal of $(-1/\sqrt{2}, 1/\sqrt{2})$), and shoot rays at them to make sure they reflect upwards!
-"
 
 # ╔═╡ ba0a869a-1ad1-11eb-091f-916e9151f052
 md"""
@@ -498,6 +495,18 @@ function closest_hit(photon::Photon, objects::Vector{<:Object})
 	minimum(hits)
 end
 
+# ╔═╡ 2b898e24-1ad2-11eb-34d6-6387011c0366
+# function intersection(photon::Photon, sphere::Sphere; ϵ=1e-3)
+# 	a = dot(photon.l, photon.l)
+# 	b = 2 * dot(photon.l, photon.p - sphere.center)
+# 	c = dot(photon.p - sphere.center, photon.p - sphere.center) - sphere.radius^2
+	
+# 	d = b^2 - 4*a*c
+	
+# 	# your code here
+# 	missing
+# end
+
 # ╔═╡ 584ce620-1935-11eb-177a-f75d9ad8a399
 md"""
  $(html"<br><br><br><br>")
@@ -554,26 +563,16 @@ $\ell_2 = r\ell_1 + \left(rc-\sqrt{1-r^2(1-c^2)}\right)\hat n.$
 The last step is to write this in code with a function that takes the ray, the normal, and the index of refraction ration `r`:
 """
 
-# ╔═╡ 311000fe-19cb-11eb-2a63-0f82ba6527f8
-# function photon_step(photon::Photon, timestep::Real, new_ior::Real)
+# ╔═╡ 14dc73d2-1a0d-11eb-1a3c-0f793e74da9b
+function refract(velocity::Vector{Float64}, normal::Vector{Float64},
+	old_ior, new_ior)
 	
-# 	Photon(photon.p + photon.v * timestep, photon.v, photon.ior)
-# end
-
-# ╔═╡ 4a27d346-1937-11eb-0204-2bb4e253b8b0
-function refract(photon::Photon, normal, new_ior)
-	r = photon.ior / new_ior
+	r = new_ior / old_ior
 	
-	new_direction = normalize(
-		r * photon.l + 
-		(r*c - sqrt(1 - r^2 * (1 - c^2))) * normal
-		)
-	
-	Photon(photon.p, new_direction, new_ior)
+	# this probably isn't correct but it _feels right_
+	# just a placeholder
+	normalize(velocity + (r - 1)*normal * sign(dot(velocity, normal)))
 end
-
-# ╔═╡ a4b06ae0-19cc-11eb-1a29-e9873a414c6b
-
 
 # ╔═╡ 71b70da6-193e-11eb-0bc4-f309d24fd4ef
 md"
@@ -658,20 +657,6 @@ let
 	
 	p
 end
-
-# ╔═╡ 14dc73d2-1a0d-11eb-1a3c-0f793e74da9b
-function refract(velocity::Vector{Float64}, normal::Vector{Float64},
-	old_ior, new_ior)
-	
-	r = new_ior / old_ior
-	
-	# this probably isn't correct but it _feels right_
-	# just a placeholder
-	normalize(velocity + (r - 1)*normal * sign(dot(velocity, normal)))
-end
-
-# ╔═╡ 6b5aaee0-19cc-11eb-0113-8fdd40620b5f
-refract(test_photon, [0,1], 5)
 
 # ╔═╡ c25caf08-1a13-11eb-3c4d-0567faf4e662
 md"""
@@ -891,6 +876,29 @@ not_defined(variable_name) = Markdown.MD(Markdown.Admonition("danger", "Oopsie!"
 # ╔═╡ ec85c940-19c3-11eb-3375-a90735beaec1
 TODO = html"<span style='display: inline; font-size: 2em; color: purple; font-weight: 900;'>TODO</span>"
 
+# ╔═╡ 92290e54-1940-11eb-1a24-5d1eaee9f6ca
+md"""
+$TODO talk about timestepping
+
+## **Exercise 1:** _Walls_
+
+As discussed in lecture, event-driven simulations are the traditional method used for raytracing. Here, we look for any objects in our path and analytically determine how far away they are. From there, we take one big timestep all the way to the surface boundary, calculate refraction or reflection to see what direction we are moving in, and then seek out any other object we could potentially run into.
+
+So let's start simple with determining when a ray of light could intersect with a wall
+
+#### Exercise 1.1 - _what is a wall?_
+
+To start, let's create the concept of a wall. Similar to Spheres, these will be Objects that rays can hit. For our purposes, walls will be infinitely long, so we only need to create an object that has a position and a normal vector at that position:
+"""
+
+# ╔═╡ 4e535f52-1ac8-11eb-163c-7b26f4896650
+md"""
+$TODO more tests, dont make them hidden
+"""
+
+# ╔═╡ 8cfa4902-1ad3-11eb-03a1-736898ff9cef
+TODO_note(text) = Markdown.MD(Markdown.Admonition("todo", "TODO note", [text]))
+
 # ╔═╡ 19c6d3ae-1a0f-11eb-0e7a-4768e080408a
 md"""
 # $TODO fonsi's idea for problem 2 :
@@ -940,27 +948,7 @@ minimum(vect_of_intersections)
 Neat!
 
 This allows us to naturally extend our work to ex 3, where we add methods to existing functions to support spheres.
-""" |> correct
-
-# ╔═╡ 92290e54-1940-11eb-1a24-5d1eaee9f6ca
-md"""
-$TODO talk about timestepping
-
-## **Exercise 1:** _Walls_
-
-As discussed in lecture, event-driven simulations are the traditional method used for raytracing. Here, we look for any objects in our path and analytically determine how far away they are. From there, we take one big timestep all the way to the surface boundary, calculate refraction or reflection to see what direction we are moving in, and then seek out any other object we could potentially run into.
-
-So let's start simple with determining when a ray of light could intersect with a wall
-
-#### Exercise 1.1 - _what is a wall?_
-
-To start, let's create the concept of a wall. Similar to Spheres, these will be Objects that rays can hit. For our purposes, walls will be infinitely long, so we only need to create an object that has a position and a normal vector at that position:
-"""
-
-# ╔═╡ 4e535f52-1ac8-11eb-163c-7b26f4896650
-md"""
-$TODO more tests, dont make them hidden
-"""
+""" |> TODO_note
 
 # ╔═╡ b157247e-1a0c-11eb-3980-bdaaa74f7aff
 md"""
@@ -968,7 +956,12 @@ $TODO add some more (at least visual) test cases:
 - miss the ball, 
 - start after the ball, 
 - start inside the ball
-"""
+""" |> TODO_note
+
+# ╔═╡ 333b7b84-1ad3-11eb-0741-e91314ada8ea
+md"""
+in the equations below, we use the speed of light, ``c``, but shouldn't it cancel out in the final equation? And what about internal reflections when ``\theta_1`` is greater than the critical angle?
+""" |> TODO_note
 
 # ╔═╡ Cell order:
 # ╟─1df32310-19c4-11eb-0824-6766cd21aaf4
@@ -978,7 +971,6 @@ $TODO add some more (at least visual) test cases:
 # ╟─1e202680-19c4-11eb-29a7-99061b886b3c
 # ╟─1e2cd0b0-19c4-11eb-3583-0b82092139aa
 # ╠═c3e52bf2-ca9a-11ea-13aa-03a4335f2906
-# ╠═24b0d4ba-192c-11eb-0f66-e77b544b0510
 # ╟─19c6d3ae-1a0f-11eb-0e7a-4768e080408a
 # ╟─92290e54-1940-11eb-1a24-5d1eaee9f6ca
 # ╠═333d815a-193f-11eb-0f43-b515f8055468
@@ -993,6 +985,7 @@ $TODO add some more (at least visual) test cases:
 # ╠═0393dd3a-1a06-11eb-18a9-494ae7a26bc0
 # ╟─293776f8-1ac4-11eb-21db-9d023c09e89f
 # ╟─0e9a240c-1ac5-11eb-1a7e-b3c43c459484
+# ╠═24b0d4ba-192c-11eb-0f66-e77b544b0510
 # ╟─aa43ef1c-1941-11eb-04de-552719a08da0
 # ╠═8acef4b0-1a09-11eb-068d-79a259244ed1
 # ╠═8018fbf0-1a05-11eb-3032-95aae07ca78f
@@ -1016,7 +1009,6 @@ $TODO add some more (at least visual) test cases:
 # ╠═3663bf80-1a06-11eb-3596-8fbbed28cc38
 # ╟─711a5ea2-194c-11eb-2e66-079f417ef3bb
 # ╟─d70380a4-1ad0-11eb-1184-f7e9b84a83ad
-# ╠═80e889d4-1a09-11eb-2240-15bddf3b61bc
 # ╠═6c37c5f4-1a09-11eb-08ae-9dce752f29cb
 # ╠═c3090e4a-1a09-11eb-0f32-d3bbfd9992e0
 # ╠═754eeec4-1a07-11eb-1329-8d9ae0948613
@@ -1025,35 +1017,33 @@ $TODO add some more (at least visual) test cases:
 # ╟─dad5acfa-194c-11eb-27f9-01f40342a681
 # ╠═43306bd4-194d-11eb-2e30-07eabb8b29ef
 # ╟─b6614d80-194b-11eb-1edb-dba3c29672f8
-# ╠═76ef6e46-1a06-11eb-03e3-9f40a86dc9aa
 # ╠═e70b9e24-1a07-11eb-13db-b95c07880893
+# ╠═76ef6e46-1a06-11eb-03e3-9f40a86dc9aa
 # ╠═9f73bfb6-1a06-11eb-1c02-43331228da14
+# ╠═a45e1012-194d-11eb-3252-bb89daed3c8d
 # ╟─7ba5dda0-1ad1-11eb-1c4e-2391c11f54b3
 # ╠═900d6622-1a08-11eb-1475-bfadc2aac749
 # ╠═3cd36ac0-1a09-11eb-1818-75b36e67594a
 # ╠═1ee0787e-1a08-11eb-233b-43a654f70117
-# ╠═a45e1012-194d-11eb-3252-bb89daed3c8d
 # ╟─ba0a869a-1ad1-11eb-091f-916e9151f052
 # ╠═3aa539ce-193f-11eb-2a0f-bbc6b83528b7
 # ╟─e0bb335a-194d-11eb-3b14-73b478a94a53
 # ╟─337918f4-194f-11eb-0b45-b13fef3b23bf
 # ╟─492b257a-194f-11eb-17fb-f770b4d3da2e
 # ╠═885ac814-1953-11eb-30d9-85dcd198a1d8
+# ╠═2b898e24-1ad2-11eb-34d6-6387011c0366
 # ╠═251f0262-1a0c-11eb-39a3-09be67091dc8
 # ╠═83aa9cea-1a0c-11eb-281d-699665da2b4f
-# ╟─b157247e-1a0c-11eb-3980-bdaaa74f7aff
+# ╠═b157247e-1a0c-11eb-3980-bdaaa74f7aff
 # ╟─584ce620-1935-11eb-177a-f75d9ad8a399
+# ╠═333b7b84-1ad3-11eb-0741-e91314ada8ea
 # ╟─78915326-1937-11eb-014f-fff29b3660a0
-# ╠═311000fe-19cb-11eb-2a63-0f82ba6527f8
-# ╠═4a27d346-1937-11eb-0204-2bb4e253b8b0
-# ╠═6b5aaee0-19cc-11eb-0113-8fdd40620b5f
-# ╠═a4b06ae0-19cc-11eb-1a29-e9873a414c6b
+# ╠═14dc73d2-1a0d-11eb-1a3c-0f793e74da9b
 # ╟─71b70da6-193e-11eb-0bc4-f309d24fd4ef
 # ╟─54b81de0-193f-11eb-004d-f90ec43588f8
 # ╠═6fdf613c-193f-11eb-0029-957541d2ed4d
 # ╠═e5c0e960-19cc-11eb-107d-39b397a783ab
 # ╠═caa98732-19cd-11eb-04ce-2f018275cf01
-# ╠═14dc73d2-1a0d-11eb-1a3c-0f793e74da9b
 # ╟─c25caf08-1a13-11eb-3c4d-0567faf4e662
 # ╠═e1cb1622-1a0c-11eb-224c-559af7b90f49
 # ╠═c492a1f8-1a0c-11eb-2c38-5921c39cf5f8
@@ -1071,6 +1061,7 @@ $TODO add some more (at least visual) test cases:
 # ╟─ec4abc12-19c3-11eb-1ca4-b5e9d3cd100b
 # ╟─ec57b460-19c3-11eb-2142-07cf28dcf02b
 # ╟─ec5d59b0-19c3-11eb-0206-cbd1a5415c28
-# ╟─ec698eb0-19c3-11eb-340a-e319abb8ebb5
+# ╠═ec698eb0-19c3-11eb-340a-e319abb8ebb5
 # ╟─ec7638e0-19c3-11eb-1ca1-0b3aa3b40240
 # ╟─ec85c940-19c3-11eb-3375-a90735beaec1
+# ╟─8cfa4902-1ad3-11eb-03a1-736898ff9cef
