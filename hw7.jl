@@ -27,7 +27,7 @@ begin
 end
 
 # ╔═╡ 1df32310-19c4-11eb-0824-6766cd21aaf4
-md"_homework 7, version 0_"
+md"_homework 7, version 1_"
 
 # ╔═╡ 1e01c912-19c4-11eb-269a-9796cccdf274
 # WARNING FOR OLD PLUTO VERSIONS, DONT DELETE ME
@@ -90,7 +90,20 @@ Submission by: **_$(student.name)_** ($(student.kerberos_id)@mit.edu)
 # ╔═╡ 1e2cd0b0-19c4-11eb-3583-0b82092139aa
 md"_Let's create a package environment:_"
 
-# ╔═╡ 333d815a-193f-11eb-0f43-b515f8055468
+# ╔═╡ 92290e54-1940-11eb-1a24-5d1eaee9f6ca
+md"""
+## **Exercise 1:** _Walls_
+
+As discussed the lecture, event-driven simulations are the traditional method used for raytracing. Here, we look for any objects in our path and _analytically_ determine how far away they are. From there, we take one big timestep all the way to the surface boundary, calculate refraction or reflection to see what direction we are moving in, and then seek out any other object we could potentially run into.
+
+So let's start simple with determining when a ray of light could intersect with a wall.
+
+#### Exercise 1.1 - _what is a wall?_
+
+To start, let's create the concept of a wall. For our purposes, walls will be infinitely long, so we only need to create an object that has a position and a normal vector at that position:
+"""
+
+# ╔═╡ d851a202-1ca0-11eb-3da0-51fcb656783c
 abstract type Object end
 
 # ╔═╡ 99c61b74-1941-11eb-2323-2bdb7c120a28
@@ -174,7 +187,7 @@ md"""
 
 # ╔═╡ e5ed6098-1c70-11eb-0b58-31d1830b9a10
 md"""
-In the exercise, we will find the intersection of a ray of light and a wall. To represent light, we create a `struct` called **`Photon`**, holding the position and travel direction of a single particle of light. We also include the _index of refraction_ of the medium it is currently traveling in, we will use this later.
+In the next exercise, we will find the intersection of a ray of light and a wall. To represent light, we create a `struct` called **`Photon`**, holding the position and travel direction of a single particle of light. We also include the _index of refraction_ of the medium it is currently traveling in, we will use this later.
 """
 
 # ╔═╡ 24b0d4ba-192c-11eb-0f66-e77b544b0510
@@ -268,6 +281,12 @@ function intersection_distance(photon::Photon, wall::Wall)
 	-dot(photon.p - wall.position, wall.normal) / dot(photon.l, wall.normal)
 end
 
+# ╔═╡ abe3de54-1ca0-11eb-01cd-11fe798bfb97
+# function intersection_distance(photon::Photon, wall::Wall)
+	
+# 	return missing
+# end
+
 # ╔═╡ 42d65f56-1aca-11eb-1079-e32f85554349
 md"""
  $(html"<br><br><br><br>")
@@ -298,8 +317,11 @@ function intersection(photon::Photon, wall::Wall; ϵ=1e-3)
 	end
 end
 
-# ╔═╡ ee8fb9a0-1c71-11eb-2dbc-f1480889611f
-
+# ╔═╡ a5847264-1ca0-11eb-0b45-eb5388f6e688
+# function intersection(photon::Photon, wall::Wall; ϵ=1e-3)
+	
+# 	return missing
+# end
 
 # ╔═╡ 7f286ccc-1c75-11eb-1270-95a87840b300
 @bind dizzy_angle Slider(0:0.0001:2π, default=2.2)
@@ -390,13 +412,13 @@ md"
 
 For this one, we need to implement a reflection function. This one is way easier than refraction. All we need to do is find how much of the light is moving in the direction of the surface's normal and subtract that twice.
 
-$\ell_1 = \ell_0 - 2(\ell_0\cdot \hat n)\hat n$
+$\ell_2 = \ell_1 - 2(\ell_1\cdot \hat n)\hat n$
 
-Where $\ell_0$ and $\ell_1$ are the photon direction before and after the reflection off a surface with normal ``\hat{n}``. Let's write that in code:
+Where $\ell_1$ and $\ell_2$ are the photon directions before and after the reflection off a surface with normal ``\hat{n}``. Let's write that in code:
 "
 
 # ╔═╡ 43306bd4-194d-11eb-2e30-07eabb8b29ef
-reflect(ℓ₀::Vector, n̂::Vector)::Vector = ℓ₀ - 2 * dot(ℓ₀, n̂) * n̂
+reflect(ℓ₁::Vector, n̂::Vector)::Vector = ℓ₁ - 2 * dot(ℓ₁, n̂) * n̂
 
 # ╔═╡ 70b8401e-1c7e-11eb-16b2-d54d8f66d71a
 md"""
@@ -420,6 +442,12 @@ function interact(photon::Photon, hit::Intersection{Wall})
 	
 	Photon(hit.point, reflect(photon.l, hit.object.normal), photon.ior)
 end
+
+# ╔═╡ 2c6defd0-1ca1-11eb-17db-d5cb498f3265
+# function interact(photon::Photon, hit::Intersection{Wall})
+	
+# 	return missing
+# end
 
 # ╔═╡ 3f727a2c-1c80-11eb-3608-e55ccb9786d9
 md"""
@@ -522,14 +550,11 @@ let
 end
 
 # ╔═╡ e5c0e960-19cc-11eb-107d-39b397a783ab
-test_sphere = Sphere(
+example_sphere = Sphere(
 	[7, -6],
 	2,
 	1.5,
 )
-
-# ╔═╡ 2a2b7284-1ade-11eb-3b71-d17fe2ca638a
-plot_scene([test_sphere], size=(400,200), legend=false, xlim=(-15,15), ylim=(-10,10))
 
 # ╔═╡ e2a8d1d6-1add-11eb-0da1-cda1492a950c
 md"
@@ -546,6 +571,59 @@ As shown below:
 
 # ╔═╡ 337918f4-194f-11eb-0b45-b13fef3b23bf
 PlutoUI.Resource("https://upload.wikimedia.org/wikipedia/commons/6/67/Line-Sphere_Intersection_Cropped.png")
+
+# ╔═╡ 492b257a-194f-11eb-17fb-f770b4d3da2e
+md"""
+So we need a way of finding all of these.
+
+To start, let's look at the intersection of a **point** and a sphere. So long as the relative distance between the photon and the sphere's center satisfies the sphere equation, we can be considered inside of the sphere. More specifically, we are inside the sphere if:
+
+$(x_s-x_p)^2+(y_s-y_p) < r^2.$
+
+where the $s$ and $p$ subscripts represent the sphere and photon, respectively. We know we are *on* the sphere if
+
+$(x_s-x_p)^2+(y_s-y_p) = r^2.$
+
+Let's rewrite this in vector notation as:
+
+$(\mathbf{R} - \mathbf{S})\cdot(\mathbf{R} - \mathbf{S}) = r^2,$
+
+where $\mathbf{R}$ and $\mathbf{S}$ are the $x$, $y$, and $z$ location of the photon and sphere, respectively.
+
+Returning to the timestepping example from above, we know that our ray is moving forward with time such that $\mathbf{R} = \mathbf{R}_0 + v dt = \mathbf{R}_0 + \ell t$. We now need to ask ourselves if there is any time when our ray interacts with the sphere. Plugging this in to the dot product from above, we get
+
+$(\mathbf{R}_0 + \ell t - \mathbf{S})\cdot(\mathbf{R}_0 + \ell t - \mathbf{S}) = r^2$
+
+To solve this for $t$, we first need to reorder everything into the form of a polynomial, such that:
+
+$t^2(\ell\cdot\ell)+2t\ell\cdot(\mathbf{R_0}-\mathbf{S})+(\mathbf{R}_0-\mathbf{S})\cdot(\mathbf{R}_0-\mathbf{S}) - r^2=0.$
+
+This can be solved with the good ol' fashioned quadratic equation:
+
+$\frac{-b\pm\sqrt{b^2-4ac}}{2a},$
+
+where $a = \ell\cdot\ell$, $b = 2\ell\cdot(\mathbf{R}_0-\mathbf{S})$, and $c=(\mathbf{R}_0-\mathbf{S})\cdot(\mathbf{R}_0-\mathbf{S}) - r^2$
+
+If the quadratic equation returns no roots, there is no intersection. If it returns 1 root, the ray just barely hits the edge of the sphere. If it returns 2 roots, it goes right through!
+
+The easiest way to check this is by looking at the discriminant $d = b^2-4ac$.
+
+```math
+\text{Number of roots} = \left\{
+    \begin{align}
+       &0, \qquad \text{if } d < 0 \\
+       &1, \qquad \text{if } d = 0 \\
+       &2, \qquad \text{if } d > 0 \\
+    \end{align}
+\right.
+```
+
+In the case that there are 2 roots, the second root corresponds to when the ray would interact with the far edge of the sphere *if there were no refraction or reflection!*; therefore, we only care about returning the closest point.
+
+With all this said, we are ready to write some code.
+
+👉 Write a new method `intersection` that takes a `Photon` and a `Sphere`, and returns either a `Miss` or an `Intersection`, using the method described above. Go back to Exercise 1.3 where we defined the first method, and see how we adapt it to a sphere.
+"""
 
 # ╔═╡ 885ac814-1953-11eb-30d9-85dcd198a1d8
 function intersection(photon::Photon, sphere::Sphere; ϵ=1e-3)
@@ -634,8 +712,24 @@ let
 	p |> as_svg
 end
 
+# ╔═╡ 392fe192-1ca1-11eb-36c4-f9bd2b01a5e5
+# function intersection(photon::Photon, sphere::Sphere; ϵ=1e-3)
+	
+# 	return missing
+# end
+
+# ╔═╡ af5c6bea-1c9c-11eb-35ae-250337e4fc86
+test_sphere = Sphere(
+	[7, -6],
+	2,
+	1.5,
+)
+
+# ╔═╡ 2a2b7284-1ade-11eb-3b71-d17fe2ca638a
+plot_scene([test_sphere], size=(400,200), legend=false, xlim=(-15,15), ylim=(-10,10))
+
 # ╔═╡ 251f0262-1a0c-11eb-39a3-09be67091dc8
-intersection(philip, test_sphere)
+sphere_intersection = intersection(philip, test_sphere)
 
 # ╔═╡ b3ab93d2-1a0b-11eb-0f5a-cdca19af3d89
 ex_3_scene = [test_sphere, box_scene...]
@@ -644,14 +738,21 @@ ex_3_scene = [test_sphere, box_scene...]
 let
 	p = plot_scene(ex_3_scene)
 	
-	plot_photon_arrow!(p, philip)
-	hit = intersection(philip, test_sphere)
+	plot_photon_arrow!(p, philip, 4; label="Philip")
+	if sphere_intersection isa Intersection
+		scatter!(p, sphere_intersection.point[1:1], sphere_intersection.point[2:2], label="Intersection point")
+	end
 	
-	# line = [philip.p, hit.point]
-	# plot!(p, first.(line), last.(line), lw=5)
-	
-	p
+	p |> as_svg
 end
+
+# ╔═╡ 71dc652e-1c9c-11eb-396c-cfd9ee2261fe
+md"""
+👉 Change the definition of `test_sphere` to test different situations:
+- Hit the circle
+- Miss the circle
+- Start inside the cricle (you should hit the exit boundary)
+"""
 
 # ╔═╡ 584ce620-1935-11eb-177a-f75d9ad8a399
 md"""
@@ -706,42 +807,38 @@ Now, we can rewrite everything such that
 
 $\ell_2 = r\ell_1 + \left(rc-\sqrt{1-r^2(1-c^2)}\right)\hat n.$
 
-The last step is to write this in code with a function that takes the ray, the normal, and the index of refraction ration `r`:
+The last step is to write this in code with a function that takes the light direction, the normal, and old and new indices of refraction:
 """
 
 # ╔═╡ 14dc73d2-1a0d-11eb-1a3c-0f793e74da9b
-function refract(velocity::Vector{Float64}, normal::Vector{Float64},
-	old_ior, new_ior)
+function refract(
+		ℓ₁::Vector, n̂::Vector,
+		old_ior, new_ior
+	)
 	
 	r = old_ior / new_ior
 	
-	n = if -dot(velocity, normal) < 0
-		-normal
+	n̂_oriented = if -dot(ℓ₁, n̂) < 0
+		-n̂
 	else
-		normal
+		n̂
 	end
 	
-	c = -dot(velocity, n)
+	c = -dot(ℓ₁, n̂_oriented)
 	
-	f = 1 - r^2 * (1 - c^2)
-	
-	normalize(r * velocity + (r*c - sqrt(f)) * n)
+	normalize(r * ℓ₁ + (r*c - sqrt(1 - r^2 * (1 - c^2))) * n̂_oriented)
 end
 
 # ╔═╡ 71b70da6-193e-11eb-0bc4-f309d24fd4ef
 md"
 
 Now to move on to lenses. Like in lecture, we will focus exclusively on spherical lenses. Ultimately, there isn't a big difference between a lens and a spherical drop of water. It just has a slightly different refractive index and it's normal is defined slightly differently.
-
-For this, we will create an abstract type of Object that can take in both spheres and mirrors. The sphere will take 3 variables, a position vector `p`, a radius `r`, and an index of refraction `ior`:
 "
 
 # ╔═╡ 54b81de0-193f-11eb-004d-f90ec43588f8
-md"
-Now we need a few auxiliary functions to find the normal at any position and whether we are inside of the sphere or not.
-
-Firstly, the normal. Remember that the normal will always be pointing perpendicularly from the surface of the sphere. This means that no matter what point you are at, the normal will just be a normalized vector of your current location minus the sphere's position:
-"
+md"""
+We need a helper functions to find the normal of the sphere's surface at any position. Remember that the normal will always be pointing perpendicularly from the surface of the sphere. This means that no matter what point you are at, the normal will just be a normalized vector of your current location minus the sphere's position:
+"""
 
 # ╔═╡ 6fdf613c-193f-11eb-0029-957541d2ed4d
 function sphere_normal_at(p::Vector{Float64}, s::Sphere)
@@ -806,6 +903,49 @@ let
 	p
 end |> as_svg
 
+# ╔═╡ 427747d6-1ca1-11eb-28ae-ff50728c84fe
+# function interact(photon::Photon, hit::Intersection{Sphere})
+	
+# 	return missing
+# end
+
+# ╔═╡ dced1fd0-1c9e-11eb-3226-17dc1e09e018
+md"""
+To test your code, modify the definition of `test_lens_photon` and `test_lens` below.
+"""
+
+# ╔═╡ 65aec4fc-1c9e-11eb-1c5a-6dd7c533d3b8
+test_lens_photon = Photon([0,0], [1,0], 1.0)
+
+# ╔═╡ 5895d9ae-1c9e-11eb-2f4e-671f2a7a0150
+test_lens = Sphere(
+	[5, -2],
+	3,
+	1.5,
+	)
+
+# ╔═╡ 83acf10e-1c9e-11eb-3426-bb28e7bc6c79
+let
+	scene = [test_lens, box_scene...]
+	N = 3
+	
+	p = plot_scene(scene, legend=false, xlim=(-11,11), ylim=(-11,11))
+	
+	path = accumulate(1:N; init=test_lens_photon) do old_photon, i
+		step_ray(old_photon, scene)
+	end
+	
+	line = [test_lens_photon.p, [r.p for r in path]...]
+	plot!(p, first.(line), last.(line), lw=5, color=:red)
+	
+	p
+end |> as_svg
+
+# ╔═╡ 13fef49c-1c9e-11eb-2aa3-d3aa2bfd0d57
+md"""
+By defining a method for `interact` that takes a sphere intersection, we are now able to use the machinery developed in Exercise 2 to simulate a scene with both lenses and mirrors. Let's try it out!
+"""
+
 # ╔═╡ c492a1f8-1a0c-11eb-2c38-5921c39cf5f8
 @bind sphere_test_ray_N Slider(1:30; default=4)
 
@@ -813,11 +953,11 @@ end |> as_svg
 let
 	p = plot_scene(ex_3_scene, legend=false, xlim=(-11,11), ylim=(-11,11))
 	
-	path = accumulate(1:sphere_test_ray_N; init=snoopy) do old_photon, i
+	path = accumulate(1:sphere_test_ray_N; init=philip) do old_photon, i
 		step_ray(old_photon, ex_3_scene)
 	end
 	
-	line = [snoopy.p, [r.p for r in path]...]
+	line = [philip.p, [r.p for r in path]...]
 	plot!(p, first.(line), last.(line), lw=5, color=:red)
 	
 	p
@@ -830,7 +970,7 @@ Now we can put it all together into an image of spherical aberration!
 "
 
 # ╔═╡ eb35ac4a-1acc-11eb-0729-ff85c8406c45
-@bind aberration_viz_ior Slider(1.0:0.0001:5.0, show_value=true)
+@bind aberration_viz_ior Slider(1.0:0.0001:2.0, show_value=true)
 
 # ╔═╡ bff04784-1acc-11eb-36c2-9335a58be23a
 function aberration_viz(ior)
@@ -895,57 +1035,6 @@ yays = [md"Fantastic!", md"Splendid!", md"Great!", md"Yay ❤", md"Great! 🎉",
 # ╔═╡ ec698eb0-19c3-11eb-340a-e319abb8ebb5
 correct(text=rand(yays)) = Markdown.MD(Markdown.Admonition("correct", "Got it!", [text]))
 
-# ╔═╡ 19c6d3ae-1a0f-11eb-0e7a-4768e080408a
-md"""
-# description of what i changed in these exercises
-
-This is a cool exercise! I made two changes/additions:
-
-### Intersection type
-
-Instead of slowly building up a `propagate` function with a growing if statement, we use types and multiple dispatch to build up functionality. The main idea is that we have a new type:
-
-
-```julia
-struct Intersection{T<:Object}
-	object::T
-	distance::Float64
-	point::Vector{Float64}
-end
-
-```
-
-that contains the intersection result. It is a possible return type of the `intersection(::Photon, ::Object)` function. Because it is a _parametric_ type, we can later dispatch on the type of object that the intersection happened on, and do something different (i.e. refract / reflect) based on this type.
-
-#### Sorting intersections
-
-We also introduce a second type to signify a miss:
-
-```julia
-struct Miss end
-```
-
-We could create an abstract type `MaybeIntersection` that is the supertype of `Miss` and `Intersection`, but this is not necessary.
-
-And we define methods to compare different `MaybeIntersection`s:
-
-```julia
-Base.isless(a::Miss, b::Miss) = false
-Base.isless(a::Miss, b::Intersection) = false
-Base.isless(a::Intersection, b::Miss) = true
-Base.isless(a::Intersection, b::Intersection) = a.distance < b.distance
-```
-
-This allows us to get the closest intersection using:
-```julia
-minimum(vect_of_intersections)
-```
-
-Neat!
-
-This allows us to naturally extend our work to ex 3, where we add methods to existing functions to support spheres.
-""" |> correct
-
 # ╔═╡ 0e9a240c-1ac5-11eb-1a7e-b3c43c459484
 let
 	if length(box_scene) != 4
@@ -1009,8 +1098,22 @@ let
 			if abs(result.distance - (20 - 5)) > 0.1
 				keep_working(md"The returned distance is not correct.")
 			else
+				p = Photon([5,0], [-1,0], 1.0)
+				result = intersection(p, w)
 				
-				correct()
+				if !(result isa Miss)
+					almost(md"What should happen when ``D < 0``?")
+				else
+					p = Photon([10,10], [1,0], 1.0)
+					w = Wall([10,10], normalize([-1,-1]))
+					
+					result = intersection(p, w)
+					if result isa Miss
+						correct()
+					else
+						almost(md"Remember to use ``\epsilon``.")
+					end
+				end
 			end
 		end
 	end
@@ -1022,122 +1125,8 @@ not_defined(variable_name) = Markdown.MD(Markdown.Admonition("danger", "Oopsie!"
 # ╔═╡ ec85c940-19c3-11eb-3375-a90735beaec1
 TODO = html"<span style='display: inline; font-size: 2em; color: purple; font-weight: 900;'>TODO</span>"
 
-# ╔═╡ 92290e54-1940-11eb-1a24-5d1eaee9f6ca
-md"""
-$TODO talk about timestepping
-
-## **Exercise 1:** _Walls_
-
-As discussed in lecture, event-driven simulations are the traditional method used for raytracing. Here, we look for any objects in our path and _analytically_ determine how far away they are. From there, we take one big timestep all the way to the surface boundary, calculate refraction or reflection to see what direction we are moving in, and then seek out any other object we could potentially run into.
-
-So let's start simple with determining when a ray of light could intersect with a wall.
-
-#### Exercise 1.1 - _what is a wall?_
-
-To start, let's create the concept of a wall. For our purposes, walls will be infinitely long, so we only need to create an object that has a position and a normal vector at that position:
-"""
-
-# ╔═╡ 4e535f52-1ac8-11eb-163c-7b26f4896650
-md"""
-$TODO more tests, dont make them hidden
-
-also test for epsilon
-"""
-
-# ╔═╡ 492b257a-194f-11eb-17fb-f770b4d3da2e
-md"
-So we need a way of finding all of these.
-
-To start, let's remember back to the `inside_of(...)` function we defined above. There, we stated that so long as the relative distance between the ray's tip and the sphere's center satisfies the sphere equation, we can be considered inside of the sphere. More specifically, we are inside the sphere if:
-
-$(x_s-x_r)^2+(y_s-y_r) < r^2.$
-
-where the $s$ and $r$ subscripts represent the sphere and ray, respectively. We know we are *on* the sphere if
-
-$(x_s-x_r)^2+(y_s-y_r) = r^2.$
-
-As has been the theme for this homework set, we can rewrite this in vector notation as:
-
-$(\mathbf{R} - \mathbf{S})\cdot(\mathbf{R} - \mathbf{S}) = r^2,$
-
-where $\mathbf{R}$ and $\mathbf{S}$ are the $x$, $y$, and $z$ location of the ray and sphere, respectively.
-
-Returning to the timestepping example from above, we know that our ray is moving forward with time such that $\mathbf{R} = \mathbf{R}_0 + v dt = \mathbf{R}_0 + \ell t$. We now need to ask ourselves if there is any time when our ray interacts with the sphere. Plugging this in to the dot product from above, we get
-
-$(\mathbf{R}_0 + \ell t - \mathbf{S})\cdot(\mathbf{R}_0 + \ell t - \mathbf{S}) = r^2$
-
-To solve this for $t$, we first need to reorder everything into the form of a polynomial, such that:
-
-$t^2(\ell\cdot\ell)+2t\ell\cdot(\mathbf{R_0}-\mathbf{S})+(\mathbf{R}_0-\mathbf{S})\cdot(\mathbf{R}_0-\mathbf{S}) - r^2=0.$
-
-This can be solved with the good ol' fashioned quadratic equation:
-
-$\frac{-b\pm\sqrt{b^2-4ac}}{2a},$
-
-where $a = \ell\cdot\ell$, $b = 2\ell\cdot(\mathbf{R}_0-\mathbf{S})$, and $c=(\mathbf{R}_0-\mathbf{S})\cdot(\mathbf{R}_0-\mathbf{S}) - r^2$
-
-If the quadratic equation returns no roots, there is no intersection. If it returns 1 root, the ray just barely hits the edge of the sphere. If it returns 2 roots, it goes right through!
-
-The easiest way to check this is by looking at the discriminant $d = b^2-4ac$.
-
-```math
-\text{Number of roots} = \left\{
-    \begin{align}
-       &0, \qquad \text{if } d < 0 \\
-       &1, \qquad \text{if } d = 0 \\
-       &2, \qquad \text{if } d > 0 \\
-    \end{align}
-\right.
-```
-
-In the case that there are 2 roots, the second root corresponds to when the ray would interact with the far edge of the sphere *if there were no refraction or reflection!*; therefore, we only care about returning the closest point.
-
-With all this said, we are ready to write some code:
-
-👉 $TODO write a description for this exercise explaining what to do
-
-"
-
 # ╔═╡ 8cfa4902-1ad3-11eb-03a1-736898ff9cef
 TODO_note(text) = Markdown.MD(Markdown.Admonition("warning", "TODO note", [text]))
-
-# ╔═╡ 49d2b7de-1adc-11eb-0457-1998946eb71d
-md"""
-I have distributed the original paragraphs from James's draft throughout the notebook to where they are most appropriate, but most of them still need to be rewritten to match the current exercise.
-""" |> TODO_note
-
-# ╔═╡ 7ae770d2-1adc-11eb-0848-8b72bfbf5464
-md"""
-A visual test
-""" |> TODO_note
-
-# ╔═╡ b157247e-1a0c-11eb-3980-bdaaa74f7aff
-md"""
-$TODO add some more (at least visual) test cases: 
-- miss the ball, 
-- start after the ball, 
-- start inside the ball
-""" |> TODO_note
-
-# ╔═╡ 333b7b84-1ad3-11eb-0741-e91314ada8ea
-md"""
-Perhaps we should just write this function ourselves? It was quite time consuming for me to get right, and there is no computer sciency lesson here.
-
----
-
-What is missing in this description is that the normal needs to point in the opposite direction as the incoming velocity vector. So you need to **flip the normal** if `c < 0`. 
-
-We can also refer to the derivation on Wikipedia:
-
-[https://en.wikipedia.org/wiki/Snell%27s_law#Vector_form](https://en.wikipedia.org/wiki/Snell%27s_law#Vector_form)
-
-(Or perhaps we did it in a lecture?)
-
-
-
-
-
-""" |> TODO_note
 
 # ╔═╡ Cell order:
 # ╟─1df32310-19c4-11eb-0824-6766cd21aaf4
@@ -1147,10 +1136,8 @@ We can also refer to the derivation on Wikipedia:
 # ╟─1e202680-19c4-11eb-29a7-99061b886b3c
 # ╟─1e2cd0b0-19c4-11eb-3583-0b82092139aa
 # ╠═c3e52bf2-ca9a-11ea-13aa-03a4335f2906
-# ╟─19c6d3ae-1a0f-11eb-0e7a-4768e080408a
-# ╟─49d2b7de-1adc-11eb-0457-1998946eb71d
 # ╟─92290e54-1940-11eb-1a24-5d1eaee9f6ca
-# ╠═333d815a-193f-11eb-0f43-b515f8055468
+# ╠═d851a202-1ca0-11eb-3da0-51fcb656783c
 # ╠═99c61b74-1941-11eb-2323-2bdb7c120a28
 # ╠═0906b340-19d3-11eb-112c-e568f69deb5d
 # ╠═e45e1d36-1a12-11eb-2720-294c4be6e9fd
@@ -1178,13 +1165,12 @@ We can also refer to the derivation on Wikipedia:
 # ╟─d39f149e-1ac3-11eb-39a2-41c2030d7d49
 # ╟─e135d490-1ac2-11eb-053e-914051f16e31
 # ╠═f76ab794-1ac9-11eb-26e3-b9d0baa05d49
+# ╠═abe3de54-1ca0-11eb-01cd-11fe798bfb97
 # ╟─0787f130-1aca-11eb-24b4-2ff2ddd0bc48
-# ╠═7ae770d2-1adc-11eb-0848-8b72bfbf5464
 # ╟─42d65f56-1aca-11eb-1079-e32f85554349
 # ╠═aa19faa4-1941-11eb-2b61-9b78aaf42876
-# ╠═038d5e88-1ac7-11eb-2020-a9d7e19feebc
-# ╠═4e535f52-1ac8-11eb-163c-7b26f4896650
-# ╠═ee8fb9a0-1c71-11eb-2dbc-f1480889611f
+# ╠═a5847264-1ca0-11eb-0b45-eb5388f6e688
+# ╟─038d5e88-1ac7-11eb-2020-a9d7e19feebc
 # ╟─6544be90-19d3-11eb-153c-218025f738c6
 # ╠═a306e880-19eb-11eb-0ff1-d7ef49777f63
 # ╟─3663bf80-1a06-11eb-3596-8fbbed28cc38
@@ -1216,6 +1202,7 @@ We can also refer to the derivation on Wikipedia:
 # ╠═79532662-1c7e-11eb-2edf-57e7cfbc1eda
 # ╟─b6614d80-194b-11eb-1edb-dba3c29672f8
 # ╠═e70b9e24-1a07-11eb-13db-b95c07880893
+# ╠═2c6defd0-1ca1-11eb-17db-d5cb498f3265
 # ╟─ad5a7420-1c7f-11eb-042f-115a9ef4c676
 # ╠═0b03316c-1c80-11eb-347c-1b5c9a0ae379
 # ╟─fb70cc0c-1c7f-11eb-31b5-87b168a66e19
@@ -1236,24 +1223,31 @@ We can also refer to the derivation on Wikipedia:
 # ╟─337918f4-194f-11eb-0b45-b13fef3b23bf
 # ╟─492b257a-194f-11eb-17fb-f770b4d3da2e
 # ╠═885ac814-1953-11eb-30d9-85dcd198a1d8
+# ╠═392fe192-1ca1-11eb-36c4-f9bd2b01a5e5
 # ╠═251f0262-1a0c-11eb-39a3-09be67091dc8
-# ╠═83aa9cea-1a0c-11eb-281d-699665da2b4f
+# ╟─83aa9cea-1a0c-11eb-281d-699665da2b4f
+# ╠═af5c6bea-1c9c-11eb-35ae-250337e4fc86
 # ╠═b3ab93d2-1a0b-11eb-0f5a-cdca19af3d89
-# ╠═b157247e-1a0c-11eb-3980-bdaaa74f7aff
+# ╟─71dc652e-1c9c-11eb-396c-cfd9ee2261fe
 # ╟─584ce620-1935-11eb-177a-f75d9ad8a399
-# ╠═333b7b84-1ad3-11eb-0741-e91314ada8ea
 # ╟─78915326-1937-11eb-014f-fff29b3660a0
 # ╠═14dc73d2-1a0d-11eb-1a3c-0f793e74da9b
-# ╟─71b70da6-193e-11eb-0bc4-f309d24fd4ef
+# ╠═71b70da6-193e-11eb-0bc4-f309d24fd4ef
 # ╟─54b81de0-193f-11eb-004d-f90ec43588f8
 # ╠═6fdf613c-193f-11eb-0029-957541d2ed4d
 # ╟─392c25b8-1add-11eb-225d-49cfca27bef4
 # ╟─c25caf08-1a13-11eb-3c4d-0567faf4e662
 # ╠═e1cb1622-1a0c-11eb-224c-559af7b90f49
+# ╠═427747d6-1ca1-11eb-28ae-ff50728c84fe
+# ╟─dced1fd0-1c9e-11eb-3226-17dc1e09e018
+# ╠═65aec4fc-1c9e-11eb-1c5a-6dd7c533d3b8
+# ╠═5895d9ae-1c9e-11eb-2f4e-671f2a7a0150
+# ╟─83acf10e-1c9e-11eb-3426-bb28e7bc6c79
+# ╟─13fef49c-1c9e-11eb-2aa3-d3aa2bfd0d57
 # ╟─c492a1f8-1a0c-11eb-2c38-5921c39cf5f8
-# ╟─b65d9a0c-1a0c-11eb-3cd5-e5a2c4302c7e
+# ╠═b65d9a0c-1a0c-11eb-3cd5-e5a2c4302c7e
 # ╟─c00eb0a6-cab2-11ea-3887-070ebd8d56e2
-# ╟─eb35ac4a-1acc-11eb-0729-ff85c8406c45
+# ╠═eb35ac4a-1acc-11eb-0729-ff85c8406c45
 # ╟─f83da7f8-1acc-11eb-02d7-f33ffe518531
 # ╟─bff04784-1acc-11eb-36c2-9335a58be23a
 # ╟─ebd05bf0-19c3-11eb-2559-7d0745a84025
