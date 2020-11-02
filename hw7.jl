@@ -143,7 +143,7 @@ md"""
 In our simulations, we will enclose our scene in a box of **four walls**, to make sure that no rays can escape the scene. We have written this box (i.e. vector of walls) below, but we are still missing the roof.
 """
 
-# ╔═╡ d257a728-1a04-11eb-281d-bde30644f5f5
+# ╔═╡ ac9bafaa-1ac4-11eb-16c4-0df8133f9c98
 box_scene = [
 	Wall(
 		[10,0],
@@ -157,28 +157,8 @@ box_scene = [
 		[0,-10],
 		[0,1]
 		),
-	Wall(
-		[0,10],
-		[0,-1]
-		),
+	# your code here
 	]
-
-# ╔═╡ ac9bafaa-1ac4-11eb-16c4-0df8133f9c98
-# box_scene = [
-# 	Wall(
-# 		[10,0],
-# 		[-1,0]
-# 		),
-# 	Wall(
-# 		[-10,0],
-# 		[1,0]
-# 		),
-# 	Wall(
-# 		[0,-10],
-# 		[0,1]
-# 		),
-# 	# your code here
-# 	]
 
 # ╔═╡ 293776f8-1ac4-11eb-21db-9d023c09e89f
 md"""
@@ -276,16 +256,11 @@ where $p$ is the position, $\hat \ell$ is the direction of the light, and $\hat 
 👉 Write a function `intersection_distance` that implements this formula, and returns $D$. You can use `dot(a,b)` to compute the vector dot product ``a \cdot b``.
 """
 
-# ╔═╡ f76ab794-1ac9-11eb-26e3-b9d0baa05d49
-function intersection_distance(photon::Photon, wall::Wall)
-	-dot(photon.p - wall.position, wall.normal) / dot(photon.l, wall.normal)
-end
-
 # ╔═╡ abe3de54-1ca0-11eb-01cd-11fe798bfb97
-# function intersection_distance(photon::Photon, wall::Wall)
+function intersection_distance(photon::Photon, wall::Wall)
 	
-# 	return missing
-# end
+	return missing
+end
 
 # ╔═╡ 42d65f56-1aca-11eb-1079-e32f85554349
 md"""
@@ -304,24 +279,11 @@ If $D$ is _negative_ (or zero), then the wall is _behind_ the photon - we should
 We are using _floating points_ (`Float64`) to store positions, distances, etc., which means that we need to account for small errors. Like in the lecture, we will not check for `D > 0`, but `D > ϵ` with `ϵ = 1e-3`.
 """
 
-# ╔═╡ aa19faa4-1941-11eb-2b61-9b78aaf42876
-function intersection(photon::Photon, wall::Wall; ϵ=1e-3)
-	D = intersection_distance(photon, wall)
-	
-	if D > ϵ
-		point = photon.p + D * photon.l
-		
-		Intersection(wall, D, point)
-	else
-		Miss()
-	end
-end
-
 # ╔═╡ a5847264-1ca0-11eb-0b45-eb5388f6e688
-# function intersection(photon::Photon, wall::Wall; ϵ=1e-3)
+function intersection(photon::Photon, wall::Wall; ϵ=1e-3)
 	
-# 	return missing
-# end
+	return missing
+end
 
 # ╔═╡ 7f286ccc-1c75-11eb-1270-95a87840b300
 @bind dizzy_angle Slider(0:0.0001:2π, default=2.2)
@@ -388,10 +350,13 @@ By taking the minimum, we have found our closest hit! Let's turn this into a fun
 """
 
 # ╔═╡ 19cf420e-1c7c-11eb-1cb8-dd939fee1276
-# function closest_hit(photon::Photon, objects::Vector{<:Object})
+function closest_hit(photon::Photon, objects::Vector{<:Object})
 	
-# 	return missing
-# end
+	return missing
+end
+
+# ╔═╡ b8cd4112-1c7c-11eb-3b2d-29170ad9beb5
+test_closest = closest_hit(philip, ex_1_scene)
 
 # ╔═╡ e9c6a0b8-1ad0-11eb-1606-0319caf0948a
 md"""
@@ -437,17 +402,11 @@ Our event-driven simulation is a stepping method, but instead of taking small st
 👉 Write a function `interact` that takes a photon and a `hit::Intersection{Wall}` and returns a new `Photon` at the next step. The new photon is located at the hit point, its direction is reflected off the wall's normal and the `photon.ior` is reused.
 """
 
-# ╔═╡ e70b9e24-1a07-11eb-13db-b95c07880893
+# ╔═╡ 2c6defd0-1ca1-11eb-17db-d5cb498f3265
 function interact(photon::Photon, hit::Intersection{Wall})
 	
-	Photon(hit.point, reflect(photon.l, hit.object.normal), photon.ior)
+	return missing
 end
-
-# ╔═╡ 2c6defd0-1ca1-11eb-17db-d5cb498f3265
-# function interact(photon::Photon, hit::Intersection{Wall})
-	
-# 	return missing
-# end
 
 # ╔═╡ 3f727a2c-1c80-11eb-3608-e55ccb9786d9
 md"""
@@ -467,10 +426,10 @@ md"""
 """
 
 # ╔═╡ 1a43b70c-1ca3-11eb-12a5-a94ebbba0e86
-# function trace(photon::Photon, scene::Vector{<:Object}, N)
+function trace(photon::Photon, scene::Vector{<:Object}, N)
 	
-# 	return missing
-# end
+	return missing
+end
 
 # ╔═╡ 3cd36ac0-1a09-11eb-1818-75b36e67594a
 @bind mirror_test_ray_N Slider(1:30; default=4)
@@ -557,6 +516,33 @@ let
 	plot_photon_arrow!(p, philip, 5)
 end
 
+# ╔═╡ a99c40bc-1c7c-11eb-036b-7fe6e9b937e5
+let
+	p = plot_scene(ex_1_scene)
+	
+	plot_photon_arrow!(p, philip, 4; label="Philip")
+	
+	scatter!(p, test_closest.point[1:1], test_closest.point[2:2], label="Closest hit")
+	
+	p |> as_svg
+end
+
+# ╔═╡ 1ee0787e-1a08-11eb-233b-43a654f70117
+let
+	p = plot_scene(ex_1_scene, legend=false, xlim=(-11,11), ylim=(-11,11))
+	
+	path = trace(philip, ex_1_scene, mirror_test_ray_N)
+	
+	
+	line = [philip.p, [r.p for r in path]...]
+	plot!(p, first.(line), last.(line), lw=5, color=:pink)
+	
+	plot_photon_arrow!(p, philip)
+	plot_photon_arrow!.([p], path)
+	
+	p
+end |> as_svg
+
 # ╔═╡ e5c0e960-19cc-11eb-107d-39b397a783ab
 example_sphere = Sphere(
 	[7, -6],
@@ -636,32 +622,10 @@ With all this said, we are ready to write some code.
 👉 Write a new method `intersection` that takes a `Photon` and a `Sphere`, and returns either a `Miss` or an `Intersection`, using the method described above. Go back to Exercise 1.3 where we defined the first method, and see how we adapt it to a sphere.
 """
 
-# ╔═╡ 885ac814-1953-11eb-30d9-85dcd198a1d8
+# ╔═╡ 392fe192-1ca1-11eb-36c4-f9bd2b01a5e5
 function intersection(photon::Photon, sphere::Sphere; ϵ=1e-3)
-	a = dot(photon.l, photon.l)
-	b = 2 * dot(photon.l, photon.p - sphere.center)
-	c = dot(photon.p - sphere.center, photon.p - sphere.center) - sphere.radius^2
 	
-	d = b^2 - 4*a*c
-	
-	if d <= 0
-		Miss()
-	else
-		t1 = (-b-sqrt(d))/2a
-		t2 = (-b+sqrt(d))/2a
-		
-		t = if t1 > ϵ
-			t1
-		elseif t2 > ϵ
-			t2
-		else
-			return Miss()
-		end
-		
-		point = photon.p + t * photon.l
-		
-		Intersection(sphere, t, point)
-	end
+	return missing
 end
 
 # ╔═╡ a306e880-19eb-11eb-0ff1-d7ef49777f63
@@ -701,33 +665,6 @@ sort(all_intersections)
 
 # ╔═╡ 63ef21c6-1c7a-11eb-2f3c-c5ac16bc289f
 minimum(all_intersections)
-
-# ╔═╡ 754eeec4-1a07-11eb-1329-8d9ae0948613
-function closest_hit(photon::Photon, objects::Vector{<:Object})
-	hits = intersection.([photon], objects)
-	
-	minimum(hits)
-end
-
-# ╔═╡ b8cd4112-1c7c-11eb-3b2d-29170ad9beb5
-test_closest = closest_hit(philip, ex_1_scene)
-
-# ╔═╡ a99c40bc-1c7c-11eb-036b-7fe6e9b937e5
-let
-	p = plot_scene(ex_1_scene)
-	
-	plot_photon_arrow!(p, philip, 4; label="Philip")
-	
-	scatter!(p, test_closest.point[1:1], test_closest.point[2:2], label="Closest hit")
-	
-	p |> as_svg
-end
-
-# ╔═╡ 392fe192-1ca1-11eb-36c4-f9bd2b01a5e5
-# function intersection(photon::Photon, sphere::Sphere; ϵ=1e-3)
-	
-# 	return missing
-# end
 
 # ╔═╡ af5c6bea-1c9c-11eb-35ae-250337e4fc86
 test_sphere = Sphere(
@@ -858,18 +795,10 @@ md"""
 👉 Write a new method for `interact` that takes a `photon` and a `hit` of type `Intersection{Sphere}`, that implements refraction. It returns a new `Photon` positioned at the hit point, with the refracted velocity and the new index of refraction.
 """
 
-# ╔═╡ e1cb1622-1a0c-11eb-224c-559af7b90f49
+# ╔═╡ 427747d6-1ca1-11eb-28ae-ff50728c84fe
 function interact(photon::Photon, hit::Intersection{Sphere})
-	old_ior = photon.ior
-	new_ior = if photon.ior == 1.0
-		hit.object.ior
-	else
-		1.0
-	end
 	
-	normal = sphere_normal_at(hit.point, hit.object)
-	
-	Photon(hit.point, refract(photon.l, normal, old_ior, new_ior), new_ior)
+	return missing
 end
 
 # ╔═╡ 0b03316c-1c80-11eb-347c-1b5c9a0ae379
@@ -891,35 +820,6 @@ function step_ray(photon::Photon, objects::Vector{<:Object})
 	
 	interact(photon, hit)
 end
-
-# ╔═╡ 900d6622-1a08-11eb-1475-bfadc2aac749
-function trace(photon::Photon, scene::Vector{<:Object}, N)
-	accumulate(1:N; init=photon) do old_photon, i
-		step_ray(old_photon, scene)
-	end
-end
-
-# ╔═╡ 1ee0787e-1a08-11eb-233b-43a654f70117
-let
-	p = plot_scene(ex_1_scene, legend=false, xlim=(-11,11), ylim=(-11,11))
-	
-	path = trace(philip, ex_1_scene, mirror_test_ray_N)
-	
-	
-	line = [philip.p, [r.p for r in path]...]
-	plot!(p, first.(line), last.(line), lw=5, color=:pink)
-	
-	plot_photon_arrow!(p, philip)
-	plot_photon_arrow!.([p], path)
-	
-	p
-end |> as_svg
-
-# ╔═╡ 427747d6-1ca1-11eb-28ae-ff50728c84fe
-# function interact(photon::Photon, hit::Intersection{Sphere})
-	
-# 	return missing
-# end
 
 # ╔═╡ dced1fd0-1c9e-11eb-3226-17dc1e09e018
 md"""
@@ -987,32 +887,24 @@ md"""
 👉 Recreate the spherical aberration figure from [the lecture](https://www.youtube.com/watch?v=MkkZb5V6HqM) (around the end of the video), and make the index of refraction interactive using a `Slider`. _Or make something else!_
 """
 
-# ╔═╡ eb35ac4a-1acc-11eb-0729-ff85c8406c45
-@bind aberration_viz_ior Slider(1.0:0.0001:2.0, show_value=true)
+# ╔═╡ 270762e4-1ca4-11eb-2fb4-392e5c3b3e04
 
-# ╔═╡ bff04784-1acc-11eb-36c2-9335a58be23a
-function aberration_viz(ior)
-	s = Sphere([5,0], 1, ior)
-	aberration_scene = [s, box_scene...]
-	
-	p = plot_scene(aberration_scene, legend=false, xlim=(3,8), ylim=(-1.5,1.5))
-	
-	for y in LinRange(-0.9, 0.9, 8)
-		start = Photon([0,y], [1,0], 1.0)
-		
-		path = accumulate(1:3; init=start) do old_photon, i
-			step_ray(old_photon, aberration_scene)
-		end
-		
-		line = [start.p, [r.p for r in path]...]
-		plot!(p, first.(line), last.(line), lw=2, color=:darkred)
-	end
 
-	p |> as_svg
-end
+# ╔═╡ bbf730c8-1ca6-11eb-3bb0-1188046339ac
+md"""
+## **Exercise XX:** _Lecture transcript_
+(MIT students only)
+Please see the link for hw 7 transcript document on [Canvas](https://canvas.mit.edu/courses/5637).
+We want each of you to correct about 500 lines, but don’t spend more than 20 minutes on it.
+See the the beginning of the document for more instructions.
 
-# ╔═╡ f83da7f8-1acc-11eb-02d7-f33ffe518531
-aberration_viz(aberration_viz_ior)
+👉 Please mention the name of the video(s) and the line ranges you edited:
+"""
+
+# ╔═╡ cbd8f164-1ca6-11eb-1440-bdaabf73a6c7
+lines_i_edited = md"""
+Abstraction, lines 1-219; Array Basics, lines 1-137; Course Intro, lines 1-144 (_for example_)
+"""
 
 # ╔═╡ ebd05bf0-19c3-11eb-2559-7d0745a84025
 if student.name == "Jazzy Doe" || student.kerberos_id == "jazz"
@@ -1162,7 +1054,6 @@ TODO_note(text) = Markdown.MD(Markdown.Admonition("warning", "TODO note", [text]
 # ╟─6de1bafc-1a01-11eb-3d67-c9d9b6c3cea8
 # ╟─eff9329e-1a05-11eb-261f-734127d36750
 # ╟─5f551588-1ac4-11eb-1f86-197442f1ef1d
-# ╠═d257a728-1a04-11eb-281d-bde30644f5f5
 # ╠═ac9bafaa-1ac4-11eb-16c4-0df8133f9c98
 # ╠═0393dd3a-1a06-11eb-18a9-494ae7a26bc0
 # ╟─293776f8-1ac4-11eb-21db-9d023c09e89f
@@ -1182,11 +1073,9 @@ TODO_note(text) = Markdown.MD(Markdown.Admonition("warning", "TODO note", [text]
 # ╠═bc10541e-1ac3-11eb-0b5f-916922f1a8e8
 # ╟─d39f149e-1ac3-11eb-39a2-41c2030d7d49
 # ╟─e135d490-1ac2-11eb-053e-914051f16e31
-# ╠═f76ab794-1ac9-11eb-26e3-b9d0baa05d49
 # ╠═abe3de54-1ca0-11eb-01cd-11fe798bfb97
 # ╟─0787f130-1aca-11eb-24b4-2ff2ddd0bc48
 # ╟─42d65f56-1aca-11eb-1079-e32f85554349
-# ╠═aa19faa4-1941-11eb-2b61-9b78aaf42876
 # ╠═a5847264-1ca0-11eb-0b45-eb5388f6e688
 # ╟─038d5e88-1ac7-11eb-2020-a9d7e19feebc
 # ╟─6544be90-19d3-11eb-153c-218025f738c6
@@ -1208,7 +1097,6 @@ TODO_note(text) = Markdown.MD(Markdown.Admonition("warning", "TODO note", [text]
 # ╟─55f475a8-1c7a-11eb-377e-91d07fa0bdb6
 # ╠═63ef21c6-1c7a-11eb-2f3c-c5ac16bc289f
 # ╟─6cf7df1a-1c7a-11eb-230b-df1333f191c7
-# ╠═754eeec4-1a07-11eb-1329-8d9ae0948613
 # ╠═19cf420e-1c7c-11eb-1cb8-dd939fee1276
 # ╠═b8cd4112-1c7c-11eb-3b2d-29170ad9beb5
 # ╟─a99c40bc-1c7c-11eb-036b-7fe6e9b937e5
@@ -1219,7 +1107,6 @@ TODO_note(text) = Markdown.MD(Markdown.Admonition("warning", "TODO note", [text]
 # ╟─70b8401e-1c7e-11eb-16b2-d54d8f66d71a
 # ╠═79532662-1c7e-11eb-2edf-57e7cfbc1eda
 # ╟─b6614d80-194b-11eb-1edb-dba3c29672f8
-# ╠═e70b9e24-1a07-11eb-13db-b95c07880893
 # ╠═2c6defd0-1ca1-11eb-17db-d5cb498f3265
 # ╟─ad5a7420-1c7f-11eb-042f-115a9ef4c676
 # ╠═0b03316c-1c80-11eb-347c-1b5c9a0ae379
@@ -1228,7 +1115,6 @@ TODO_note(text) = Markdown.MD(Markdown.Admonition("warning", "TODO note", [text]
 # ╠═76ef6e46-1a06-11eb-03e3-9f40a86dc9aa
 # ╟─a45e1012-194d-11eb-3252-bb89daed3c8d
 # ╟─7ba5dda0-1ad1-11eb-1c4e-2391c11f54b3
-# ╠═900d6622-1a08-11eb-1475-bfadc2aac749
 # ╠═1a43b70c-1ca3-11eb-12a5-a94ebbba0e86
 # ╟─3cd36ac0-1a09-11eb-1818-75b36e67594a
 # ╟─1ee0787e-1a08-11eb-233b-43a654f70117
@@ -1241,7 +1127,6 @@ TODO_note(text) = Markdown.MD(Markdown.Admonition("warning", "TODO note", [text]
 # ╟─e2a8d1d6-1add-11eb-0da1-cda1492a950c
 # ╟─337918f4-194f-11eb-0b45-b13fef3b23bf
 # ╟─492b257a-194f-11eb-17fb-f770b4d3da2e
-# ╠═885ac814-1953-11eb-30d9-85dcd198a1d8
 # ╠═392fe192-1ca1-11eb-36c4-f9bd2b01a5e5
 # ╠═251f0262-1a0c-11eb-39a3-09be67091dc8
 # ╟─83aa9cea-1a0c-11eb-281d-699665da2b4f
@@ -1256,7 +1141,6 @@ TODO_note(text) = Markdown.MD(Markdown.Admonition("warning", "TODO note", [text]
 # ╠═6fdf613c-193f-11eb-0029-957541d2ed4d
 # ╟─392c25b8-1add-11eb-225d-49cfca27bef4
 # ╟─c25caf08-1a13-11eb-3c4d-0567faf4e662
-# ╠═e1cb1622-1a0c-11eb-224c-559af7b90f49
 # ╠═427747d6-1ca1-11eb-28ae-ff50728c84fe
 # ╟─dced1fd0-1c9e-11eb-3226-17dc1e09e018
 # ╠═65aec4fc-1c9e-11eb-1c5a-6dd7c533d3b8
@@ -1264,12 +1148,12 @@ TODO_note(text) = Markdown.MD(Markdown.Admonition("warning", "TODO note", [text]
 # ╟─83acf10e-1c9e-11eb-3426-bb28e7bc6c79
 # ╟─13fef49c-1c9e-11eb-2aa3-d3aa2bfd0d57
 # ╟─c492a1f8-1a0c-11eb-2c38-5921c39cf5f8
-# ╠═b65d9a0c-1a0c-11eb-3cd5-e5a2c4302c7e
+# ╟─b65d9a0c-1a0c-11eb-3cd5-e5a2c4302c7e
 # ╟─c00eb0a6-cab2-11ea-3887-070ebd8d56e2
 # ╟─3dd0a48c-1ca3-11eb-1127-e7c43b5d1666
-# ╠═eb35ac4a-1acc-11eb-0729-ff85c8406c45
-# ╟─f83da7f8-1acc-11eb-02d7-f33ffe518531
-# ╟─bff04784-1acc-11eb-36c2-9335a58be23a
+# ╠═270762e4-1ca4-11eb-2fb4-392e5c3b3e04
+# ╟─bbf730c8-1ca6-11eb-3bb0-1188046339ac
+# ╠═cbd8f164-1ca6-11eb-1440-bdaabf73a6c7
 # ╟─ebd05bf0-19c3-11eb-2559-7d0745a84025
 # ╟─ec275590-19c3-11eb-23d0-cb3d9f62ba92
 # ╟─ec31dce0-19c3-11eb-1487-23cc20cd5277
