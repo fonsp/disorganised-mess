@@ -434,7 +434,7 @@ md"""
 
 Our event-driven simulation is a stepping method, but instead of taking small steps in time, we take large steps from one collision event to the next.
 
-👉 Write a function `interact` that takes a photon and a `hit::Intersection{Wall}` and returns a new `Photon` at the next step. The new photon is located at the hit point, its direction is reflected of the wall's normal and the `photon.ior` is reused.
+👉 Write a function `interact` that takes a photon and a `hit::Intersection{Wall}` and returns a new `Photon` at the next step. The new photon is located at the hit point, its direction is reflected off the wall's normal and the `photon.ior` is reused.
 """
 
 # ╔═╡ e70b9e24-1a07-11eb-13db-b95c07880893
@@ -451,7 +451,7 @@ end
 
 # ╔═╡ 3f727a2c-1c80-11eb-3608-e55ccb9786d9
 md"""
-For convenience, we define a function `step_ray` that combines these two actions: it finds the closest hit, and computes the interaction.
+For convenience, we define a function `step_ray` that combines these two actions: it finds the closest hit and computes the interaction.
 """
 
 # ╔═╡ a45e1012-194d-11eb-3252-bb89daed3c8d
@@ -462,7 +462,15 @@ Great! Next, we will repeat this action to trace the path of a photon.
 # ╔═╡ 7ba5dda0-1ad1-11eb-1c4e-2391c11f54b3
 md"""
 #### Exercise 2.3 - _accumulate_
+
+👉 Write a function `trace` that takes an initial `Photon`, a vector of `Object`s and `N`, the number of steps to make. Return a vector of `Photon`s. Try to use `accumulate`.
 """
+
+# ╔═╡ 1a43b70c-1ca3-11eb-12a5-a94ebbba0e86
+# function trace(photon::Photon, scene::Vector{<:Object}, N)
+	
+# 	return missing
+# end
 
 # ╔═╡ 3cd36ac0-1a09-11eb-1818-75b36e67594a
 @bind mirror_test_ray_N Slider(1:30; default=4)
@@ -556,15 +564,18 @@ example_sphere = Sphere(
 	1.5,
 )
 
+# ╔═╡ 2a2b7284-1ade-11eb-3b71-d17fe2ca638a
+plot_scene([example_sphere], size=(400,200), legend=false, xlim=(-15,15), ylim=(-10,10))
+
 # ╔═╡ e2a8d1d6-1add-11eb-0da1-cda1492a950c
 md"
 #### Exercise 3.1
 Just like with the `Wall`, our first step is to be able to find the intersection point of a ray of light and a sphere.
 
 This one is a bit more challenging than the intersction with the wall, in particular because there are 3 potential outcomes of a line interacting with a sphere:
-1. No intersection
-2. 1 intersection
-3. 2 intersections
+- No intersection
+- 1 intersection
+- 2 intersections
 
 As shown below:
 "
@@ -725,9 +736,6 @@ test_sphere = Sphere(
 	1.5,
 )
 
-# ╔═╡ 2a2b7284-1ade-11eb-3b71-d17fe2ca638a
-plot_scene([test_sphere], size=(400,200), legend=false, xlim=(-15,15), ylim=(-10,10))
-
 # ╔═╡ 251f0262-1a0c-11eb-39a3-09be67091dc8
 sphere_intersection = intersection(philip, test_sphere)
 
@@ -885,20 +893,24 @@ function step_ray(photon::Photon, objects::Vector{<:Object})
 end
 
 # ╔═╡ 900d6622-1a08-11eb-1475-bfadc2aac749
-accumulate(1:5; init=philip) do old_photon, i
-		step_ray(old_photon, ex_1_scene)
+function trace(photon::Photon, scene::Vector{<:Object}, N)
+	accumulate(1:N; init=photon) do old_photon, i
+		step_ray(old_photon, scene)
 	end
+end
 
 # ╔═╡ 1ee0787e-1a08-11eb-233b-43a654f70117
 let
 	p = plot_scene(ex_1_scene, legend=false, xlim=(-11,11), ylim=(-11,11))
 	
-	path = accumulate(1:mirror_test_ray_N; init=philip) do old_photon, i
-		step_ray(old_photon, ex_1_scene)
-	end
+	path = trace(philip, ex_1_scene, mirror_test_ray_N)
+	
 	
 	line = [philip.p, [r.p for r in path]...]
-	plot!(p, first.(line), last.(line), lw=5)
+	plot!(p, first.(line), last.(line), lw=5, color=:pink)
+	
+	plot_photon_arrow!(p, philip)
+	plot_photon_arrow!.([p], path)
 	
 	p
 end |> as_svg
@@ -919,7 +931,7 @@ test_lens_photon = Photon([0,0], [1,0], 1.0)
 
 # ╔═╡ 5895d9ae-1c9e-11eb-2f4e-671f2a7a0150
 test_lens = Sphere(
-	[5, -2],
+	[5, -1.5],
 	3,
 	1.5,
 	)
@@ -951,13 +963,14 @@ By defining a method for `interact` that takes a sphere intersection, we are now
 
 # ╔═╡ b65d9a0c-1a0c-11eb-3cd5-e5a2c4302c7e
 let
-	p = plot_scene(ex_3_scene, legend=false, xlim=(-11,11), ylim=(-11,11))
+	scene = [test_lens, box_scene...]
+	p = plot_scene(scene, legend=false, xlim=(-11,11), ylim=(-11,11))
 	
-	path = accumulate(1:sphere_test_ray_N; init=philip) do old_photon, i
-		step_ray(old_photon, ex_3_scene)
+	path = accumulate(1:sphere_test_ray_N; init=test_lens_photon) do old_photon, i
+		step_ray(old_photon, scene)
 	end
 	
-	line = [philip.p, [r.p for r in path]...]
+	line = [test_lens_photon.p, [r.p for r in path]...]
 	plot!(p, first.(line), last.(line), lw=5, color=:red)
 	
 	p
@@ -968,6 +981,11 @@ md"
 #### Spherical aberration
 Now we can put it all together into an image of spherical aberration!
 "
+
+# ╔═╡ 3dd0a48c-1ca3-11eb-1127-e7c43b5d1666
+md"""
+👉 Recreate the spherical aberration figure from [the lecture](https://www.youtube.com/watch?v=MkkZb5V6HqM) (around the end of the video), and make the index of refraction interactive using a `Slider`. _Or make something else!_
+"""
 
 # ╔═╡ eb35ac4a-1acc-11eb-0729-ff85c8406c45
 @bind aberration_viz_ior Slider(1.0:0.0001:2.0, show_value=true)
@@ -1211,8 +1229,9 @@ TODO_note(text) = Markdown.MD(Markdown.Admonition("warning", "TODO note", [text]
 # ╟─a45e1012-194d-11eb-3252-bb89daed3c8d
 # ╟─7ba5dda0-1ad1-11eb-1c4e-2391c11f54b3
 # ╠═900d6622-1a08-11eb-1475-bfadc2aac749
-# ╠═3cd36ac0-1a09-11eb-1818-75b36e67594a
-# ╠═1ee0787e-1a08-11eb-233b-43a654f70117
+# ╠═1a43b70c-1ca3-11eb-12a5-a94ebbba0e86
+# ╟─3cd36ac0-1a09-11eb-1818-75b36e67594a
+# ╟─1ee0787e-1a08-11eb-233b-43a654f70117
 # ╟─7478330a-1c81-11eb-2f9f-099f1111032c
 # ╟─ba0a869a-1ad1-11eb-091f-916e9151f052
 # ╠═3aa539ce-193f-11eb-2a0f-bbc6b83528b7
@@ -1247,6 +1266,7 @@ TODO_note(text) = Markdown.MD(Markdown.Admonition("warning", "TODO note", [text]
 # ╟─c492a1f8-1a0c-11eb-2c38-5921c39cf5f8
 # ╠═b65d9a0c-1a0c-11eb-3cd5-e5a2c4302c7e
 # ╟─c00eb0a6-cab2-11ea-3887-070ebd8d56e2
+# ╟─3dd0a48c-1ca3-11eb-1127-e7c43b5d1666
 # ╠═eb35ac4a-1acc-11eb-0729-ff85c8406c45
 # ╟─f83da7f8-1acc-11eb-02d7-f33ffe518531
 # ╟─bff04784-1acc-11eb-36c2-9335a58be23a
