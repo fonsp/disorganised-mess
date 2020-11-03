@@ -1,11 +1,14 @@
 ### A Pluto.jl notebook ###
-# v0.8.6
+# v0.12.6
 
 using Markdown
+using InteractiveUtils
+
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.peek, el) ? Base.peek(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
         el
     end
 end
@@ -126,29 +129,23 @@ r = Set([123,54,1,2,23,23,21,42,34234,4]) |> Base.axes1
 # ╔═╡ 47715e08-8fba-11ea-1982-99fce343b41b
 i = md"![asdf](https://fonsp.com/img/doggoSmall.jpg?raw=true)"
 
-# ╔═╡ b0d52d76-8721-11ea-0d79-d3cc67a891d5
-good_boys = Dict(:title => md"# Hello world", :img => i) #:names => ["Hannes", "Floep"]
-
-# ╔═╡ 69c2076a-8feb-11ea-143a-cfec10821e8e
-repr(MIME"text/html"(), md"asdf $(good_boys) asd")
-
-# ╔═╡ ad19ec44-8fe1-11ea-11a9-73b10aa46388
-md"asdf $(good_boys) asd"
-
 # ╔═╡ 503d8582-8fc3-11ea-3934-fb7a4f2a3473
 doggos = [i,i,i, @bind p html"<input type='range' />"]
 
 # ╔═╡ 6dd4dbb4-8fe8-11ea-0d3e-4d874391e9e1
 p
 
+# ╔═╡ b0d52d76-8721-11ea-0d79-d3cc67a891d5
+good_boys = Dict(:title => md"# Hello world", :img => i) #:names => ["Hannes", "Floep"]
+
+# ╔═╡ ad19ec44-8fe1-11ea-11a9-73b10aa46388
+md"asdf $(good_boys) asd"
+
+# ╔═╡ 69c2076a-8feb-11ea-143a-cfec10821e8e
+repr(MIME"text/html"(), md"asdf $(good_boys) asd")
+
 # ╔═╡ eed501f8-9076-11ea-3002-a5ec32d6dccb
 md"asdf $(x) asdf"
-
-# ╔═╡ 88f424ee-8fcb-11ea-3204-03c943098a17
-let
-	enu = enumerate(x)
-	enu[1], enu[1]
-end
 
 # ╔═╡ cb62a20c-9074-11ea-3fb2-0d197fe87508
 md"I like [_dogs_](dogs.org) **and** cats!".content
@@ -488,7 +485,6 @@ sqrt(sum(seq) * 6.0)
 # ╠═47715e08-8fba-11ea-1982-99fce343b41b
 # ╠═eed501f8-9076-11ea-3002-a5ec32d6dccb
 # ╠═f4f81140-9076-11ea-3fc9-b9098fa5f8ab
-# ╠═88f424ee-8fcb-11ea-3204-03c943098a17
 # ╠═cb62a20c-9074-11ea-3fb2-0d197fe87508
 # ╟─f8c7970c-9074-11ea-36b4-0927aaed5682
 # ╠═c06927b6-8fd6-11ea-3da4-fd6080e71b37
