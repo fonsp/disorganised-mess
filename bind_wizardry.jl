@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.4
+# v0.12.6
 
 using Markdown
 using InteractiveUtils
@@ -37,7 +37,7 @@ Edit `x`!
 """
 
 # ╔═╡ aac7928c-1a17-11eb-1c5d-bffde1a43f11
-x = [80, 500]
+x = [80, 200, 500]
 
 # ╔═╡ bc00430a-1a17-11eb-0593-b11c999979c7
 """
