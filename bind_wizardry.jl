@@ -113,24 +113,19 @@ Comments:
 You see that you can't _slide_ the slider. This is because a new slider gets rendered every time the cell updates, which resets its internal (cursor) state.
 
 If this is a problem, it can be fixed using the `this` persistence together with self-updating, see the next section.
-
-
-> Everything below this cell is WIP and currently not working 100%, but you can have a preview. Will be fixed soon!
 """
 
 # ╔═╡ 1cbc1278-1a18-11eb-34db-3704e69a8a9c
 md"""
 
 # `this` persistence + self updating
-This is still somewhat WIP, and is **currently not working for self-updating cells** (cryptic issue is [here](https://github.com/fonsp/Pluto.jl/issues/619), you can subscribe to it). 
-
 The demo below uses both techniques, but you can see that the animations are not working when you click.
 
 """
 
 # ╔═╡ e8ea71fc-108e-11eb-2f27-e984fde247d2
 A = [0  -1
-	1    -.5]
+	1    -.7]
 
 # ╔═╡ 10853972-108f-11eb-36b5-57f656bc992e
 T = LinRange(0.0, 60.0, 500)
