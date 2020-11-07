@@ -460,15 +460,61 @@ end
 # ╔═╡ 086e1956-204e-11eb-2524-f719504fb95b
 interact(photon::Photon, ::Miss, ::Any, ::Any) = photon
 
-# ╔═╡ 95ca879a-204d-11eb-3473-959811aa8320
-function step_ray(ray::Photon, objects::Vector{O},
-			   num_intersections) where {O <: Object}
+# ╔═╡ 3cd9b940-208d-11eb-0c1d-53170be92644
+begin
+	function interact(ray::Photon, hit::Intersection{Sphere}, num_intersections, objects)
+		sphere = hit.object
 
-	if num_intersections == 0
-		ray
-	else
-		hit = closest_hit(ray, objects)
-		interact(ray, hit, num_intersections, objects)
+		reflected_ray = ray
+		refracted_ray = ray
+		colored_ray = ray
+
+		if !isapprox(sphere.s.t, 0)
+			
+			old_ior = ray.ior
+			new_ior = if ray.ior == 1.0
+				sphere.s.ior
+			else
+				1.0
+			end
+
+			normal = sphere_normal_at(hit.point, hit.object)
+
+			refracted_ray = Photon(hit.point, refract(ray.l, normal, old_ior, new_ior), ray.c, new_ior)
+			
+			refracted_ray = step_ray(refracted_ray, objects,
+									 num_intersections-1)
+		end
+
+		if !isapprox(sphere.s.r, 0)
+			n = sphere_normal_at(hit.point, sphere)
+			reflected_ray = Photon(hit.point, reflect(ray.l, n), ray.c, ray.ior)
+			reflected_ray = step_ray(reflected_ray, objects,
+									 num_intersections-1)
+		end
+
+		if !isapprox(sphere.s.c.alpha, 0)
+			ray_color = RGB(sphere.s.c)
+			colored_ray = Photon(ray.l, ray.p, ray_color, ray.ior)
+		end
+
+		ray_color = sphere.s.t * refracted_ray.c +
+					sphere.s.r * reflected_ray.c +
+					sphere.s.c.alpha*colored_ray.c
+
+		Photon(hit.point, ray.l, ray_color, ray.ior)
+	end
+	
+	
+	function step_ray(ray::Photon, objects::Vector{O},
+				   num_intersections) where {O <: Object}
+
+		if num_intersections == 0
+			ray
+		else
+			hit = closest_hit(ray, objects)
+			interact(ray, hit, num_intersections, objects)
+		end
 	end
 end
 
@@ -487,6 +533,18 @@ let
 	scene = [sky]
 	ray_trace(scene, basic_camera; num_intersections=4)
 end
+
+# ╔═╡ 95ca879a-204d-11eb-3473-959811aa8320
+# function step_ray(ray::Photon, objects::Vector{O},
+# 			   num_intersections) where {O <: Object}
+
+# 	if num_intersections == 0
+# 		ray
+# 	else
+# 		hit = closest_hit(ray, objects)
+# 		interact(ray, hit, num_intersections, objects)
+# 	end
+# end
 
 # ╔═╡ d1970a34-1ef7-11eb-3e1f-0fd3b8e9657f
 md"""
@@ -618,9 +676,20 @@ Another option is that we approximate the panaroma by _padding_ the image of you
 """
 
 # ╔═╡ 6480b85c-2067-11eb-0262-f752d306d8ae
-function padded(img)
+function padded(face)
+	a,b = size(face)
 	
-	return missing
+	Abw = [((2a-y) / 2a) for y in 1:2a, x in 1:3b]
+	Abw .-= .1 * rand(Gray, 2a, 3b)
+	A = RGB.(Abw)
+	
+	c = a ÷ 2
+	d = b ÷ 2
+	
+	A[
+		c + 1:c + a,
+		b + 1:2b] .= face
+	A
 end
 
 # ╔═╡ 3de614da-2091-11eb-361a-83bcf357c394
@@ -992,6 +1061,7 @@ TODO_note(text) = Markdown.MD(Markdown.Admonition("warning", "TODO note", [text]
 # ╟─04a86366-208b-11eb-1977-ff7e4ae6b714
 # ╠═a9754410-204d-11eb-123e-e5c5f87ae1c5
 # ╠═086e1956-204e-11eb-2524-f719504fb95b
+# ╠═3cd9b940-208d-11eb-0c1d-53170be92644
 # ╠═95ca879a-204d-11eb-3473-959811aa8320
 # ╠═1f66ba6e-1ef8-11eb-10ba-4594f7c5ff19
 # ╟─d1970a34-1ef7-11eb-3e1f-0fd3b8e9657f
