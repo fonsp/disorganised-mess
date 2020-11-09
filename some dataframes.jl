@@ -13,14 +13,23 @@ macro bind(def, element)
     end
 end
 
+# ╔═╡ da2116b4-2284-11eb-1f88-2b2b461ceb90
+using Tables
+
 # ╔═╡ 71697846-1fb4-11eb-053e-b73ac96850cd
 using DataFrames
 
 # ╔═╡ 0f567b92-1fb7-11eb-1313-8dd2bd83d24c
 using PlutoUI
 
-# ╔═╡ 052e4444-1fc4-11eb-2bdc-6def590dfe5d
+# ╔═╡ a5557e78-22bd-11eb-182b-779dcd7502e4
+rar = @view DataFrame(rand(100,3))[2:2]
 
+# ╔═╡ f0942208-22be-11eb-2832-1530b937cf60
+rr = Tables.rows(rar)
+
+# ╔═╡ 245823fa-22bf-11eb-191a-998b7bd8e0d8
+@view rr[1:20]
 
 # ╔═╡ a050d25e-1fc7-11eb-0d78-9d401cc8ecc8
 sl = @bind x html"<input type=range>"
@@ -38,8 +47,26 @@ md"""
 # DataFrames.jl default
 """
 
+# ╔═╡ d2bbe5fe-228c-11eb-2979-71c7b9451c7b
+[1:100...]
+
+# ╔═╡ 32f6d7ee-2292-11eb-189e-0d33c947f82a
+ra = rand(UInt)
+
+# ╔═╡ d1cdbe98-2281-11eb-0e9f-b3c1c09d8d94
+[
+	let
+		a = x
+		a
+	end
+	for x in 1:10
+]
+
 # ╔═╡ 98253b72-1fce-11eb-1216-97e38583501d
-DataFrame(rand(200,20))
+d200 = DataFrame(rand(200,200))
+
+# ╔═╡ 07c699ae-2285-11eb-222b-8fb3db91b21e
+d200
 
 # ╔═╡ 8d91acd8-1fdb-11eb-326a-376d2c5bdd70
 collect(1:100)
@@ -93,11 +120,23 @@ d2 = DataFrame(
 # ╔═╡ 880bf2e2-1fc1-11eb-0787-2fda069b81d0
 dbig = let
 	dwide = hcat(d2, d2, d2, d2, makeunique=true)
-	vcat(dwide, dwide, dwide, dwide, dwide, dwide, dwide, dwide, dwide)
+	vcat(dwide, dwide, dwide, dwide, dwide, dwide, dwide, dwide, dwide, dwide, dwide, dwide)
 end
+
+# ╔═╡ dc3ffb9c-2284-11eb-1e7b-5b04e4e95b5e
+objectid(Tables.columns(dbig))
 
 # ╔═╡ 016ffc0a-1fb8-11eb-2d6b-056c2da7d427
 d3 = DataFrame(:a => 1:1000)
+
+# ╔═╡ b60da076-2293-11eb-1d48-45f5ec99b0ca
+convert(Int64, UInt16(123))
+
+# ╔═╡ c6d7db6a-2293-11eb-23e6-b982c992e486
+asdf(x::Int64) = x
+
+# ╔═╡ cb6ffec8-2293-11eb-1bb1-a5ea012fb74a
+asdf(UInt16(123))
 
 # ╔═╡ 4d267b74-1fb8-11eb-30a4-1dc7ad25f33f
 default_iocontext = IOContext(devnull, :color => false, :limit => true, :displaysize => (18, 88))
@@ -106,7 +145,7 @@ default_iocontext = IOContext(devnull, :color => false, :limit => true, :display
 old(x) = HTML(repr(MIME"text/html"(), x; context=default_iocontext))
 
 # ╔═╡ 11a61136-1fb8-11eb-1a02-0b9d7651e876
-old(d1)
+old(dbig)
 
 # ╔═╡ 1e165c64-1fb8-11eb-17cd-0f93602efc3c
 old(d2)
@@ -114,8 +153,19 @@ old(d2)
 # ╔═╡ 94fabb8c-1fb7-11eb-3b18-6b32f209810b
 replace(repr(MIME"text/html"(), d1), "><"=>">\n<") |> Text
 
+# ╔═╡ 052e4444-1fc4-11eb-2bdc-6def590dfe5d
+DataFrame()
+
+# ╔═╡ 37fd775e-22bd-11eb-3115-b969364db3e4
+DataFrame(rand(20,2000))
+
+# ╔═╡ 3c4a1f92-22bd-11eb-1d59-5b709e450c82
+DataFrame(rand(2000,20))
+
 # ╔═╡ Cell order:
-# ╟─052e4444-1fc4-11eb-2bdc-6def590dfe5d
+# ╠═a5557e78-22bd-11eb-182b-779dcd7502e4
+# ╠═f0942208-22be-11eb-2832-1530b937cf60
+# ╠═245823fa-22bf-11eb-191a-998b7bd8e0d8
 # ╠═a050d25e-1fc7-11eb-0d78-9d401cc8ecc8
 # ╠═37fc1398-1fc8-11eb-28dd-87ffa3e555a8
 # ╠═9d41474c-1fc7-11eb-06ae-15831e77fafe
@@ -125,7 +175,13 @@ replace(repr(MIME"text/html"(), d1), "><"=>">\n<") |> Text
 # ╟─143603bc-1fc6-11eb-2770-0fdf336cefbd
 # ╠═11a61136-1fb8-11eb-1a02-0b9d7651e876
 # ╠═880bf2e2-1fc1-11eb-0787-2fda069b81d0
+# ╠═d2bbe5fe-228c-11eb-2979-71c7b9451c7b
+# ╠═32f6d7ee-2292-11eb-189e-0d33c947f82a
+# ╠═d1cdbe98-2281-11eb-0e9f-b3c1c09d8d94
 # ╠═98253b72-1fce-11eb-1216-97e38583501d
+# ╠═07c699ae-2285-11eb-222b-8fb3db91b21e
+# ╠═da2116b4-2284-11eb-1f88-2b2b461ceb90
+# ╠═dc3ffb9c-2284-11eb-1e7b-5b04e4e95b5e
 # ╠═8d91acd8-1fdb-11eb-326a-376d2c5bdd70
 # ╠═71697846-1fb4-11eb-053e-b73ac96850cd
 # ╠═cf254188-1fd0-11eb-37d9-c1ead57db23a
@@ -135,7 +191,13 @@ replace(repr(MIME"text/html"(), d1), "><"=>">\n<") |> Text
 # ╠═c415ab82-1fb9-11eb-2358-91e1ee287f77
 # ╠═0f567b92-1fb7-11eb-1313-8dd2bd83d24c
 # ╠═016ffc0a-1fb8-11eb-2d6b-056c2da7d427
+# ╠═b60da076-2293-11eb-1d48-45f5ec99b0ca
+# ╠═c6d7db6a-2293-11eb-23e6-b982c992e486
+# ╠═cb6ffec8-2293-11eb-1bb1-a5ea012fb74a
 # ╠═1e165c64-1fb8-11eb-17cd-0f93602efc3c
 # ╠═4d267b74-1fb8-11eb-30a4-1dc7ad25f33f
 # ╠═11e8a2ea-1fb7-11eb-2c30-bb886f8725d2
 # ╠═94fabb8c-1fb7-11eb-3b18-6b32f209810b
+# ╠═052e4444-1fc4-11eb-2bdc-6def590dfe5d
+# ╠═37fd775e-22bd-11eb-3115-b969364db3e4
+# ╠═3c4a1f92-22bd-11eb-1d59-5b709e450c82
