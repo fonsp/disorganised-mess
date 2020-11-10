@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.11.12
+# v0.12.7
 
 using Markdown
 using InteractiveUtils
@@ -28,8 +28,19 @@ OffsetArray(rand(100),30)
 # ╔═╡ 2dc38d10-ed6f-11ea-2176-89cc7b0946d8
 B = collect(rand(10))
 
+# ╔═╡ a3ee007e-2359-11eb-1917-a3126c6b46f9
+
+
+# ╔═╡ 6f7652c2-2359-11eb-04a2-bb46da403821
+OffsetArray(zeros(3), 20:22)
+
 # ╔═╡ 495d2ee6-ed6f-11ea-2725-bf610648aee0
 OB = OffsetArray(B, 5)
+
+# ╔═╡ 6c8c3ce4-2358-11eb-08d8-db32465c8d26
+[
+	OB[i] for i in eachindex(OB)
+] |> collect
 
 # ╔═╡ 643dd22e-ed6f-11ea-243b-f766e9895d6f
 enumerate(OB) |> collect
@@ -124,7 +135,10 @@ OB[end-3+1:end]
 # ╠═256dc3b0-ed6f-11ea-0b2b-2177fc039926
 # ╠═87f1606e-ed6f-11ea-3b9e-4382351f8052
 # ╠═2dc38d10-ed6f-11ea-2176-89cc7b0946d8
+# ╠═a3ee007e-2359-11eb-1917-a3126c6b46f9
+# ╠═6f7652c2-2359-11eb-04a2-bb46da403821
 # ╠═495d2ee6-ed6f-11ea-2725-bf610648aee0
+# ╠═6c8c3ce4-2358-11eb-08d8-db32465c8d26
 # ╠═643dd22e-ed6f-11ea-243b-f766e9895d6f
 # ╠═590c7a4c-ed6f-11ea-01f6-3d252fe8767e
 # ╠═8afb1170-ed75-11ea-0bdb-f9196a8f82c8
