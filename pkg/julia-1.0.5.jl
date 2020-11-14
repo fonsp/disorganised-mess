@@ -16,6 +16,9 @@ end
 # ╔═╡ 226fe150-2377-11eb-1b6b-1b5dda79c780
 @bind input html"<input>"
 
+# ╔═╡ 1ed85fb0-2398-11eb-325f-11a104b7ecd2
+readdir(Pkg.Types.stdlib_dir())
+
 # ╔═╡ 8020a160-2375-11eb-2e97-71bc04edf349
 VERSION
 
@@ -27,15 +30,6 @@ import Pkg
 
 # ╔═╡ 5a672622-2374-11eb-094f-bbd06a5c3f0b
 Pkg.REPLMode.complete_remote_package("Pl", 1, 3)
-
-# ╔═╡ 69132422-2375-11eb-2aad-edda7e976a99
-Pkg.Operations.E
-
-# ╔═╡ 9ac10960-2375-11eb-17c1-adeff6a89fea
-Pkg.Operations.sour
-
-# ╔═╡ cea1a290-2374-11eb-0169-273498620900
-Pkg.Operations.load_versions()
 
 # ╔═╡ 2356bee0-2377-11eb-3060-f72278809757
 function packagecompletions(partial_name)
@@ -80,14 +74,12 @@ choice_versions = Pkg.Operations.load_versions(choice_fullpath) |> keys |> colle
 # ╟─226fe150-2377-11eb-1b6b-1b5dda79c780
 # ╟─277b1430-2377-11eb-387c-d3547c8b7721
 # ╟─2b8cf2f2-2377-11eb-1271-d55d8cc52886
-# ╟─2756bbee-237a-11eb-04d9-4109c95ce927
+# ╠═1ed85fb0-2398-11eb-325f-11a104b7ecd2
+# ╠═2756bbee-237a-11eb-04d9-4109c95ce927
 # ╠═8020a160-2375-11eb-2e97-71bc04edf349
 # ╠═a72abbb0-237a-11eb-3fcd-7f855607ffb3
 # ╠═47a0a162-2374-11eb-192d-a321eded9f93
 # ╠═5a672622-2374-11eb-094f-bbd06a5c3f0b
-# ╠═69132422-2375-11eb-2aad-edda7e976a99
-# ╠═9ac10960-2375-11eb-17c1-adeff6a89fea
-# ╠═cea1a290-2374-11eb-0169-273498620900
 # ╠═2356bee0-2377-11eb-3060-f72278809757
 # ╠═2fa07f60-2377-11eb-3aa8-230fa0aba9fe
 # ╠═8875e440-2377-11eb-2474-5b9b7933bb39
