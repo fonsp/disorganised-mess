@@ -189,7 +189,7 @@ function update_ghostcells!(A; option="no-flux")
 end
 
 # ╔═╡ 60e62962-280b-11eb-063c-e99186efb59c
-function α(T; α0=0.3, αi=0.5, ΔT=10.)
+function α(T; α0=α0, αi=αi, ΔT=3.)
 	if T < -ΔT
 		return αi
 	elseif -ΔT <= T < ΔT
@@ -199,24 +199,14 @@ function α(T; α0=0.3, αi=0.5, ΔT=10.)
 	end
 end
 
-# ╔═╡ ec3798f0-280b-11eb-3e26-9d40d35a6920
-S = [
-		35 .* (cos((y+1) * π/4) + .3)
-		for y in ys, x in xs[:]
-	]
+# ╔═╡ e0ed2f4a-2836-11eb-20e1-23f8567a435c
+plot(-20:20, α, ylim=(0,1))
 
 # ╔═╡ 09c49990-280c-11eb-3ad6-9dd0dd88376d
 heatmap(S) |> as_png
 
-# ╔═╡ 443fb830-280b-11eb-017e-0d8a56cf7729
-function absorbed_solar_radiation(T)
-	absorption = 1.0 .- α.(T)
-	
-	absorption .* S
-end
-
 # ╔═╡ 96ed4c10-280a-11eb-0eba-139ca63247e3
-T0 = 14.0
+T0 = 0.0
 
 # ╔═╡ c4424838-12e2-11eb-25eb-058344b39c8b
 begin
@@ -238,40 +228,8 @@ md"""
 ##### Need boundary conditions still! 
 """
 
-# ╔═╡ 2ae5d9ee-280b-11eb-1bfc-c79d2742eee8
-A = 20
-
-# ╔═╡ 30539f30-280b-11eb-1219-9b1d7d8c8cfb
-B = -0.5
-
-# ╔═╡ 13f114d0-280b-11eb-2c89-67cc659372ce
-function outgoing_thermal_radiation(T)
-	A .- B .* (T .- T0)
-end
-
-# ╔═╡ 5f6ca7c2-2816-11eb-2bdb-6502b84cc9c8
-plot(
-	-10:40, outgoing_thermal_radiation(-10:40),
-	xlabel="Temperature",
-	ylabel="Outgoing radiation"
-)
-
 # ╔═╡ 440fe49a-12e5-11eb-1c08-f706f5f33c84
 @bind go Clock(.1)
-
-# ╔═╡ 4a709370-2818-11eb-1302-0f877986e7b6
-κ = 0.015
-
-# ╔═╡ 79a0086c-2050-11eb-1974-49d430b5eecd
-begin
-	function diffuse(T, j, i)
-		return κ.*sum(diff_kernel[-1:1,-1:1].*T[j-1:j+1, i-1:i+1])/(2Δx^2)
-	end
-	diffuse(T) = [diffuse(T, j, i) for j=2:Ny-1, i=2:Nx-1]
-end
-
-# ╔═╡ 9b9e1b30-2810-11eb-2493-717b3949a3c5
-diffuse(T)
 
 # ╔═╡ 9fe89d82-2833-11eb-2a39-5f94dd51d1ef
 @bind temperature_control_event html"""
@@ -311,6 +269,60 @@ set_button.onclick = () => {
 return node
 </script>
 """
+
+# ╔═╡ 4a709370-2818-11eb-1302-0f877986e7b6
+κ = 0.015
+
+# ╔═╡ 79a0086c-2050-11eb-1974-49d430b5eecd
+begin
+	function diffuse(T, j, i)
+		return κ.*sum(diff_kernel[-1:1,-1:1].*T[j-1:j+1, i-1:i+1])/(2Δx^2)
+	end
+	diffuse(T) = [diffuse(T, j, i) for j=2:Ny-1, i=2:Nx-1]
+end
+
+# ╔═╡ 9b9e1b30-2810-11eb-2493-717b3949a3c5
+diffuse(T)
+
+# ╔═╡ 396ad562-2837-11eb-0a65-55ece65a7da6
+α0=0.3
+
+# ╔═╡ 439f7984-2837-11eb-2e08-75d8e90d4b9f
+αi=0.5
+
+# ╔═╡ 2ae5d9ee-280b-11eb-1bfc-c79d2742eee8
+A = 11
+
+# ╔═╡ 30539f30-280b-11eb-1219-9b1d7d8c8cfb
+B = -0.7
+
+# ╔═╡ 13f114d0-280b-11eb-2c89-67cc659372ce
+function outgoing_thermal_radiation(T)
+	A .- B .* (T .- T0)
+end
+
+# ╔═╡ 5f6ca7c2-2816-11eb-2bdb-6502b84cc9c8
+plot(
+	-10:40, outgoing_thermal_radiation(-10:40),
+	xlabel="Temperature",
+	ylabel="Outgoing radiation"
+)
+
+# ╔═╡ 06367924-2839-11eb-1de9-51833725a659
+S_peak = 35.0
+
+# ╔═╡ ec3798f0-280b-11eb-3e26-9d40d35a6920
+Ss = [
+		S_peak .* (cos((y+1) * π/4) + .3)
+		for y in ys, x in xs[:]
+	]
+
+# ╔═╡ 443fb830-280b-11eb-017e-0d8a56cf7729
+function absorbed_solar_radiation(T)
+	absorption = 1.0 .- α.(T)
+	
+	absorption .* Ss
+end
 
 # ╔═╡ b2c066b0-2815-11eb-0373-453a84ff3d3b
 mean(x) = sum(x) / length(x)
@@ -500,6 +512,7 @@ heatmap(xs', ys, ψ̂)
 # ╠═918ae9c0-2810-11eb-0620-956ef6dac50c
 # ╠═9b9e1b30-2810-11eb-2493-717b3949a3c5
 # ╠═13f114d0-280b-11eb-2c89-67cc659372ce
+# ╠═e0ed2f4a-2836-11eb-20e1-23f8567a435c
 # ╠═60e62962-280b-11eb-063c-e99186efb59c
 # ╠═ec3798f0-280b-11eb-3e26-9d40d35a6920
 # ╠═09c49990-280c-11eb-3ad6-9dd0dd88376d
@@ -512,15 +525,18 @@ heatmap(xs', ys, ψ̂)
 # ╠═42ea047e-2811-11eb-0e60-510310f813d8
 # ╟─f5ae1756-12e9-11eb-1228-8f03879c154a
 # ╟─f9824610-12e7-11eb-3e61-f96c900a0636
-# ╠═2ae5d9ee-280b-11eb-1bfc-c79d2742eee8
-# ╠═30539f30-280b-11eb-1219-9b1d7d8c8cfb
 # ╠═5f6ca7c2-2816-11eb-2bdb-6502b84cc9c8
 # ╠═87bfc240-12e3-11eb-03cc-756dc00efa6c
 # ╠═440fe49a-12e5-11eb-1c08-f706f5f33c84
-# ╠═4a709370-2818-11eb-1302-0f877986e7b6
 # ╟─9fe89d82-2833-11eb-2a39-5f94dd51d1ef
-# ╠═bd879bbe-12de-11eb-0d1d-93bba42b6ff9
+# ╟─bd879bbe-12de-11eb-0d1d-93bba42b6ff9
 # ╠═bff76d60-2815-11eb-2dc3-8f92794a5056
+# ╠═4a709370-2818-11eb-1302-0f877986e7b6
+# ╠═396ad562-2837-11eb-0a65-55ece65a7da6
+# ╠═439f7984-2837-11eb-2e08-75d8e90d4b9f
+# ╠═2ae5d9ee-280b-11eb-1bfc-c79d2742eee8
+# ╠═30539f30-280b-11eb-1219-9b1d7d8c8cfb
+# ╠═06367924-2839-11eb-1de9-51833725a659
 # ╠═b2c066b0-2815-11eb-0373-453a84ff3d3b
 # ╠═c0e46442-27fb-11eb-2c94-15edbda3f84d
 # ╠═b0a94630-2833-11eb-1f37-63e7f5beaf10
