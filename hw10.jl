@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.10
+# v0.12.7
 
 using Markdown
 using InteractiveUtils
@@ -133,8 +133,8 @@ md"""
 
 # ╔═╡ 65da5b38-12dc-11eb-3505-bdaf7834afaa
 begin
-	Δx = 0.02
-	Δy = 0.02
+	Δx = 0.04
+	Δy = 0.04
 	
 	xs = (0. -Δx/2.:Δx:1. +Δx/2.)'
 	ys = (-1. -Δy/2.:Δy:1. +Δx/2.)
@@ -144,7 +144,7 @@ begin
 end;
 
 # ╔═╡ 490320c0-2818-11eb-1b72-f3c08c502e51
-Δt = 0.002
+Δt = 0.005
 
 # ╔═╡ 9036dc6a-204e-11eb-305d-45e760e62bef
 begin
@@ -257,10 +257,10 @@ plot(
 )
 
 # ╔═╡ 440fe49a-12e5-11eb-1c08-f706f5f33c84
-@bind go Clock()
+@bind go Clock(.1)
 
 # ╔═╡ 4a709370-2818-11eb-1302-0f877986e7b6
-κ = 0.01
+κ = 0.015
 
 # ╔═╡ 79a0086c-2050-11eb-1974-49d430b5eecd
 begin
@@ -273,11 +273,65 @@ end
 # ╔═╡ 9b9e1b30-2810-11eb-2493-717b3949a3c5
 diffuse(T)
 
+# ╔═╡ 9fe89d82-2833-11eb-2a39-5f94dd51d1ef
+@bind temperature_control_event html"""
+<script>
+
+const add_button = html`<button>Submit</button>`
+const add_field = html`<input type=number value=-5 style='width: 4em;'>`
+
+const set_button = html`<button>Submit</button>`
+const set_field = html`<input type=number value=14 style='width: 4em;'>`
+
+const node = html`<div style='border: 1em solid #eeffee; padding: 1em; border-radius: 1.5em;'>
+<p>Increase global temperature by ${add_field}°C &nbsp&nbsp&nbsp ${add_button}</p>
+<p>Set global temperature to ${set_field}°C &nbsp&nbsp&nbsp ${set_button}</p>
+
+</div>`
+
+
+add_field.oninput = set_field.oninput = (e) => {
+	e.stopPropagation()
+}
+add_button.onclick = () => {
+	node.value = {
+		type: "add",
+		value: add_field.valueAsNumber
+	}
+	node.dispatchEvent(new CustomEvent("input"))
+}
+set_button.onclick = () => {
+	node.value = {
+		type: "set",
+		value: set_field.valueAsNumber
+	}
+	node.dispatchEvent(new CustomEvent("input"))
+}
+
+return node
+</script>
+"""
+
 # ╔═╡ b2c066b0-2815-11eb-0373-453a84ff3d3b
 mean(x) = sum(x) / length(x)
 
 # ╔═╡ bff76d60-2815-11eb-2dc3-8f92794a5056
 go; mean(T)
+
+# ╔═╡ b0a94630-2833-11eb-1f37-63e7f5beaf10
+begin
+	if !ismissing(temperature_control_event)
+		e = temperature_control_event
+		if e["type"] == "add"
+			T .+= e["value"]
+		elseif e["type"] == "set"
+			T .= e["value"]
+		end
+		
+	end
+	temperature_control_event_handled = true
+	Text("Temperature control logic")
+end
 
 # ╔═╡ 3b0e16a2-12e5-11eb-3130-c763c1c85182
 
@@ -403,7 +457,7 @@ function plot_state()
 	X = repeat(xitp(xs), size(yitp(ys),1), 1)
 	Y = repeat(yitp(ys), 1, size(xitp(xs),2))
 	p = temperature_heatmap(T)
-	Nq = 15
+	Nq = 4
 	quiver!(p, X[(Nq+1)÷2:Nq:end], Y[(Nq+1)÷2:Nq:end], quiver=(U[(Nq+1)÷2:Nq:end]./10., V[(Nq+1)÷2:Nq:end]./10.), color=:black, alpha=0.7)
 	plot!(p, xlims=(0., 1.), ylims=(-1.0, 1.0))
 	plot!(p, xlabel="longitudinal distance", ylabel="latitudinal distance")
@@ -414,6 +468,7 @@ end
 # ╔═╡ bd879bbe-12de-11eb-0d1d-93bba42b6ff9
 begin
 	go
+	temperature_control_event_handled
 	nT = 50
 	for i = 1:nT
 		timestep!(t, T)
@@ -423,9 +478,6 @@ end
 
 # ╔═╡ 3cc1218e-1307-11eb-1907-e7cd68f6af35
 heatmap(xs', ys, ψ̂)
-
-# ╔═╡ d96c7a56-12e4-11eb-123c-d57487bd37df
-as_svg(x) = PlutoUI.Show(MIME"image/svg+xml"(), repr(MIME"image/svg+xml"(), x))
 
 # ╔═╡ Cell order:
 # ╟─0f8db6f4-2113-11eb-18b4-21a469c67f3a
@@ -466,10 +518,12 @@ as_svg(x) = PlutoUI.Show(MIME"image/svg+xml"(), repr(MIME"image/svg+xml"(), x))
 # ╠═87bfc240-12e3-11eb-03cc-756dc00efa6c
 # ╠═440fe49a-12e5-11eb-1c08-f706f5f33c84
 # ╠═4a709370-2818-11eb-1302-0f877986e7b6
+# ╟─9fe89d82-2833-11eb-2a39-5f94dd51d1ef
 # ╠═bd879bbe-12de-11eb-0d1d-93bba42b6ff9
 # ╠═bff76d60-2815-11eb-2dc3-8f92794a5056
 # ╠═b2c066b0-2815-11eb-0373-453a84ff3d3b
 # ╠═c0e46442-27fb-11eb-2c94-15edbda3f84d
+# ╠═b0a94630-2833-11eb-1f37-63e7f5beaf10
 # ╠═3cc1218e-1307-11eb-1907-e7cd68f6af35
 # ╠═3b0e16a2-12e5-11eb-3130-c763c1c85182
 # ╠═1528ed7e-12e5-11eb-34cf-112d2baa7353
@@ -477,4 +531,3 @@ as_svg(x) = PlutoUI.Show(MIME"image/svg+xml"(), repr(MIME"image/svg+xml"(), x))
 # ╠═627eb1a4-12e2-11eb-30d1-c1ad292d1522
 # ╠═e3ee80c0-12dd-11eb-110a-c336bb978c51
 # ╠═9c8a7e5a-12dd-11eb-1b99-cd1d52aefa1d
-# ╠═d96c7a56-12e4-11eb-123c-d57487bd37df

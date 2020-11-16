@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.7
+# v0.12.8
 
 using Markdown
 using InteractiveUtils
@@ -62,6 +62,9 @@ ra = rand(UInt)
 	for x in 1:10
 ]
 
+# ╔═╡ f9b7ee58-2400-11eb-3e62-4765aaaf7d50
+rand(200,200)
+
 # ╔═╡ 98253b72-1fce-11eb-1216-97e38583501d
 d200 = DataFrame(rand(200,200))
 
@@ -80,7 +83,7 @@ struct Wow
 end
 
 # ╔═╡ 7bdf2f0c-1fb7-11eb-2b4f-539bb59a1782
-rand(['a':'z'..., '\n'], 100000) |> String |> Text
+rand(['a':'z'..., '\n'], 1000) |> String |> Text
 
 # ╔═╡ 979aa9b0-1fbc-11eb-0c9a-fb7d75463c80
 collect(1:50)
@@ -159,8 +162,14 @@ DataFrame()
 # ╔═╡ 37fd775e-22bd-11eb-3115-b969364db3e4
 DataFrame(rand(20,2000))
 
+# ╔═╡ bafe4134-2401-11eb-31aa-3b18140682ef
+DataFrame(rand(1:9,2002,200))
+
 # ╔═╡ 3c4a1f92-22bd-11eb-1d59-5b709e450c82
 DataFrame(rand(2000,20))
+
+# ╔═╡ 0d0e93a4-2400-11eb-2d0f-1311057e617f
+collect(1:200)
 
 # ╔═╡ Cell order:
 # ╠═a5557e78-22bd-11eb-182b-779dcd7502e4
@@ -178,6 +187,7 @@ DataFrame(rand(2000,20))
 # ╠═d2bbe5fe-228c-11eb-2979-71c7b9451c7b
 # ╠═32f6d7ee-2292-11eb-189e-0d33c947f82a
 # ╠═d1cdbe98-2281-11eb-0e9f-b3c1c09d8d94
+# ╠═f9b7ee58-2400-11eb-3e62-4765aaaf7d50
 # ╠═98253b72-1fce-11eb-1216-97e38583501d
 # ╠═07c699ae-2285-11eb-222b-8fb3db91b21e
 # ╠═da2116b4-2284-11eb-1f88-2b2b461ceb90
@@ -200,4 +210,6 @@ DataFrame(rand(2000,20))
 # ╠═94fabb8c-1fb7-11eb-3b18-6b32f209810b
 # ╠═052e4444-1fc4-11eb-2bdc-6def590dfe5d
 # ╠═37fd775e-22bd-11eb-3115-b969364db3e4
+# ╠═bafe4134-2401-11eb-31aa-3b18140682ef
 # ╠═3c4a1f92-22bd-11eb-1d59-5b709e450c82
+# ╠═0d0e93a4-2400-11eb-2d0f-1311057e617f
