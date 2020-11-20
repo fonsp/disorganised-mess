@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.7
+# v0.12.10
 
 using Markdown
 using InteractiveUtils
@@ -217,6 +217,9 @@ begin
 	]
 	t = Ref(0.)
 end;
+
+# ╔═╡ b7077870-2b45-11eb-220f-6585a0c26f65
+size(T)
 
 # ╔═╡ f5ae1756-12e9-11eb-1228-8f03879c154a
 md"""
@@ -499,6 +502,7 @@ heatmap(xs', ys, ψ̂)
 # ╟─a60e5550-211a-11eb-3cf8-f9bae0a9efd3
 # ╠═b1b5625e-211a-11eb-3ee1-3ba9c9cc375a
 # ╠═65da5b38-12dc-11eb-3505-bdaf7834afaa
+# ╠═b7077870-2b45-11eb-220f-6585a0c26f65
 # ╠═490320c0-2818-11eb-1b72-f3c08c502e51
 # ╠═9036dc6a-204e-11eb-305d-45e760e62bef
 # ╠═fd07ee24-2067-11eb-0ac8-7b3da3993223
@@ -529,7 +533,7 @@ heatmap(xs', ys, ψ̂)
 # ╠═87bfc240-12e3-11eb-03cc-756dc00efa6c
 # ╠═440fe49a-12e5-11eb-1c08-f706f5f33c84
 # ╟─9fe89d82-2833-11eb-2a39-5f94dd51d1ef
-# ╟─bd879bbe-12de-11eb-0d1d-93bba42b6ff9
+# ╠═bd879bbe-12de-11eb-0d1d-93bba42b6ff9
 # ╠═bff76d60-2815-11eb-2dc3-8f92794a5056
 # ╠═4a709370-2818-11eb-1302-0f877986e7b6
 # ╠═396ad562-2837-11eb-0a65-55ece65a7da6
