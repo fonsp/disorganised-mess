@@ -1084,7 +1084,7 @@ todo(text) = HTML("""<div
 
 # ╔═╡ b19df5b0-2c05-11eb-0f59-83fa0aa6d0bb
 md"""
-## **Exercise 1** - _Asdffd_
+## **Exercise 1** - _Advection-diffusion_
 
 
 Goals:
