@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.7
+# v0.12.10
 
 using Markdown
 using InteractiveUtils
@@ -162,6 +162,9 @@ begin
 end
 
 end
+
+# ╔═╡ 6d2141d2-2b56-11eb-19ea-679a529dae3e
+Model.A
 
 # ╔═╡ 1312525c-1fc0-11eb-2756-5bc3101d2260
 md"""## **Exercise 1** - _policy goals under uncertainty_
@@ -807,9 +810,10 @@ TODO = html"<span style='display: inline; font-size: 2em; color: purple; font-we
 # ╠═23335418-2433-11eb-05e4-2b35dc6cca0e
 # ╟─253f4da0-2433-11eb-1e48-4906059607d3
 # ╠═1e06178a-1fbf-11eb-32b3-61769a79b7c0
-# ╟─87e68a4a-2433-11eb-3e9d-21675850ed71
+# ╠═87e68a4a-2433-11eb-3e9d-21675850ed71
 # ╟─fe3304f8-2668-11eb-066d-fdacadce5a19
-# ╟─930d7154-1fbf-11eb-1c3a-b1970d291811
+# ╠═6d2141d2-2b56-11eb-19ea-679a529dae3e
+# ╠═930d7154-1fbf-11eb-1c3a-b1970d291811
 # ╟─1312525c-1fc0-11eb-2756-5bc3101d2260
 # ╠═c4398f9c-1fc4-11eb-0bbb-37f066c6027d
 # ╟─7f961bc0-1fc5-11eb-1f18-612aeff0d8df
