@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.8
+# v0.12.12
 
 using Markdown
 using InteractiveUtils
@@ -15,6 +15,9 @@ end
 
 # ╔═╡ da2116b4-2284-11eb-1f88-2b2b461ceb90
 using Tables
+
+# ╔═╡ 3d7ded8e-2c20-11eb-1a9a-b70f73cd4195
+using Plots
 
 # ╔═╡ 71697846-1fb4-11eb-053e-b73ac96850cd
 using DataFrames
@@ -47,6 +50,9 @@ md"""
 # DataFrames.jl default
 """
 
+# ╔═╡ 11a61136-1fb8-11eb-1a02-0b9d7651e876
+# old(dbig)
+
 # ╔═╡ d2bbe5fe-228c-11eb-2979-71c7b9451c7b
 [1:100...]
 
@@ -67,6 +73,34 @@ rand(200,200)
 
 # ╔═╡ 98253b72-1fce-11eb-1216-97e38583501d
 d200 = DataFrame(rand(200,200))
+
+# ╔═╡ e57ba890-2c24-11eb-3434-b5aa9917910a
+md"""
+## Here $\frac{1}{2}$ we go "asdf"
+
+$\frac{1}{2}$
+
+Asdf Asdf Asdf Asdf Asdf Asdf Asdf Asdf Asdf 
+bbbasfasdf asdf asdf
+
+asdfasdf
+
+"""
+
+# ╔═╡ ddd20544-2c29-11eb-268e-cf720bdcc23e
+
+
+# ╔═╡ 5870862e-2c25-11eb-2dc2-a5dbca1fb50b
+html"""
+<b>asdf</b> asdf
+
+"""
+
+# ╔═╡ 3d99b1fc-2c25-11eb-30d9-c195df7bb776
+
+
+# ╔═╡ ac3dc1b2-2c24-11eb-3dae-3174380e4613
+plot.([sin,cos])
 
 # ╔═╡ 07c699ae-2285-11eb-222b-8fb3db91b21e
 d200
@@ -147,9 +181,6 @@ default_iocontext = IOContext(devnull, :color => false, :limit => true, :display
 # ╔═╡ 11e8a2ea-1fb7-11eb-2c30-bb886f8725d2
 old(x) = HTML(repr(MIME"text/html"(), x; context=default_iocontext))
 
-# ╔═╡ 11a61136-1fb8-11eb-1a02-0b9d7651e876
-old(dbig)
-
 # ╔═╡ 1e165c64-1fb8-11eb-17cd-0f93602efc3c
 old(d2)
 
@@ -189,8 +220,14 @@ collect(1:200)
 # ╠═d1cdbe98-2281-11eb-0e9f-b3c1c09d8d94
 # ╠═f9b7ee58-2400-11eb-3e62-4765aaaf7d50
 # ╠═98253b72-1fce-11eb-1216-97e38583501d
+# ╠═e57ba890-2c24-11eb-3434-b5aa9917910a
+# ╠═ddd20544-2c29-11eb-268e-cf720bdcc23e
+# ╠═5870862e-2c25-11eb-2dc2-a5dbca1fb50b
+# ╠═3d99b1fc-2c25-11eb-30d9-c195df7bb776
+# ╠═ac3dc1b2-2c24-11eb-3dae-3174380e4613
 # ╠═07c699ae-2285-11eb-222b-8fb3db91b21e
 # ╠═da2116b4-2284-11eb-1f88-2b2b461ceb90
+# ╠═3d7ded8e-2c20-11eb-1a9a-b70f73cd4195
 # ╠═dc3ffb9c-2284-11eb-1e7b-5b04e4e95b5e
 # ╠═8d91acd8-1fdb-11eb-326a-376d2c5bdd70
 # ╠═71697846-1fb4-11eb-053e-b73ac96850cd
