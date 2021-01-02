@@ -13,6 +13,9 @@ macro bind(def, element)
     end
 end
 
+# ╔═╡ 7777f629-dc29-44a8-9127-8e236c88d1ef
+using PlutoUI
+
 # ╔═╡ 1e992cf1-7ea6-4c23-a573-3c867c22ada0
 md"""
 # Scrubbable numbers
@@ -58,7 +61,7 @@ We define a variable `x` as a _scrubbable number_ like so:
 
 # ╔═╡ 99a2907f-f748-47bd-92d2-88eb21e8e0f1
 md"""
-Using interpolation (with `$`), you can write this defition inside Markdown text:
+Using interpolation (with `$`), you can write this definition inside Markdown text:
 """
 
 # ╔═╡ 0be135f4-ef36-41d1-8a20-1080ca8919a0
@@ -319,8 +322,9 @@ end
 # ╔═╡ Cell order:
 # ╟─1e992cf1-7ea6-4c23-a573-3c867c22ada0
 # ╟─023869e9-236d-426e-8419-d398f1d20c3e
-# ╟─b62db8c0-4352-4d0f-83a2-ac170ef3337a
-# ╟─861a570a-3a77-4445-9217-3d38682cbb8c
+# ╠═7777f629-dc29-44a8-9127-8e236c88d1ef
+# ╠═b62db8c0-4352-4d0f-83a2-ac170ef3337a
+# ╠═861a570a-3a77-4445-9217-3d38682cbb8c
 # ╟─d86baba8-1207-466b-9170-fdc5f2616152
 # ╟─10494af3-3d7d-47ae-8844-3ca139e7708b
 # ╠═5d6299e0-fb4a-448f-b87a-9d17b607fd6a
