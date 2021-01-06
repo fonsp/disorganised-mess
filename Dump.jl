@@ -6,7 +6,7 @@ using InteractiveUtils
 
 # ╔═╡ 1d015dd4-009f-11eb-3247-994e422271f6
 mutable struct A
-	x
+	x 
 	y
 end
 
