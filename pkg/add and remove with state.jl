@@ -5,7 +5,7 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ 505c8ff2-14ab-44ff-9936-e6823a7ad57c
-function Base.first(f::Function, xs)
+function getfirst(f::Function, xs)
 	for x in xs
 		if f(x)
 			return x
@@ -18,7 +18,7 @@ end
 import Pkg
 
 # ╔═╡ d557ce18-ec63-4579-8971-d2ff8bcd30e8
-packages_i_want = ["SpecialFunctions", "zz"]#, "DataArrays"]
+packages_i_want = ["SpecialFunctions"]#, "DataArrays"]
 
 # ╔═╡ 7d8912a5-7979-4811-b77d-ec17503b8050
 Pkg.PRESERVE_ALL < Pkg.PRESERVE_NONE
@@ -133,13 +133,16 @@ let
 end
 
 # ╔═╡ 33c76e41-54a7-4c11-8659-50e93bfd30e8
-entry = first(e -> e.name == "MsgPack", values(ctx.env.manifest))
+entry = getfirst(e -> e.name == "MsgPack", values(ctx.env.manifest))
 
 # ╔═╡ 1666277b-7593-4889-bc50-80b50279448a
 let
 	try result catch end
 	ctx.env
 end
+
+# ╔═╡ 38aef7be-8bb0-4f8a-95f2-e3ca0e2a0b14
+ctx.env.project_file |> dirname
 
 # ╔═╡ e9f1a9e5-672e-4df0-8967-5870a6e849e1
 pt = tempname()
@@ -161,4 +164,5 @@ pt = tempname()
 # ╠═33c76e41-54a7-4c11-8659-50e93bfd30e8
 # ╠═1666277b-7593-4889-bc50-80b50279448a
 # ╠═a9ee527c-90e5-44c2-b8b2-4d0304494c54
+# ╠═38aef7be-8bb0-4f8a-95f2-e3ca0e2a0b14
 # ╠═e9f1a9e5-672e-4df0-8967-5870a6e849e1
