@@ -19,7 +19,7 @@ begin
 	Pkg.activate(mktempdir())
 	Pkg.add([
 			Pkg.PackageSpec(name="PlutoUI", version="0.6.7-0.6"), 
-			Pkg.PackageSpec(name="Plots", version="1.6-1"),
+			Pkg.PackageSpec(name="Plots", version="1.10.1-1"),
 			Pkg.PackageSpec(name="Combinatorics"),
 			])
 
@@ -47,14 +47,22 @@ html"""<button style="font-size: 1rem; margin:auto; display: block;" onClick="pr
 
 """ |> HTML
 
+# ╔═╡ c508a77d-9190-45a4-89e1-785a593444ba
+
+
 # ╔═╡ e545a33e-3c48-48ac-9c9f-660bd61132ad
 md"n = $(@bind n Slider(1:10, show_value=true, default=3))"
+
+# ╔═╡ 964bd5d6-6263-4042-8000-0dd62138eb13
+md"""
+## More options
+"""
 
 # ╔═╡ f2e1c626-ae31-4e33-9409-e9f696d38142
 let
 	bar(
 		[length(combinations(1:n, k)) for k in 1:n],
-		dpi=400, size=(400,200), leg=false
+		dpi=96, size=(400,200), leg=false
 	)
 end
 
@@ -65,9 +73,21 @@ end
 let
 	bar(
 		[length(combinations(1:n_again, k)) for k in 1:n_again], 
-		dpi=400, size=(600,300), leg=false
+		dpi=96, size=(600,300), leg=false
 	)
 end
+
+# ╔═╡ b672d26a-cafd-4332-9a31-70a32ea46d96
+md"k = $(@bind k Slider(1:n, show_value=true))"
+
+# ╔═╡ 82b64095-60f3-413e-940a-f4358077d67a
+prettylist(x) = join([string(p) * "\n" for p in x]) |> Text
+
+# ╔═╡ d2b09aa9-bc70-4a20-bf42-24495a07445f
+Any[prettylist(combinations(1:n, k)) for k in 1:n]
+
+# ╔═╡ 8035c639-4f78-4df0-b6be-1db2a1a0ba2a
+combinations(1:n, k) |> prettylist
 
 # ╔═╡ b88bf072-604f-4d70-985b-b413a41614ee
 function onoff(permutation)
@@ -80,20 +100,8 @@ function onoff(permutation)
 	end |> join
 end
 
-# ╔═╡ b672d26a-cafd-4332-9a31-70a32ea46d96
-md"k = $(@bind k Slider(1:n, show_value=true))"
-
-# ╔═╡ 82b64095-60f3-413e-940a-f4358077d67a
-prettylist(x) = join([string(p) * "\n" for p in x]) |> Text
-
-# ╔═╡ d2b09aa9-bc70-4a20-bf42-24495a07445f
-Any[prettylist(combinations(1:n, k)) for k in 1:n]
-
 # ╔═╡ a6495f5c-f91a-4655-b4c5-ce68f6bdf9f2
 Any[prettylist(combinations(1:n, k) .|> onoff) for k in 1:n]
-
-# ╔═╡ 8035c639-4f78-4df0-b6be-1db2a1a0ba2a
-combinations(1:n, k) |> prettylist
 
 # ╔═╡ 4909a6ad-cc17-4233-8056-8b2b2b12116a
 md"""
@@ -481,16 +489,18 @@ end
 # ╟─5939ffe6-5f2b-11eb-16b0-37c3cbfabe7a
 # ╟─00d81ec5-c9e1-459d-8de7-f193e05241c0
 # ╠═141efa5d-e66a-4212-b3ad-040f253b1e78
+# ╟─c508a77d-9190-45a4-89e1-785a593444ba
 # ╟─e545a33e-3c48-48ac-9c9f-660bd61132ad
-# ╠═d2b09aa9-bc70-4a20-bf42-24495a07445f
 # ╠═a6495f5c-f91a-4655-b4c5-ce68f6bdf9f2
-# ╟─f2e1c626-ae31-4e33-9409-e9f696d38142
+# ╟─964bd5d6-6263-4042-8000-0dd62138eb13
+# ╠═d2b09aa9-bc70-4a20-bf42-24495a07445f
+# ╠═f2e1c626-ae31-4e33-9409-e9f696d38142
 # ╟─e2cd7b2d-c09f-4dc8-85a0-94cf9409b2cd
-# ╟─a741afd6-61e7-43b6-b242-acad152284d4
-# ╠═b88bf072-604f-4d70-985b-b413a41614ee
+# ╠═a741afd6-61e7-43b6-b242-acad152284d4
 # ╠═b672d26a-cafd-4332-9a31-70a32ea46d96
 # ╠═8035c639-4f78-4df0-b6be-1db2a1a0ba2a
-# ╠═82b64095-60f3-413e-940a-f4358077d67a
+# ╟─82b64095-60f3-413e-940a-f4358077d67a
+# ╟─b88bf072-604f-4d70-985b-b413a41614ee
 # ╠═a58cd747-4f7e-4277-a3a8-7ad60f21aa35
 # ╟─4909a6ad-cc17-4233-8056-8b2b2b12116a
 # ╟─c7064213-e778-4fab-91a9-c05cd35005a1
