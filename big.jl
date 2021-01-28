@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.11.14
+# v0.12.19
 
 using Markdown
 using InteractiveUtils
@@ -15,6 +15,32 @@ end
 
 # ╔═╡ 93136964-93c0-11ea-3da9-4d6e11b49b1e
 using Distributed
+
+# ╔═╡ f2d5e15e-5888-4d74-b8c5-b744603be7bc
+dog_file = download("https://upload.wikimedia.org/wikipedia/commons/e/ef/Pluto_in_True_Color_-_High-Res.jpg")
+
+# ╔═╡ e0a67ff3-376e-4bf8-b281-90486f31c80d
+begin
+	struct Dog end
+	function Base.show(io::IO, ::MIME"image/jpg", ::Dog)
+		write(io, read(dog_file))
+	end
+end
+
+# ╔═╡ a75e2cf6-1520-430c-abf1-83185d494dc5
+md" $(filesize(dog_file) / 1000) kB"
+
+# ╔═╡ cbd533bd-0d15-44d5-bf29-aea13b572719
+Dog()
+
+# ╔═╡ 4343e495-afc5-47a4-9791-d3bc2ae7bf03
+[Dog(),Dog(),Dog(),Dog(),Dog()]
+
+# ╔═╡ 615bd1d0-5037-41ed-88bf-a0df03b32e2e
+[Dog(),Dog(),Dog(),Dog(),Dog()]
+
+# ╔═╡ 88a14c54-801d-4c5b-8b39-1e887691798b
+1+2+3
 
 # ╔═╡ 321f9e52-b193-11ea-09d3-0fcf6af1e472
 md"asdfasdf"
@@ -47,6 +73,12 @@ end
 	SymbolsState(references, assignments) = SymbolsState(references, assignments, Set{Symbol}())
 	SymbolsState() = SymbolsState(Set{Symbol}(), Set{Symbol}())
 end
+
+# ╔═╡ e67b124c-f21a-47ca-aa8c-4a014b86320b
+
+
+# ╔═╡ c74ac385-f88f-4cbe-a05d-bffceb1dd9e1
+
 
 # ╔═╡ 8843f164-b172-11ea-0d5c-67fbbd97d6ee
 "ScopeState moves _up_ the ASTree: it carries scope information up towards the endpoints."
@@ -1210,6 +1242,13 @@ begin
 end
 
 # ╔═╡ Cell order:
+# ╠═e0a67ff3-376e-4bf8-b281-90486f31c80d
+# ╠═a75e2cf6-1520-430c-abf1-83185d494dc5
+# ╠═f2d5e15e-5888-4d74-b8c5-b744603be7bc
+# ╠═cbd533bd-0d15-44d5-bf29-aea13b572719
+# ╠═4343e495-afc5-47a4-9791-d3bc2ae7bf03
+# ╠═615bd1d0-5037-41ed-88bf-a0df03b32e2e
+# ╠═88a14c54-801d-4c5b-8b39-1e887691798b
 # ╠═2c0e8b60-b173-11ea-1db9-b7ae66e03dc1
 # ╠═321f9e52-b193-11ea-09d3-0fcf6af1e472
 # ╠═18c9914e-b173-11ea-342e-01c4e2097b8c
@@ -1217,6 +1256,8 @@ end
 # ╠═2464da5e-b173-11ea-2532-13c06602328d
 # ╠═5edd43d4-b172-11ea-1dc4-79c3e07941ed
 # ╠═881ed6f4-b172-11ea-237a-6d64da160f42
+# ╠═e67b124c-f21a-47ca-aa8c-4a014b86320b
+# ╠═c74ac385-f88f-4cbe-a05d-bffceb1dd9e1
 # ╠═8843f164-b172-11ea-0d5c-67fbbd97d6ee
 # ╠═9be01bf8-b172-11ea-04fe-13c44256cf50
 # ╠═88725842-b172-11ea-004c-21fc8845bc9b
