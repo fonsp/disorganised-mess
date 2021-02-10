@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.18
+# v0.12.20
 
 using Markdown
 using InteractiveUtils
@@ -12,9 +12,6 @@ macro bind(def, element)
         el
     end
 end
-
-# ╔═╡ 7777f629-dc29-44a8-9127-8e236c88d1ef
-using PlutoUI
 
 # ╔═╡ 1e992cf1-7ea6-4c23-a573-3c867c22ada0
 md"""
@@ -29,6 +26,9 @@ html"""
 <br>
 <br>
 """
+
+# ╔═╡ 7777f629-dc29-44a8-9127-8e236c88d1ef
+# using PlutoUI
 
 # ╔═╡ d86baba8-1207-466b-9170-fdc5f2616152
 html"""
@@ -168,6 +168,42 @@ md"""
 
 # ╔═╡ 9c7ce2da-4ad8-11eb-14cd-cfcc8d2a6bf8
 begin
+	"""
+	
+	An inline number that can be changed by clicking and dragging the mouse.
+	
+	# Examples
+	```julia
+	md\"\"\"
+	_If Alice has \$(@bind a Scrubbable(20)) apples, 
+	and she gives \$(@bind b Scrubbable(3)) apples to Bob..._
+	\"\"\"
+	```
+	```julia
+	md\"\"\"
+	_...then Alice has **\$(a - b)** apples left._
+	\"\"\"
+	```
+	
+	In the examples above, we give the **initial value** as parameter, and the reader can change it to be lower or higher.
+	
+	## Custom range
+	Besides an initial value, a scrubbable number also has an array of possible values that can be reached. When you pass a **single number** to `Scrubbable`, this array is automatically created.
+	
+	You can also **specify the array manually**:
+	
+	```julia
+	@bind apples Scrubbable(200 : 300; default=220)
+	```
+	
+	## Formatting
+
+	The library [`d3-format`](https://github.com/d3/d3-format) is used to format floating-point numbers. You can specify a **format string** like `".2f"` to be used to format the scrubbable value. Have a look at their [documentation](https://github.com/d3/d3-format) to see more examples.
+	
+	`@bind money Scrubbable(30e6, format=".0s", prefix="€ ")`
+	
+	`@bind coolness Scrubbable(0.80 : 0.01 : 1.00, format=".0%", prefix="you are 🌝 ", suffix=" cool")`
+	"""
 	Base.@kwdef struct Scrubbable
 		values::AbstractVector{<:Real}
 		default::Real
@@ -319,6 +355,9 @@ if coolness >= 1
 	md"![](https://media.giphy.com/media/GwGXoeb0gm7sc/giphy.gif)"
 end
 
+# ╔═╡ 1d34fec8-01cb-4bee-8144-d8cc13a87b8b
+export Scrubbable
+
 # ╔═╡ Cell order:
 # ╟─1e992cf1-7ea6-4c23-a573-3c867c22ada0
 # ╟─023869e9-236d-426e-8419-d398f1d20c3e
@@ -346,14 +385,15 @@ end
 # ╠═4e40dcad-9840-4517-9947-7fcd4dce69cd
 # ╠═e14b3395-831d-43d6-874e-cfb32f8edd05
 # ╠═018035dd-78d7-46d3-bd3c-5c136fa47929
-# ╠═e0ea8328-ddcc-4130-b2f6-0079f98402ad
+# ╟─e0ea8328-ddcc-4130-b2f6-0079f98402ad
 # ╠═e8a6ce9f-9f48-4e31-ad2a-e21d7e0415af
 # ╠═1e139b79-b703-43bf-a351-1a2d811aea6a
-# ╠═1e60fea6-33dc-417b-9928-eb5922b41759
+# ╟─1e60fea6-33dc-417b-9928-eb5922b41759
 # ╠═6fe1f0f7-e8a1-441a-a676-ddd4b3b26668
 # ╠═cfcc5fbb-72f7-4223-a83e-96fe6971b143
-# ╠═1fa8edc6-9aa2-4082-bdeb-7517d9e2dd71
+# ╟─1fa8edc6-9aa2-4082-bdeb-7517d9e2dd71
 # ╠═3f1c3fa5-2257-4c3a-aa75-0b3c59a7fcdc
 # ╠═2554121f-13e6-4b07-9c45-b2ccf154d07d
 # ╟─aed5fa58-4fe3-4596-b18d-a76cd98a5a1b
 # ╠═9c7ce2da-4ad8-11eb-14cd-cfcc8d2a6bf8
+# ╠═1d34fec8-01cb-4bee-8144-d8cc13a87b8b
