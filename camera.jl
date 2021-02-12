@@ -62,7 +62,7 @@ function process_raw_camera_data(raw_camera_data)
 end
 
 # ╔═╡ c0cc27aa-2818-4c80-b709-f0a6c776a8a9
-function camera_input(;max_size=200, default_url="https://i.imgur.com/SUmi94P.png")
+function camera_input(;max_size=150, default_url="https://i.imgur.com/SUmi94P.png")
 """
 <span class="pl-image waiting-for-permission">
 <style>
@@ -276,5 +276,5 @@ process_raw_camera_data(wow)
 # ╠═06a1d5cc-6bda-11eb-202a-7f59977d1b27
 # ╠═6476d911-e081-4c90-b925-992b285880e3
 # ╟─9ce66b4e-4fbf-4dd1-8dfb-3541f7702a6e
-# ╟─f88a96e4-06de-45b1-b1e5-6d76edd75582
+# ╠═f88a96e4-06de-45b1-b1e5-6d76edd75582
 # ╟─c0cc27aa-2818-4c80-b709-f0a6c776a8a9
