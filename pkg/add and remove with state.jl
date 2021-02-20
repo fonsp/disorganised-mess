@@ -171,7 +171,7 @@ stdlibs = readdir(Pkg.Types.stdlib_dir())
 # ╔═╡ 851a8779-c477-4e8d-a971-6c7c4e19114a
 function get_installed_version(ctx, pkg_name)
 	if pkg_name ∈ stdlibs
-		"sdtlib"
+		"stdlib"
 	else
 		entry = get_manifest_entry(ctx, pkg_name)
 		entry.version
