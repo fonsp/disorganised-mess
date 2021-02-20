@@ -70,7 +70,7 @@ A = [
 
 # ╔═╡ 772d54a1-46a4-43a7-a40b-3d190208e242
 map(CartesianIndices(img)) do I
-	new_coord = inv(A) * collect(Tuple(I))
+	new_coord = A \ collect(Tuple(I))
 	trygetpixel(img, new_coord...)
 end
 
