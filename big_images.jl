@@ -41,7 +41,7 @@ import Distributed
 
 
 # ╔═╡ 5539db10-b0d2-48b6-8985-ef437b8ae0b5
-show_dogs = true
+show_dogs = false
 
 # ╔═╡ 03307e43-cb61-4321-95ac-7bbb16e0cfc6
 @bind x html"<input type=range max=10000>"
