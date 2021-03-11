@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.16
+# v0.12.20
 
 using Markdown
 using InteractiveUtils
@@ -32,6 +32,11 @@ begin
 	using Compose
 	using LinearAlgebra
 end
+
+# ╔═╡ 59172962-b4b2-42c2-916f-326d190da408
+md"""
+# The interactive word picker is at the bottom of this notebook!
+"""
 
 # ╔═╡ e6b6760a-f37f-11ea-3ae1-65443ef5a81a
 md"_homework 3, version 0_"
@@ -658,6 +663,10 @@ Dict(
 function word_counts(words::Vector)
 	counts = Dict()
 	
+	for word in words
+		counts[word] = get(counts, word, 0) + 1
+	end
+	
 	# your code here
 	
 	return counts
@@ -811,6 +820,31 @@ md"""
 Uncomment the cell below to generate some Jane Austen text:
 """
 
+# ╔═╡ 858b23b1-7aeb-4519-b0d7-554c6b0d1c5b
+austen_words = splitwords(emma)
+
+# ╔═╡ f6bea0f3-ce75-45be-b64a-943427c5f0a9
+austen_grams = ngrams_circular(austen_words, 3)
+
+# ╔═╡ cdb2db78-e606-42d2-9f21-06941253842e
+austen_cache = continutations_cache(austen_grams)
+
+# ╔═╡ 36c3f890-0a8e-45da-a0a1-68752f6bcaed
+@bind start_over Button("Start over!")
+
+# ╔═╡ c4a7ce4d-6b32-42b1-9315-f04a6c4bf59a
+current = let
+	start_over
+	[rand(austen_grams)...]
+end;
+
+# ╔═╡ a561381f-00ef-4135-8cd4-b55e0b4d6a5b
+function deduplicate_and_sort_by_occurance(xs)
+	counts = collect(word_counts(xs))
+	
+	sort(counts, by=last, rev=true) .|> first |> collect
+end
+
 # ╔═╡ 6b4d6584-f3be-11ea-131d-e5bdefcc791b
 md"## Function library
 
@@ -852,6 +886,35 @@ generate(
 
 # ╔═╡ 49b69dc2-fb8f-11ea-39af-030b5c5053c3
 generate(emma, 100; n=3) |> Quote
+
+# ╔═╡ 6567d88b-4bff-49c4-9197-e49d6b8fb0d9
+begin
+	if @isdefined(choice)
+		choice
+		
+		push!(current, choice)
+	end
+	tail = current[end - (3-2): end]
+	continuations = austen_cache[tail]
+	
+	counts = word_counts(continuations)
+	counts_sorted = sort(collect(counts), by=last, rev=true)
+	
+	choices = [
+		word => HTML("<code>$(count)</code> $(word)")
+		for (word, count) in counts_sorted
+	]
+	
+	bond = @bind choice Radio(choices)
+	
+	md"""
+	#### _"Emma"_ -- rearranged
+	$(Quote(join(current, " ")))
+	
+	#### Choose the next word!
+	$(bond)
+	"""
+end
 
 # ╔═╡ ddef9c94-fb96-11ea-1f17-f173a4ff4d89
 function compimg(img, labels=[c*d for c in replace(alphabet, ' ' => "_"), d in replace(alphabet, ' ' => "_")])
@@ -1136,7 +1199,11 @@ bigbreak
 # ╔═╡ 7f341c4e-fb54-11ea-1919-d5421d7a2c75
 bigbreak
 
+# ╔═╡ 809aca8b-13f9-482e-9a70-471a77b94490
+bigbreak
+
 # ╔═╡ Cell order:
+# ╠═59172962-b4b2-42c2-916f-326d190da408
 # ╟─e6b6760a-f37f-11ea-3ae1-65443ef5a81a
 # ╟─ec66314e-f37f-11ea-0af4-31da0584e881
 # ╟─85cfbd10-f384-11ea-31dc-b5693630a4c5
@@ -1274,7 +1341,7 @@ bigbreak
 # ╠═18355314-fb86-11ea-0738-3544e2e3e816
 # ╠═abe2b862-fb69-11ea-08d9-ebd4ba3437d5
 # ╟─3d105742-fb8d-11ea-09b0-cd2e77efd15c
-# ╟─a72fcf5a-fb62-11ea-1dcc-11451d23c085
+# ╠═a72fcf5a-fb62-11ea-1dcc-11451d23c085
 # ╟─f83991c0-fb7c-11ea-0e6f-1f80709d00c1
 # ╟─4b27a89a-fb8d-11ea-010b-671eba69364e
 # ╟─d7b7a14a-fb90-11ea-3e2b-2fd8f379b4d8
@@ -1286,6 +1353,14 @@ bigbreak
 # ╟─2521bac8-fb8f-11ea-04a4-0b077d77529e
 # ╠═49b69dc2-fb8f-11ea-39af-030b5c5053c3
 # ╟─7f341c4e-fb54-11ea-1919-d5421d7a2c75
+# ╠═858b23b1-7aeb-4519-b0d7-554c6b0d1c5b
+# ╠═f6bea0f3-ce75-45be-b64a-943427c5f0a9
+# ╠═cdb2db78-e606-42d2-9f21-06941253842e
+# ╠═c4a7ce4d-6b32-42b1-9315-f04a6c4bf59a
+# ╟─36c3f890-0a8e-45da-a0a1-68752f6bcaed
+# ╟─6567d88b-4bff-49c4-9197-e49d6b8fb0d9
+# ╟─809aca8b-13f9-482e-9a70-471a77b94490
+# ╠═a561381f-00ef-4135-8cd4-b55e0b4d6a5b
 # ╟─6b4d6584-f3be-11ea-131d-e5bdefcc791b
 # ╟─54b1e236-fb53-11ea-3769-b382ef8b25d6
 # ╟─b7803a28-fb96-11ea-3e30-d98eb322d19a

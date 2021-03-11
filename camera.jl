@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.11.8
+# v0.12.20
 
 using Markdown
 using InteractiveUtils
@@ -13,8 +13,56 @@ macro bind(def, element)
     end
 end
 
-# ╔═╡ 762e167e-e51d-11ea-0721-e566ca397423
-function camera_input(;maxsize=200, default_url="https://i.imgur.com/VGPeJ6s.jpg")
+# ╔═╡ 6476d911-e081-4c90-b925-992b285880e3
+begin
+	import Pkg
+	Pkg.activate(mktempdir())
+	Pkg.add(["Images", "ImageIO"])
+	using Images
+end
+
+# ╔═╡ 9ce66b4e-4fbf-4dd1-8dfb-3541f7702a6e
+md"""
+## Needs two functions:
+"""
+
+# ╔═╡ f88a96e4-06de-45b1-b1e5-6d76edd75582
+
+function process_raw_camera_data(raw_camera_data)
+	# the raw image data is a long byte array, we need to transform it into something
+	# more "Julian" - something with more _structure_.
+	
+	# The encoding of the raw byte stream is:
+	# every 4 bytes is a single pixel
+	# every pixel has 4 values: Red, Green, Blue, Alpha
+	# (we ignore alpha for this notebook)
+	
+	# So to get the red values for each pixel, we take every 4th value, starting at 
+	# the 1st:
+	reds_flat = UInt8.(raw_camera_data["data"][1:4:end])
+	greens_flat = UInt8.(raw_camera_data["data"][2:4:end])
+	blues_flat = UInt8.(raw_camera_data["data"][3:4:end])
+	
+	# but these are still 1-dimensional arrays, nicknamed 'flat' arrays
+	# We will 'reshape' this into 2D arrays:
+	
+	width = raw_camera_data["width"]
+	height = raw_camera_data["height"]
+	
+	# shuffle and flip to get it in the right shape
+	reds = reshape(reds_flat, (width, height))' / 255.0
+	greens = reshape(greens_flat, (width, height))' / 255.0
+	blues = reshape(blues_flat, (width, height))' / 255.0
+	
+	# we have our 2D array for each color
+	# Let's create a single 2D array, where each value contains the R, G and B value of 
+	# that pixel
+	
+	RGB.(reds, greens, blues)
+end
+
+# ╔═╡ c0cc27aa-2818-4c80-b709-f0a6c776a8a9
+function camera_input(;max_size=150, default_url="https://i.imgur.com/SUmi94P.png")
 """
 <span class="pl-image waiting-for-permission">
 <style>
@@ -119,14 +167,14 @@ function camera_input(;maxsize=200, default_url="https://i.imgur.com/VGPeJ6s.jpg
 <script>
 	// based on https://github.com/fonsp/printi-static (by the same author)
 
-	const span = this.currentScript.parentElement
+	const span = currentScript.parentElement
 	const video = span.querySelector("video")
 	const popout = span.querySelector("button#pop-out")
 	const stop = span.querySelector("button#stop")
 	const shutter = span.querySelector("button#shutter")
 	const prompt = span.querySelector(".pl-image #prompt")
 
-	const maxsize = $(maxsize)
+	const maxsize = $(max_size)
 
 	const send_source = (source, src_width, src_height) => {
 		const scale = Math.min(1.0, maxsize / src_width, maxsize / src_height)
@@ -207,57 +255,26 @@ function camera_input(;maxsize=200, default_url="https://i.imgur.com/VGPeJ6s.jpg
 	const img = html`<img crossOrigin="anonymous">`
 
 	img.onload = () => {
+	console.log("helloo")
 		send_source(img, img.width, img.height)
 	}
 	img.src = "$(default_url)"
-
+	console.log(img)
 </script>
 </span>
 """ |> HTML
 end
 
-# ╔═╡ 1feb465a-e51e-11ea-3bca-8b7634072120
-@bind i camera_input()
+# ╔═╡ 06a1d5cc-6bda-11eb-202a-7f59977d1b27
+@bind wow camera_input()
 
-# ╔═╡ 60d58bd8-e51e-11ea-328c-29f3c0d3d6bb
-i
-
-# ╔═╡ b395e806-e51e-11ea-12f1-7f05ee45cbbd
-function process_raw_camera_data(raw_camera_data)
-	# the raw image data is a long byte array, we need to transform it into something
-	# more "Julian" - something with more _structure_.
-	
-	# The encoding of the raw byte stream is:
-	# every 4 bytes is a single pixel
-	# every pixel has 4 values: Red, Green, Blue, Alpha
-	# (we ignore alpha for this notebook)
-	
-	# So to get the red values for each pixel, we take every 4th value, starting at 
-	# the 1st:
-	reds_flat = UInt8.(raw_camera_data["data"][1:4:end])
-	greens_flat = UInt8.(raw_camera_data["data"][2:4:end])
-	blues_flat = UInt8.(raw_camera_data["data"][3:4:end])
-	
-	# but these are still 1-dimensional arrays, nicknamed 'flat' arrays
-	# We will 'reshape' this into 2D arrays:
-	
-	width = raw_camera_data["width"]
-	height = raw_camera_data["height"]
-	
-	# shuffle and flip to get it in the right shape
-	reds = reshape(reds_flat, (width, height))' / 255.0
-	greens = reshape(greens_flat, (width, height))' / 255.0
-	blues = reshape(blues_flat, (width, height))' / 255.0
-	
-	# we have our 2D array for each color
-	# Let's create a single 2D array, where each value contains the R, G and B value of 
-	# that pixel
-	
-	RGB.(reds, greens, blues)
-end
+# ╔═╡ a24f3b2b-bc43-4be5-aade-9b0fbda440a3
+process_raw_camera_data(wow)
 
 # ╔═╡ Cell order:
-# ╠═60d58bd8-e51e-11ea-328c-29f3c0d3d6bb
-# ╠═1feb465a-e51e-11ea-3bca-8b7634072120
-# ╠═762e167e-e51d-11ea-0721-e566ca397423
-# ╠═b395e806-e51e-11ea-12f1-7f05ee45cbbd
+# ╠═a24f3b2b-bc43-4be5-aade-9b0fbda440a3
+# ╠═06a1d5cc-6bda-11eb-202a-7f59977d1b27
+# ╠═6476d911-e081-4c90-b925-992b285880e3
+# ╟─9ce66b4e-4fbf-4dd1-8dfb-3541f7702a6e
+# ╠═f88a96e4-06de-45b1-b1e5-6d76edd75582
+# ╟─c0cc27aa-2818-4c80-b709-f0a6c776a8a9
