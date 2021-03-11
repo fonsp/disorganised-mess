@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.14.0
+# v0.15.0
 
 using Markdown
 using InteractiveUtils
@@ -46,7 +46,10 @@ html"""
 """
 
 # ╔═╡ 1e1d983e-fac9-4b38-9d93-78d09ecec971
-package_names = split(replace(packages_raw, "," => " "), keepempty=false)
+package_names = setdiff(
+	split(replace(packages_raw, r"\W" => " "), keepempty=false),
+	["using", "import"]
+)
 
 # ╔═╡ 733ffd48-f375-4cc0-9f85-d504e9864f1c
 v = v"1.2.3"
@@ -76,6 +79,11 @@ function recommended_range(versions::Vector{VersionNumber})
 		recommended_range(v)
 	end
 end
+
+# ╔═╡ 998e2060-a0ac-44e9-8d0a-6cda3ac7a887
+md"""
+Pkg code from [https://github.com/fonsp/Pluto.jl/pull/844](https://github.com/fonsp/Pluto.jl/pull/844):
+"""
 
 # ╔═╡ e4caaba6-87b0-469e-a85f-4678b7176718
 module PkgTools
@@ -234,9 +242,6 @@ recommended_range.(package_names)
 # ╔═╡ 11695f49-fd55-40c2-89f9-3e0fd7ed623c
 recommended_range([v"0.0.123"])
 
-# ╔═╡ 737a4993-372e-413e-8269-856f71c9331b
-
-
 # ╔═╡ Cell order:
 # ╟─5cd2f666-8d49-4cff-8734-5c18aa32aef3
 # ╟─7dc112be-ff31-4423-896c-f199f621d882
@@ -255,5 +260,5 @@ recommended_range([v"0.0.123"])
 # ╠═d7bbabf3-d1db-4aa7-92ce-9df5bb48b54a
 # ╠═3d345deb-253f-4174-84b8-c54bcf111eae
 # ╠═af583068-81e1-11eb-36f3-47394c281524
+# ╟─998e2060-a0ac-44e9-8d0a-6cda3ac7a887
 # ╠═e4caaba6-87b0-469e-a85f-4678b7176718
-# ╠═737a4993-372e-413e-8269-856f71c9331b
