@@ -11,7 +11,7 @@ using BenchmarkTools
 j = download("https://fonsp.com/img/doggoSmall.jpg?raw=true")
 
 # ╔═╡ 5bd0f9fa-d81a-11ea-3f31-b9b2539bfdb5
-s = download("https://raw.githubusercontent.com/fonsp/Pluto.jl/master/frontend/img/logo.svg")
+s = download("https://raw.githubusercontent.com/fonsp/Pluto.jl/main/frontend/img/logo.svg")
 
 # ╔═╡ 5d1fa8e4-dd86-11ea-2cf8-655e16e409b1
 read(j)
