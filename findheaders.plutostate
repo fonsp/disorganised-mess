@@ -1,0 +1,28 @@
+Šªcell_order“Ù$673b77fc-e16d-11ea-3718-113715701f75Ù$aba17712-e16f-11ea-3a8e-f338dc28583cÙ$27096552-e16d-11ea-0190-c3adf4a91cec¥bonds€¬cell_resultsƒÙ$673b77fc-e16d-11ea-3718-113715701f75†¦queuedÂ§runningÂ¦output…¤bodyÙ+<div class="markdown"><h1>Hello</h1>
+</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØÉêfî_¬rootassigneeÀ§cell_idÙ$673b77fc-e16d-11ea-3718-113715701f75§runtimeÍ¤§erroredÂÙ$27096552-e16d-11ea-0190-c3adf4a91cec†¦queuedÂ§runningÂ¦output…¤bodyÙÆ<script>
+const headers = Array.from(
+	document.querySelectorAll(
+		"pluto-notebook pluto-output h1"
+	)
+)
+
+return html`<ul>${headers.map(h1 => 
+			html`<li>${h1.innerText}</li>`
+	)}</ul>`
+
+</script>
+°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØÉêgÉ¬rootassigneeÀ§cell_idÙ$27096552-e16d-11ea-0190-c3adf4a91cec§runtimeÍT§erroredÂÙ$aba17712-e16f-11ea-3a8e-f338dc28583c†¦queuedÂ§runningÂ¦output…¤bodyÙ+<div class="markdown"><h1>World</h1>
+</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØÉêfú¬rootassigneeÀ§cell_idÙ$aba17712-e16f-11ea-3a8e-f338dc28583c§runtimeÍ§erroredÂ¥nbpkg„²installed_versions€§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputsƒÙ$673b77fc-e16d-11ea-3718-113715701f75ƒ§cell_idÙ$673b77fc-e16d-11ea-3718-113715701f75¤code«md"# Hello"«code_foldedÂÙ$27096552-e16d-11ea-0190-c3adf4a91cecƒ§cell_idÙ$27096552-e16d-11ea-0190-c3adf4a91cec¤codeÙÑhtml"""
+<script>
+const headers = Array.from(
+	document.querySelectorAll(
+		"pluto-notebook pluto-output h1"
+	)
+)
+
+return html`<ul>${headers.map(h1 => 
+			html`<li>${h1.innerText}</li>`
+	)}</ul>`
+
+</script>
+"""«code_foldedÂÙ$aba17712-e16f-11ea-3a8e-f338dc28583cƒ§cell_idÙ$aba17712-e16f-11ea-3a8e-f338dc28583c¤code«md"# World"«code_foldedÂ«notebook_idÙ$eafb97d4-915b-11eb-2723-b7acf43c7d58«in_temp_dirÂ©shortpath®findheaders.jl®process_status¥ready¤pathÙD/home/runner/work/disorganised-mess/disorganised-mess/findheaders.jl

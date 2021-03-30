@@ -1,0 +1,18 @@
+Šªcell_order”Ù$091d33fe-fffe-11ea-131f-01f4248b30eaÙ$2d01cdaa-fffe-11ea-09f5-63527a1b0f87Ù$2883b3d8-fffe-11ea-0a0f-bbd85ec665eaÙ$3599eb82-0003-11eb-3814-dfd0f5737846¥bonds€¬cell_results„Ù$3599eb82-0003-11eb-3814-dfd0f5737846†¦queuedÂ§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÈ)}*9¬rootassigneeÀ§cell_idÙ$3599eb82-0003-11eb-3814-dfd0f5737846§runtimeÎ
+ØÇ‹§erroredÂÙ$2883b3d8-fffe-11ea-0a0f-bbd85ec665ea†¦queuedÂ§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÈ)mÍ’¬rootassigneeÀ§cell_idÙ$2883b3d8-fffe-11ea-0a0f-bbd85ec665ea§runtimeÎf:ã§erroredÂÙ$2d01cdaa-fffe-11ea-09f5-63527a1b0f87†¦queuedÂ§runningÂ¦output…¤body©233564653°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÈ(ÿÉŞ¬rootassignee¡x§cell_idÙ$2d01cdaa-fffe-11ea-09f5-63527a1b0f87§runtimeÌÈ§erroredÂÙ$091d33fe-fffe-11ea-131f-01f4248b30ea†¦queuedÂ§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÈ(±Ä¨¬rootassigneeÀ§cell_idÙ$091d33fe-fffe-11ea-131f-01f4248b30ea§runtimeÎ%µ§erroredÂ¥nbpkg„²installed_versions€§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputs„Ù$3599eb82-0003-11eb-3814-dfd0f5737846ƒ§cell_idÙ$3599eb82-0003-11eb-3814-dfd0f5737846¤codeÙDfor i in 1:10
+	
+	@debug i
+	
+	if isodd(i)
+		@warn "Oh no!" i
+	end
+end«code_foldedÂÙ$2883b3d8-fffe-11ea-0a0f-bbd85ec665eaƒ§cell_idÙ$2883b3d8-fffe-11ea-0a0f-bbd85ec665ea¤codeÙ\begin
+	
+	
+	
+	try
+		sqrt(-1)
+	catch e
+		@error "99" exception=(e, catch_backtrace())
+	end
+end«code_foldedÂÙ$2d01cdaa-fffe-11ea-09f5-63527a1b0f87ƒ§cell_idÙ$2d01cdaa-fffe-11ea-09f5-63527a1b0f87¤code­x = 233564653«code_foldedÂÙ$091d33fe-fffe-11ea-131f-01f4248b30eaƒ§cell_idÙ$091d33fe-fffe-11ea-131f-01f4248b30ea¤codeª@info "23"«code_foldedÂ«notebook_idÙ$b372eb7a-9157-11eb-21b4-a731080b552a«in_temp_dirÂ©shortpathªlogging.jl®process_status¥ready¤pathÙ@/home/runner/work/disorganised-mess/disorganised-mess/logging.jl
