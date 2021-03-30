@@ -1,47 +1,47 @@
 Šªcell_orderÙ$8933fcc1-7d5a-4c4c-ba5c-0ec0207149e5Ù$e45c2d23-b3df-46fc-9934-d4172ea1bf77Ù$45cb771b-fa2d-4e09-adae-ed3a1d199ce7Ù$391a0932-bff9-484d-b758-cdfff2d37131Ù$2a11ef44-bea5-4e6e-ac1b-089c0822787dÙ$fa8e2497-91bd-4333-bdd5-c97b55d20421Ù$568651ad-a2c8-441f-bdea-9f397bcd0790Ù$496372f0-c7b4-49ad-8eda-3306240077f7Ù$674354fa-236a-4f0f-99c7-3ac4cdb3ff24Ù$744b6299-d9c3-4e49-ba30-b03504e6ef2fÙ$5adabd08-0a7b-4770-88d6-d9d52a1eb7c7Ù$0b4e358f-7a05-4350-a9bf-beef4287715fÙ$09067792-d450-4178-adaf-2e5e98f9ce4fÙ$9c53bb9c-0fe8-4805-94de-d8ccbb3c76bf¥bonds€¬cell_resultsÙ$2a11ef44-bea5-4e6e-ac1b-089c0822787d†¦queuedÂ§runningÂ¦output…¤bodyÙ/<div class="markdown"><h2>Base case</h2>
-</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØÉìü²_¬rootassigneeÀ§cell_idÙ$2a11ef44-bea5-4e6e-ac1b-089c0822787d§runtimeÍÌ§erroredÂÙ$fa8e2497-91bd-4333-bdd5-c97b55d20421†¦queuedÂ§runningÂ¦output…¤bodyÙ)issmall1 (generic function with 1 method)°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÉğn{á¬rootassigneeÀ§cell_idÙ$fa8e2497-91bd-4333-bdd5-c97b55d20421§runtimeÍ`|§erroredÂÙ$744b6299-d9c3-4e49-ba30-b03504e6ef2f†¦queuedÂ§runningÂ¦output…¤bodyÙ)issmall2 (generic function with 1 method)°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÉñ¡™¬rootassigneeÀ§cell_idÙ$744b6299-d9c3-4e49-ba30-b03504e6ef2f§runtimeÎîST§erroredÂÙ$8933fcc1-7d5a-4c4c-ba5c-0ec0207149e5†¦queuedÂ§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÉìü—N¬rootassigneeÀ§cell_idÙ$8933fcc1-7d5a-4c4c-ba5c-0ec0207149e5§runtimeÌÈ§erroredÂÙ$9c53bb9c-0fe8-4805-94de-d8ccbb3c76bf†¦queuedÂ§runningÂ¦output…¤body°:(1 || (2 || 3))°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÉò@ZO¬rootassigneeÀ§cell_idÙ$9c53bb9c-0fe8-4805-94de-d8ccbb3c76bf§runtimeÍ§erroredÂÙ$391a0932-bff9-484d-b758-cdfff2d37131†¦queuedÂ§runningÂ¦output…¤body„¦prefix¥Int64¨elements“’’¡1ªtext/plain’’¡2ªtext/plain’’¡3ªtext/plain¤type¥Array¨objectid¯86eb557095ffcdf°persist_js_stateÂ¤mimeÙ!application/vnd.pluto.tree+object²last_run_timestampËAØÉğ\µ·¬rootassignee¢xs§cell_idÙ$391a0932-bff9-484d-b758-cdfff2d37131§runtimeÍĞ§erroredÂÙ$674354fa-236a-4f0f-99c7-3ac4cdb3ff24†¦queuedÂ§runningÂ¦output…¤bodyÙ=<div class="markdown"><h2>With <code>@eval</code></h2>
-</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØÉìü½@¬rootassigneeÀ§cell_idÙ$674354fa-236a-4f0f-99c7-3ac4cdb3ff24§runtimeÍ<§erroredÂÙ$0b4e358f-7a05-4350-a9bf-beef4287715f†¦queuedÂ§runningÂ¦output…¤bodyÚ>BenchmarkTools.Trial: 
+</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ×İ¶5¬rootassigneeÀ§cell_idÙ$2a11ef44-bea5-4e6e-ac1b-089c0822787d§runtimeÍÌ§erroredÂÙ$fa8e2497-91bd-4333-bdd5-c97b55d20421†¦queuedÂ§runningÂ¦output…¤bodyÙ)issmall1 (generic function with 1 method)°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ× )‘¬rootassigneeÀ§cell_idÙ$fa8e2497-91bd-4333-bdd5-c97b55d20421§runtimeÍG§erroredÂÙ$744b6299-d9c3-4e49-ba30-b03504e6ef2f†¦queuedÂ§runningÂ¦output…¤bodyÙ)issmall2 (generic function with 1 method)°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ×!'E1¬rootassigneeÀ§cell_idÙ$744b6299-d9c3-4e49-ba30-b03504e6ef2f§runtimeÎ©)Ò§erroredÂÙ$8933fcc1-7d5a-4c4c-ba5c-0ec0207149e5†¦queuedÂ§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ×İ›®¬rootassigneeÀ§cell_idÙ$8933fcc1-7d5a-4c4c-ba5c-0ec0207149e5§runtimed§erroredÂÙ$9c53bb9c-0fe8-4805-94de-d8ccbb3c76bf†¦queuedÂ§runningÂ¦output…¤body°:(1 || (2 || 3))°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ×!±`t¬rootassigneeÀ§cell_idÙ$9c53bb9c-0fe8-4805-94de-d8ccbb3c76bf§runtimeÍ”§erroredÂÙ$391a0932-bff9-484d-b758-cdfff2d37131†¦queuedÂ§runningÂ¦output…¤body„¦prefix¥Int64¨elements“’’¡1ªtext/plain’’¡2ªtext/plain’’¡3ªtext/plain¤type¥Array¨objectid°4a02eb5ed1c4bcbb°persist_js_stateÂ¤mimeÙ!application/vnd.pluto.tree+object²last_run_timestampËAØ× #F¬rootassignee¢xs§cell_idÙ$391a0932-bff9-484d-b758-cdfff2d37131§runtimeÍ„§erroredÂÙ$674354fa-236a-4f0f-99c7-3ac4cdb3ff24†¦queuedÂ§runningÂ¦output…¤bodyÙ=<div class="markdown"><h2>With <code>@eval</code></h2>
+</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ×İÂÛ¬rootassigneeÀ§cell_idÙ$674354fa-236a-4f0f-99c7-3ac4cdb3ff24§runtimeÍ”§erroredÂÙ$0b4e358f-7a05-4350-a9bf-beef4287715f†¦queuedÂ§runningÂ¦output…¤bodyÚ>BenchmarkTools.Trial: 
   memory estimate:  0 bytes
   allocs estimate:  0
   --------------
   minimum time:     0.001 ns (0.00% GC)
   median time:      0.001 ns (0.00% GC)
-  mean time:        0.037 ns (0.00% GC)
-  maximum time:     22.700 ns (0.00% GC)
+  mean time:        0.030 ns (0.00% GC)
+  maximum time:     15.700 ns (0.00% GC)
   --------------
   samples:          10000
-  evals/sample:     1000°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÉò+qÅ¬rootassigneeÀ§cell_idÙ$0b4e358f-7a05-4350-a9bf-beef4287715f§runtimeÎ?»B§erroredÂÙ$e45c2d23-b3df-46fc-9934-d4172ea1bf77†¦queuedÂ§runningÂ¦output…¤bodyÙO<div class="markdown"><h1><code>@eval</code> for faster array check</h1>
-</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØÉìü¥"¬rootassigneeÀ§cell_idÙ$e45c2d23-b3df-46fc-9934-d4172ea1bf77§runtimeÍ¤§erroredÂÙ$496372f0-c7b4-49ad-8eda-3306240077f7†¦queuedÂ§runningÂ¦output…¤bodyÚABenchmarkTools.Trial: 
+  evals/sample:     1000°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ×!7ç¬rootassigneeÀ§cell_idÙ$0b4e358f-7a05-4350-a9bf-beef4287715f§runtimeÎ6Ë§erroredÂÙ$e45c2d23-b3df-46fc-9934-d4172ea1bf77†¦queuedÂ§runningÂ¦output…¤bodyÙO<div class="markdown"><h1><code>@eval</code> for faster array check</h1>
+</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ×İ©Ú¬rootassigneeÀ§cell_idÙ$e45c2d23-b3df-46fc-9934-d4172ea1bf77§runtimeÍx§erroredÂÙ$496372f0-c7b4-49ad-8eda-3306240077f7†¦queuedÂ§runningÂ¦output…¤bodyÚABenchmarkTools.Trial: 
   memory estimate:  0 bytes
   allocs estimate:  0
   --------------
-  minimum time:     19.157 ns (0.00% GC)
+  minimum time:     19.758 ns (0.00% GC)
   median time:      21.866 ns (0.00% GC)
-  mean time:        24.065 ns (0.00% GC)
-  maximum time:     160.182 ns (0.00% GC)
+  mean time:        23.846 ns (0.00% GC)
+  maximum time:     358.071 ns (0.00% GC)
   --------------
   samples:          10000
-  evals/sample:     997°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÉñ‘Ô¬rootassigneeÀ§cell_idÙ$496372f0-c7b4-49ad-8eda-3306240077f7§runtimeÎOÌ<E§erroredÂÙ$09067792-d450-4178-adaf-2e5e98f9ce4f†¦queuedÂ§runningÂ¦output…¤bodyÙ,or_sequence (generic function with 1 method)°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÉñ—÷¬rootassigneeÀ§cell_idÙ$09067792-d450-4178-adaf-2e5e98f9ce4f§runtimeÍ›§erroredÂÙ$45cb771b-fa2d-4e09-adae-ed3a1d199ce7†¦queuedÂ§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÉïávO¬rootassigneeÀ§cell_idÙ$45cb771b-fa2d-4e09-adae-ed3a1d199ce7§runtimeÎR§erroredÂÙ$5adabd08-0a7b-4770-88d6-d9d52a1eb7c7†¦queuedÂ§runningÂ¦output…¤bodyÚ=BenchmarkTools.Trial: 
+  evals/sample:     997°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ×!JM¬rootassigneeÀ§cell_idÙ$496372f0-c7b4-49ad-8eda-3306240077f7§runtimeÎH‘ŸÂ§erroredÂÙ$09067792-d450-4178-adaf-2e5e98f9ce4f†¦queuedÂ§runningÂ¦output…¤bodyÙ,or_sequence (generic function with 1 method)°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ×!@¬rootassigneeÀ§cell_idÙ$09067792-d450-4178-adaf-2e5e98f9ce4f§runtimeÍ4§erroredÂÙ$45cb771b-fa2d-4e09-adae-ed3a1d199ce7†¦queuedÂ§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ×“g¬rootassigneeÀ§cell_idÙ$45cb771b-fa2d-4e09-adae-ed3a1d199ce7§runtimeÎ…½Ç§erroredÂÙ$5adabd08-0a7b-4770-88d6-d9d52a1eb7c7†¦queuedÂ§runningÂ¦output…¤bodyÚ>BenchmarkTools.Trial: 
   memory estimate:  0 bytes
   allocs estimate:  0
   --------------
   minimum time:     0.001 ns (0.00% GC)
   median time:      0.001 ns (0.00% GC)
-  mean time:        0.034 ns (0.00% GC)
-  maximum time:     0.101 ns (0.00% GC)
+  mean time:        0.031 ns (0.00% GC)
+  maximum time:     15.700 ns (0.00% GC)
   --------------
   samples:          10000
-  evals/sample:     1000°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÉñæĞ¬rootassigneeÀ§cell_idÙ$5adabd08-0a7b-4770-88d6-d9d52a1eb7c7§runtimeÎ@G’|§erroredÂÙ$568651ad-a2c8-441f-bdea-9f397bcd0790†¦queuedÂ§runningÂ¦output…¤bodyÚABenchmarkTools.Trial: 
+  evals/sample:     1000°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ×!c/E¬rootassigneeÀ§cell_idÙ$5adabd08-0a7b-4770-88d6-d9d52a1eb7c7§runtimeÎ7´B§erroredÂÙ$568651ad-a2c8-441f-bdea-9f397bcd0790†¦queuedÂ§runningÂ¦output…¤bodyÚABenchmarkTools.Trial: 
   memory estimate:  0 bytes
   allocs estimate:  0
   --------------
-  minimum time:     19.759 ns (0.00% GC)
-  median time:      23.270 ns (0.00% GC)
-  mean time:        25.976 ns (0.00% GC)
-  maximum time:     298.899 ns (0.00% GC)
+  minimum time:     20.962 ns (0.00% GC)
+  median time:      22.467 ns (0.00% GC)
+  mean time:        24.637 ns (0.00% GC)
+  maximum time:     353.756 ns (0.00% GC)
   --------------
   samples:          10000
-  evals/sample:     997°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØÉñ;µ-¬rootassigneeÀ§cell_idÙ$568651ad-a2c8-441f-bdea-9f397bcd0790§runtimeÎp3|#§erroredÂ¥nbpkg„²installed_versions®BenchmarkTools¥0.6.0§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputsÙ$2a11ef44-bea5-4e6e-ac1b-089c0822787dƒ§cell_idÙ$2a11ef44-bea5-4e6e-ac1b-089c0822787d¤code¶md"""
+  evals/sample:     997°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ× Ê)‰¬rootassigneeÀ§cell_idÙ$568651ad-a2c8-441f-bdea-9f397bcd0790§runtimeÎb@jî§erroredÂ¥nbpkg„²installed_versions®BenchmarkTools¥0.6.0§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputsÙ$2a11ef44-bea5-4e6e-ac1b-089c0822787dƒ§cell_idÙ$2a11ef44-bea5-4e6e-ac1b-089c0822787d¤code¶md"""
 ## Base case
 """«code_foldedÃÙ$fa8e2497-91bd-4333-bdd5-c97b55d20421ƒ§cell_idÙ$fa8e2497-91bd-4333-bdd5-c97b55d20421¤codeÙ"function issmall1(x)
 	x âˆˆ xs
@@ -53,4 +53,4 @@ end«code_foldedÂÙ$8933fcc1-7d5a-4c4c-ba5c-0ec0207149e5ƒ§cell_idÙ$8933fcc1-7d5a-4
 # `@eval` for faster array check
 """«code_foldedÃÙ$496372f0-c7b4-49ad-8eda-3306240077f7ƒ§cell_idÙ$496372f0-c7b4-49ad-8eda-3306240077f7¤code¶@benchmark issmall1(2)«code_foldedÂÙ$09067792-d450-4178-adaf-2e5e98f9ce4fƒ§cell_idÙ$09067792-d450-4178-adaf-2e5e98f9ce4f¤codeÙWor_sequence(exprs) = foldl(Iterators.reverse(exprs)) do e, next
 	:($(next) || $(e))
-end«code_foldedÂÙ$45cb771b-fa2d-4e09-adae-ed3a1d199ce7ƒ§cell_idÙ$45cb771b-fa2d-4e09-adae-ed3a1d199ce7¤code´using BenchmarkTools«code_foldedÂÙ$5adabd08-0a7b-4770-88d6-d9d52a1eb7c7ƒ§cell_idÙ$5adabd08-0a7b-4770-88d6-d9d52a1eb7c7¤code¶@benchmark issmall2(2)«code_foldedÂÙ$568651ad-a2c8-441f-bdea-9f397bcd0790ƒ§cell_idÙ$568651ad-a2c8-441f-bdea-9f397bcd0790¤code¶@benchmark issmall1(5)«code_foldedÂ«notebook_idÙ$f1242ba8-915b-11eb-3075-a77431cb6aec«in_temp_dirÂ©shortpath·eval array inclusion.jl®process_status¥ready¤pathÙM/home/runner/work/disorganised-mess/disorganised-mess/eval array inclusion.jl
+end«code_foldedÂÙ$45cb771b-fa2d-4e09-adae-ed3a1d199ce7ƒ§cell_idÙ$45cb771b-fa2d-4e09-adae-ed3a1d199ce7¤code´using BenchmarkTools«code_foldedÂÙ$5adabd08-0a7b-4770-88d6-d9d52a1eb7c7ƒ§cell_idÙ$5adabd08-0a7b-4770-88d6-d9d52a1eb7c7¤code¶@benchmark issmall2(2)«code_foldedÂÙ$568651ad-a2c8-441f-bdea-9f397bcd0790ƒ§cell_idÙ$568651ad-a2c8-441f-bdea-9f397bcd0790¤code¶@benchmark issmall1(5)«code_foldedÂ«notebook_idÙ$61dd321a-917b-11eb-2bc5-7b5653898706«in_temp_dirÂ©shortpath·eval array inclusion.jl®process_status¥ready¤pathÙM/home/runner/work/disorganised-mess/disorganised-mess/eval array inclusion.jl
