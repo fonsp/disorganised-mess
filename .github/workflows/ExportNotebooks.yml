@@ -2,7 +2,7 @@ name: Export Pluto notebooks
 on:
     push:
         branches:
-            - asdfasdf
+            - main
     workflow_dispatch:
 
 jobs:
