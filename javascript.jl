@@ -57,24 +57,26 @@ if show_cc_with_highlighting === true
 	md"""
 	
 ```htmlmixed
-ClickCounter(text="Click") = @htl("\""
-
+ClickCounter(text="Click") = @htl(""\"
 <div>
 <button>$(text)</button>
-</div>
 
-<script id="blabla">
+<script>
 
 // Select elements relative to `currentScript`
-const div = currentScript.previousElementSibling
-const button = div.querySelector("button")
+var div = currentScript.parentElement
+var button = div.querySelector("button")
 
 // we wrapped the button in a `div` to hide its default behaviour from Pluto
 
-let count = 0
+var count = 0
 
 button.addEventListener("click", (e) => {
 	count += 1
+	
+	// we dispatch the input event on the div, not the button, because 
+	// Pluto's `@bind` mechanism listens for events on the **first element** in the
+	// HTML output. In our case, that's the div.
 	
 	div.value = count
 	div.dispatchEvent(new CustomEvent("input"))
@@ -85,8 +87,8 @@ button.addEventListener("click", (e) => {
 div.value = count
 
 </script>
-
-"\"")
+</div>
+""\")
 ```
 	"""
 end
@@ -95,20 +97,23 @@ end
 ClickCounter(text="Click") = @htl("""
 <div>
 <button>$(text)</button>
-</div>
 
-<script id="blabla">
+<script>
 
 // Select elements relative to `currentScript`
-const div = currentScript.previousElementSibling
-const button = div.querySelector("button")
+var div = currentScript.parentElement
+var button = div.querySelector("button")
 
 // we wrapped the button in a `div` to hide its default behaviour from Pluto
 
-let count = 0
+var count = 0
 
 button.addEventListener("click", (e) => {
 	count += 1
+	
+	// we dispatch the input event on the div, not the button, because 
+	// Pluto's `@bind` mechanism listens for events on the **first element** in the
+	// HTML output. In our case, that's the div.
 	
 	div.value = count
 	div.dispatchEvent(new CustomEvent("input"))
@@ -119,6 +124,7 @@ button.addEventListener("click", (e) => {
 div.value = count
 
 </script>
+</div>
 """)
 
 # ╔═╡ 9346d8e2-9ba0-4475-a21f-11bdd018bc60
@@ -127,52 +133,16 @@ div.value = count
 # ╔═╡ 7822fdb7-bee6-40cc-a089-56bb32d77fe6
 num_clicks
 
-# ╔═╡ 57d25d25-0396-4192-b52c-53bab864bf99
-ClickCounterWithReset(text="Click", reset_text="Reset") = @htl("""
-<div>
-<button>$(text)</button>&nbsp;&nbsp;&nbsp;&nbsp;
-<a id="reset" href="#">$(reset_text)</a>
-</div>
+# ╔═╡ 701de4b8-42d3-46a3-a399-d7761dccd83d
+md"""
+As an exercise to get familiar with these techniques, you can try the following:
+- 👉 Add a "reset to zero" button to the widget above.
+- 👉 Make the bound value an array that increases size when you click, instead of a single number.
+- 👉 Create a "two sliders" widget: combine two sliders (`<input type=range>`) into a single widget, where the bound value is the two-element array with both values.
+- 👉 Create a "click to send" widget: combine a text input and a button, and only send the contents of the text field when the button is clicked, not on every keystroke.
 
-<script id="blabla">
-
-// Select elements relative to `currentScript`
-const div = currentScript.previousElementSibling
-const button = div.querySelector("button")
-const reset = div.querySelector("#reset")
-
-// we wrapped the button in a `div` to hide its default behaviour from Pluto
-
-let count = 0
-
-button.addEventListener("click", (e) => {
-	count += 1
-	
-	div.value = count
-	div.dispatchEvent(new CustomEvent("input"))
-	e.stopPropagation()
-})
-
-	reset.addEventListener("click", (e) => {
-	count = 0
-	
-	div.value = count
-	div.dispatchEvent(new CustomEvent("input"))
-	e.stopPropagation()
-	e.preventDefault()
-})
-
-// Set the initial value
-div.value = count
-
-</script>
-""")
-
-# ╔═╡ 8e5b6d30-9ebd-4b56-9914-b8dcd79f4ecc
-@bind zz ClickCounterWithReset()
-
-# ╔═╡ 27d2a5f2-693d-4b21-be08-bc097baed65e
-zz
+Questions? Ask them on our [GitHub Discussions](https://github.com/fonsp/Pluto.jl/discussions)!
+"""
 
 # ╔═╡ 88120468-a43d-4d58-ac04-9cc7c86ca179
 md"""
@@ -186,7 +156,7 @@ html"""
 
 <script>
 
-console.log("Hello debugger!")
+console.info("Can you find this message in the console?")
 
 </script>
 
@@ -213,7 +183,50 @@ console.log("Hello debugger!")
 md"""
 ## Selecting elements
 
-`currentScript`
+When writing the javascript for a widget, it is common to **select elements inside the widgets** to manipulate them. In the number-of-clicks example above, we selected the `<div>` and `<button>` elements in our code, to trigger the input event, and attach event listeners, respectively.
+
+There are a numbers of ways to do this, and the recommended strategy is to **create a wrapper `<div>`, and use `currentScript.parentElement` to select it**.
+
+### `currentScript`
+
+When Pluto runs the code inside `<script>` tags, it assigns a reference to that script element to a variable called `currentScript`. You can then use properties like `previousElementSibling` or `parentElement` to "navigate to other elements".
+
+Let's look at the "wrapper div strategy" again.
+
+```htmlmixed
+@htl("\""
+
+<!-- the wrapper div -->
+<div>
+
+	<button id="first">Hello</button>
+	<button id="second">Julians!</button>
+	
+	<script>
+		var wrapper_div = currentScript.parentElement
+		// we can now use querySelector to select anything we want
+		var first_button = wrapper_dir.querySelector("button#first")
+
+		console.log(first_button)
+	</script>
+</div>
+"\"")
+```
+"""
+
+# ╔═╡ f18b98f7-1e0f-4273-896f-8a667d15605b
+md"""
+#### Why not just select on `document.body`?
+
+In the example above, it would have been easier to just select the button directly, using:
+```javascript
+// ⛔ do no use:
+var first_button = document.body.querySelector("button#first")
+```
+
+However, this becomes a problem when **combining using the widget multiple times in the same notebook**, since all selectors will point to the first instance. 
+
+Similarly, try not to search relative to the `<pluto-cell>` or `<pluto-output>` element, because users might want to combine multiple instances of the widget in a single cell.
 """
 
 # ╔═╡ 4a3398be-ee86-45f3-ac8b-f627a38c00b8
@@ -263,11 +276,6 @@ md"""
 	<p> Hello $(who)!</p>
 	""")
 
-# ╔═╡ 56c4f69d-c6c4-4670-aa65-786cf8206d3b
-md"""
-It has a bunch of very cool features! Including:
-"""
-
 # ╔═╡ e7d3db79-8253-4cbd-9832-5afb7dff0abf
 cool_features = [
 	md"Interpolate any **HTML-showable object**, such as plots and images, or another `@htl` literal."
@@ -277,6 +285,7 @@ cool_features = [
 
 # ╔═╡ bf592202-a9a4-4e9b-8433-fed55e3aa3bc
 @htl("""
+	<p>It has a bunch of very cool features! Including:</p>
 	<ul>$([
 		@htl(
 			"<li>$(item)</li>"
@@ -440,10 +449,27 @@ end
 # ╔═╡ e77cfefc-429d-49db-8135-f4604f6a9f0b
 md"""
 ### Example: d3.js transitions
+
+Type the coordinates of the circles here! 
 """
 
-# ╔═╡ ae55f62e-f165-4413-a6e0-8f9c440d7adf
-dot_positions = [100, 300] # edit me!
+# ╔═╡ 2d5689f5-1d63-4b8b-a103-da35933ad26e
+@bind positions TextField(default="100, 300")
+
+# ╔═╡ 6dd221d1-7fd8-446e-aced-950512ea34bc
+dot_positions = try
+	parse.([Int], split(replace(positions, ',' => ' ')))
+catch e
+	[100, 300]
+end
+
+# ╔═╡ 0a9d6e2d-3a41-4cd5-9a4e-a9b76ed89fa9
+# dot_positions = [100, 300] # edit me!
+
+# ╔═╡ 0962d456-1a76-4b0d-85ff-c9e7dc66621d
+md"""
+Notice that, even though the cell below re-runs, we **smoothly transition** between states. We use `this` to maintain the d3 transition states inbetween reactive runs.
+"""
 
 # ╔═╡ bf9b36e8-14c5-477b-a54b-35ba8e415c77
 @htl("""
@@ -491,13 +517,12 @@ script(s) = HTML("""
 # ╠═e8d8a60e-489b-467a-b49c-1fa844807751
 # ╠═9346d8e2-9ba0-4475-a21f-11bdd018bc60
 # ╠═7822fdb7-bee6-40cc-a089-56bb32d77fe6
-# ╠═57d25d25-0396-4192-b52c-53bab864bf99
-# ╠═8e5b6d30-9ebd-4b56-9914-b8dcd79f4ecc
-# ╠═27d2a5f2-693d-4b21-be08-bc097baed65e
+# ╟─701de4b8-42d3-46a3-a399-d7761dccd83d
 # ╟─88120468-a43d-4d58-ac04-9cc7c86ca179
 # ╠═ea4b2da1-4c83-4a1f-8fc3-c71a120e58e1
 # ╟─08bdeaff-5bfb-49ab-b4cc-3a3446c63edc
-# ╠═9b6b5da9-8372-4ebf-9c66-ae9fcfc45d47
+# ╟─9b6b5da9-8372-4ebf-9c66-ae9fcfc45d47
+# ╟─f18b98f7-1e0f-4273-896f-8a667d15605b
 # ╟─4a3398be-ee86-45f3-ac8b-f627a38c00b8
 # ╠═2d5fd611-284b-4428-b6a5-8909203990b9
 # ╠═82de4674-9ecc-46c4-8a57-0b4453c579c3
@@ -507,7 +532,6 @@ script(s) = HTML("""
 # ╠═c68ebd7b-5fb6-4527-ac34-33f9730e4587
 # ╟─8c03139f-a94b-40cc-859f-0d86f1c72143
 # ╠═d8dcb044-0ac8-46d1-a043-1073bb6d1ff1
-# ╟─56c4f69d-c6c4-4670-aa65-786cf8206d3b
 # ╠═bf592202-a9a4-4e9b-8433-fed55e3aa3bc
 # ╟─e7d3db79-8253-4cbd-9832-5afb7dff0abf
 # ╟─5ac5b984-8c02-4b8d-a342-d0f05f7909ec
@@ -527,7 +551,10 @@ script(s) = HTML("""
 # ╠═91f3dab8-5521-44a0-9890-8d988a994076
 # ╠═dcaae662-4a4f-4dd3-8763-89ea9eab7d43
 # ╟─e77cfefc-429d-49db-8135-f4604f6a9f0b
-# ╠═ae55f62e-f165-4413-a6e0-8f9c440d7adf
+# ╠═2d5689f5-1d63-4b8b-a103-da35933ad26e
+# ╠═6dd221d1-7fd8-446e-aced-950512ea34bc
+# ╠═0a9d6e2d-3a41-4cd5-9a4e-a9b76ed89fa9
+# ╟─0962d456-1a76-4b0d-85ff-c9e7dc66621d
 # ╠═bf9b36e8-14c5-477b-a54b-35ba8e415c77
 # ╠═91e9a6dc-b970-4c83-b2b9-dfaff706c28c
 # ╠═571613a1-6b4b-496d-9a68-aac3f6a83a4b
