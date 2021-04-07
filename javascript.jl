@@ -148,7 +148,7 @@ Questions? Ask them on our [GitHub Discussions](https://github.com/fonsp/Pluto.j
 md"""
 ## Debugging
 
-Since the HTML, CSS and JavaScript you write just run in the browser, you should use the [browser's built-in developer tools](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_are_browser_developer_tools) to debug your code. 
+The HTML, CSS and JavaScript that you write run in the browser, so you should use the [browser's built-in developer tools](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_are_browser_developer_tools) to debug your code. 
 """
 
 # ╔═╡ ea4b2da1-4c83-4a1f-8fc3-c71a120e58e1
@@ -183,7 +183,7 @@ console.info("Can you find this message in the console?")
 md"""
 ## Selecting elements
 
-When writing the javascript for a widget, it is common to **select elements inside the widgets** to manipulate them. In the number-of-clicks example above, we selected the `<div>` and `<button>` elements in our code, to trigger the input event, and attach event listeners, respectively.
+When writing the javascript code for a widget, it is common to **select elements inside the widgets** to manipulate them. In the number-of-clicks example above, we selected the `<div>` and `<button>` elements in our code, to trigger the input event, and attach event listeners, respectively.
 
 There are a numbers of ways to do this, and the recommended strategy is to **create a wrapper `<div>`, and use `currentScript.parentElement` to select it**.
 
