@@ -1,61 +1,6 @@
-Œ¥bonds€¬cell_results…Ù$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1†¦queuedÂ§runningÂ¦output…¤body„¦prefix¤Dict¨elements‘’’¢:xªtext/plain’„¦prefix£Any¨elements›’’¥"hi!"ªtext/plain’’¯"pluto is cool"ªtext/plain’’£232ªtext/plain’’¡2ªtext/plain’’¡2ªtext/plain’’¢12ªtext/plain’’¢12ªtext/plain’’¡2ªtext/plain’	’¢21ªtext/plain’
-’¡1ªtext/plain’’¡2ªtext/plain¤type¥Array¨objectid°7e1682dcd7206b99Ù!application/vnd.pluto.tree+object¤type¤Dict¨objectid°d5256b6ecc087e5d°persist_js_stateÂ¤mimeÙ!application/vnd.pluto.tree+object²last_run_timestampËAØ+Õ„¬rootassignee¥state§cell_idÙ$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1§runtimeÍì§erroredÂÙ$63d20a5e-ef56-4372-8d52-c042b183206b†¦queuedÂ§runningÂ¦output…¤bodyÚ¯<script type="module" id="asdf">
-	//await new Promise(r => setTimeout(r, 1000))
-	
-	const { html, render, Component, useEffect, useLayoutEffect, useState, useRef, useMemo, createContext, useContext, } = await import( "https://cdn.jsdelivr.net/npm/htm@3.0.4/preact/standalone.mjs")
-
-	const node = this ?? document.createElement("div")
-	
-	const new_state = {"x":["hi!","pluto is cool",232,2,2,12,12,2,21,1,2]}
-	
-	if(this == null){
-		const Item = ({value}) => {
-			const [loading, set_loading] = useState(true)
-
-			useEffect(() => {
-				set_loading(true)
-
-				const handle = setTimeout(() => {
-					set_loading(false)
-				}, 1000)
-
-				return () => clearTimeout(handle)
-			}, [value])
-
-			return html`<li>${loading ? 
-				html`<em>Loading...</em>` : 
-				value
-			}</li>`
-		}
-
-        const App = () => {
-
-            const [state, set_state] = useState(new_state)
-            node.set_app_state = set_state
-
-            return html`<h1>Hello world!</h1>
-                <ul>${
-                state.x.map((x,i) => html`<${Item} value=${x} key=${i}/>`)
-            }</ul>`;
-        }
-
-
-
-        render(html`<${App}/>`, node);
-	
-	} else {
-		
-		node.set_app_state(new_state)
-	}
-	return node
-</script>
-	
-	
-°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØRzÌ¬rootassigneeÀ§cell_idÙ$63d20a5e-ef56-4372-8d52-c042b183206b§runtimeÎ*iÇ§erroredÂÙ$e26f37c4-7e6e-11eb-101c-1db0eda6940e†¦queuedÂ§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØdVK¬rootassigneeÀ§cell_idÙ$e26f37c4-7e6e-11eb-101c-1db0eda6940e§runtimeÎú”Ş§erroredÂÙ$e4d31294-5369-4473-b319-3d7962164953†¦queuedÂ§runningÂ¦output…¤body„¦prefix£Any¨elements›’’¥"hi!"ªtext/plain’’¯"pluto is cool"ªtext/plain’’£232ªtext/plain’’¡2ªtext/plain’’¡2ªtext/plain’’¢12ªtext/plain’’¢12ªtext/plain’’¡2ªtext/plain’	’¢21ªtext/plain’
-’¡1ªtext/plain’’¡2ªtext/plain¤type¥Array¨objectid°7e1682dcd7206b99°persist_js_stateÂ¤mimeÙ!application/vnd.pluto.tree+object²last_run_timestampËAØéÙù¬rootassignee¡x§cell_idÙ$e4d31294-5369-4473-b319-3d7962164953§runtimeÍ §erroredÂÙ$359596df-78a4-4e9b-aa7b-665ab29dc7ec†¦queuedÂ§runningÂ¦output…¤bodyÙ<div class="markdown"><p>Modify <code>x</code>, add and remove elements, and notice that preact maintains its state.</p>
-</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ‡/ä?¬rootassigneeÀ§cell_idÙ$359596df-78a4-4e9b-aa7b-665ab29dc7ec§runtimeÍ,ì§erroredÂ±cell_dependencies…Ù$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1„´precedence_heuristic§cell_idÙ$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1´downstream_cells_map¥state‘Ù$63d20a5e-ef56-4372-8d52-c042b183206b²upstream_cells_mapƒ¤Dict¡x‘Ù$e4d31294-5369-4473-b319-3d7962164953¢=>Ù$63d20a5e-ef56-4372-8d52-c042b183206b„´precedence_heuristic§cell_idÙ$63d20a5e-ef56-4372-8d52-c042b183206b´downstream_cells_map€²upstream_cells_mapƒ¤json¤HTML¥state‘Ù$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1Ù$e26f37c4-7e6e-11eb-101c-1db0eda6940e„´precedence_heuristic§cell_idÙ$e26f37c4-7e6e-11eb-101c-1db0eda6940e´downstream_cells_map¤JSON²upstream_cells_map€Ù$e4d31294-5369-4473-b319-3d7962164953„´precedence_heuristic§cell_idÙ$e4d31294-5369-4473-b319-3d7962164953´downstream_cells_map¡x‘Ù$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1²upstream_cells_map€Ù$359596df-78a4-4e9b-aa7b-665ab29dc7ec„´precedence_heuristic§cell_idÙ$359596df-78a4-4e9b-aa7b-665ab29dc7ec´downstream_cells_map€²upstream_cells_map‚§@md_str¨getindex´cell_execution_order•Ù$e26f37c4-7e6e-11eb-101c-1db0eda6940eÙ$359596df-78a4-4e9b-aa7b-665ab29dc7ecÙ$e4d31294-5369-4473-b319-3d7962164953Ù$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1Ù$63d20a5e-ef56-4372-8d52-c042b183206b©shortpath©preact.jl®process_status¥ready¤pathÙ?/home/runner/work/disorganised-mess/disorganised-mess/preact.jlªcell_order•Ù$e26f37c4-7e6e-11eb-101c-1db0eda6940eÙ$359596df-78a4-4e9b-aa7b-665ab29dc7ecÙ$e4d31294-5369-4473-b319-3d7962164953Ù$63d20a5e-ef56-4372-8d52-c042b183206bÙ$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1¥nbpkg„²installed_versions¤JSON¦0.21.1§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputs…Ù$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1ƒ§cell_idÙ$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1¤code¹state = Dict(
-	:x => x
-	)«code_foldedÂÙ$63d20a5e-ef56-4372-8d52-c042b183206bƒ§cell_idÙ$63d20a5e-ef56-4372-8d52-c042b183206b¤codeÚœHTML("""
+Œ±cell_dependencies…Ù$359596df-78a4-4e9b-aa7b-665ab29dc7ec„´precedence_heuristic§cell_idÙ$359596df-78a4-4e9b-aa7b-665ab29dc7ec´downstream_cells_map€²upstream_cells_map‚§@md_str¨getindexÙ$e26f37c4-7e6e-11eb-101c-1db0eda6940e„´precedence_heuristic§cell_idÙ$e26f37c4-7e6e-11eb-101c-1db0eda6940e´downstream_cells_map¤JSON²upstream_cells_map€Ù$63d20a5e-ef56-4372-8d52-c042b183206b„´precedence_heuristic§cell_idÙ$63d20a5e-ef56-4372-8d52-c042b183206b´downstream_cells_map€²upstream_cells_mapƒ¤json¤HTML¥state‘Ù$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1Ù$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1„´precedence_heuristic§cell_idÙ$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1´downstream_cells_map¥state‘Ù$63d20a5e-ef56-4372-8d52-c042b183206b²upstream_cells_mapƒ¤Dict¡x‘Ù$e4d31294-5369-4473-b319-3d7962164953¢=>Ù$e4d31294-5369-4473-b319-3d7962164953„´precedence_heuristic§cell_idÙ$e4d31294-5369-4473-b319-3d7962164953´downstream_cells_map¡x‘Ù$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1²upstream_cells_map€´cell_execution_order•Ù$e26f37c4-7e6e-11eb-101c-1db0eda6940eÙ$359596df-78a4-4e9b-aa7b-665ab29dc7ecÙ$e4d31294-5369-4473-b319-3d7962164953Ù$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1Ù$63d20a5e-ef56-4372-8d52-c042b183206b®process_status¥ready¤pathÙ?/home/runner/work/disorganised-mess/disorganised-mess/preact.jlªcell_order•Ù$e26f37c4-7e6e-11eb-101c-1db0eda6940eÙ$359596df-78a4-4e9b-aa7b-665ab29dc7ecÙ$e4d31294-5369-4473-b319-3d7962164953Ù$63d20a5e-ef56-4372-8d52-c042b183206bÙ$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1¥nbpkg„²installed_versions¤JSON¦0.21.1§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputs…Ù$359596df-78a4-4e9b-aa7b-665ab29dc7ecƒ§cell_idÙ$359596df-78a4-4e9b-aa7b-665ab29dc7ec¤codeÙZmd"""
+Modify `x`, add and remove elements, and notice that preact maintains its state.
+"""«code_foldedÃÙ$e26f37c4-7e6e-11eb-101c-1db0eda6940eƒ§cell_idÙ$e26f37c4-7e6e-11eb-101c-1db0eda6940e¤codeªusing JSON«code_foldedÂÙ$63d20a5e-ef56-4372-8d52-c042b183206bƒ§cell_idÙ$63d20a5e-ef56-4372-8d52-c042b183206b¤codeÚœHTML("""
 <script type="module" id="asdf">
 	//await new Promise(r => setTimeout(r, 1000))
 	
@@ -108,6 +53,61 @@
 </script>
 	
 	
-""")«code_foldedÂÙ$e26f37c4-7e6e-11eb-101c-1db0eda6940eƒ§cell_idÙ$e26f37c4-7e6e-11eb-101c-1db0eda6940e¤codeªusing JSON«code_foldedÂÙ$e4d31294-5369-4473-b319-3d7962164953ƒ§cell_idÙ$e4d31294-5369-4473-b319-3d7962164953¤codeÙ5x = ["hi!", "pluto is cool", 232,2,2,12 ,12,2,21,1,2]«code_foldedÂÙ$359596df-78a4-4e9b-aa7b-665ab29dc7ecƒ§cell_idÙ$359596df-78a4-4e9b-aa7b-665ab29dc7ec¤codeÙZmd"""
-Modify `x`, add and remove elements, and notice that preact maintains its state.
-"""«code_foldedÃ«notebook_idÙ$63047b32-993e-11eb-2f0b-a36328d31d5b«in_temp_dirÂ
+""")«code_foldedÂÙ$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1ƒ§cell_idÙ$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1¤code¹state = Dict(
+	:x => x
+	)«code_foldedÂÙ$e4d31294-5369-4473-b319-3d7962164953ƒ§cell_idÙ$e4d31294-5369-4473-b319-3d7962164953¤codeÙ5x = ["hi!", "pluto is cool", 232,2,2,12 ,12,2,21,1,2]«code_foldedÂ«notebook_idÙ$63047b32-993e-11eb-2f0b-a36328d31d5b¥bonds€¬cell_results…Ù$359596df-78a4-4e9b-aa7b-665ab29dc7ec†¦queuedÂ§runningÂ¦output…¤bodyÙ<div class="markdown"><p>Modify <code>x</code>, add and remove elements, and notice that preact maintains its state.</p>
+</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ‡/ä?¬rootassigneeÀ§cell_idÙ$359596df-78a4-4e9b-aa7b-665ab29dc7ec§runtimeÍ,ì§erroredÂÙ$e26f37c4-7e6e-11eb-101c-1db0eda6940e†¦queuedÂ§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØdVK¬rootassigneeÀ§cell_idÙ$e26f37c4-7e6e-11eb-101c-1db0eda6940e§runtimeÎú”Ş§erroredÂÙ$63d20a5e-ef56-4372-8d52-c042b183206b†¦queuedÂ§runningÂ¦output…¤bodyÚ¯<script type="module" id="asdf">
+	//await new Promise(r => setTimeout(r, 1000))
+	
+	const { html, render, Component, useEffect, useLayoutEffect, useState, useRef, useMemo, createContext, useContext, } = await import( "https://cdn.jsdelivr.net/npm/htm@3.0.4/preact/standalone.mjs")
+
+	const node = this ?? document.createElement("div")
+	
+	const new_state = {"x":["hi!","pluto is cool",232,2,2,12,12,2,21,1,2]}
+	
+	if(this == null){
+		const Item = ({value}) => {
+			const [loading, set_loading] = useState(true)
+
+			useEffect(() => {
+				set_loading(true)
+
+				const handle = setTimeout(() => {
+					set_loading(false)
+				}, 1000)
+
+				return () => clearTimeout(handle)
+			}, [value])
+
+			return html`<li>${loading ? 
+				html`<em>Loading...</em>` : 
+				value
+			}</li>`
+		}
+
+        const App = () => {
+
+            const [state, set_state] = useState(new_state)
+            node.set_app_state = set_state
+
+            return html`<h1>Hello world!</h1>
+                <ul>${
+                state.x.map((x,i) => html`<${Item} value=${x} key=${i}/>`)
+            }</ul>`;
+        }
+
+
+
+        render(html`<${App}/>`, node);
+	
+	} else {
+		
+		node.set_app_state(new_state)
+	}
+	return node
+</script>
+	
+	
+°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØRzÌ¬rootassigneeÀ§cell_idÙ$63d20a5e-ef56-4372-8d52-c042b183206b§runtimeÎ*iÇ§erroredÂÙ$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1†¦queuedÂ§runningÂ¦output…¤body„¨elements‘’’¢:xªtext/plain’„¨elements›’’¥"hi!"ªtext/plain’’¯"pluto is cool"ªtext/plain’’£232ªtext/plain’’¡2ªtext/plain’’¡2ªtext/plain’’¢12ªtext/plain’’¢12ªtext/plain’’¡2ªtext/plain’	’¢21ªtext/plain’
+’¡1ªtext/plain’’¡2ªtext/plain¨objectid°7e1682dcd7206b99¦prefix£Any¤type¥ArrayÙ!application/vnd.pluto.tree+object¨objectid°d5256b6ecc087e5d¦prefix¤Dict¤type¤Dict°persist_js_stateÂ¤mimeÙ!application/vnd.pluto.tree+object²last_run_timestampËAØ+Õ„¬rootassignee¥state§cell_idÙ$7e226ea0-dfd6-4f5f-a3c3-88c8bbba97a1§runtimeÍì§erroredÂÙ$e4d31294-5369-4473-b319-3d7962164953†¦queuedÂ§runningÂ¦output…¤body„¨elements›’’¥"hi!"ªtext/plain’’¯"pluto is cool"ªtext/plain’’£232ªtext/plain’’¡2ªtext/plain’’¡2ªtext/plain’’¢12ªtext/plain’’¢12ªtext/plain’’¡2ªtext/plain’	’¢21ªtext/plain’
+’¡1ªtext/plain’’¡2ªtext/plain¨objectid°7e1682dcd7206b99¦prefix£Any¤type¥Array°persist_js_stateÂ¤mimeÙ!application/vnd.pluto.tree+object²last_run_timestampËAØéÙù¬rootassignee¡x§cell_idÙ$e4d31294-5369-4473-b319-3d7962164953§runtimeÍ §erroredÂ©shortpath©preact.jl«in_temp_dirÂ
