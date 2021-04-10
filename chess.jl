@@ -38,15 +38,6 @@ domove(startboard(), "e4") |> moves
 # ╔═╡ 2ea956e4-be0c-4acb-9f7c-d5e0dbf32899
 Base.:(!)(p::PieceColor) = p === BLACK ? WHITE : BLACK
 
-# ╔═╡ 369fafb1-dfd4-4a82-a75d-c96fd60f7860
-
-
-# ╔═╡ 872935df-b452-4b19-932e-3d510b256fb6
-
-
-# ╔═╡ d01216af-f09d-4ccb-a7c8-06545c870388
-
-
 # ╔═╡ 71ccaeeb-628a-4e35-9890-4813f00eabba
 function random_result()
 	board = startboard()
@@ -108,22 +99,6 @@ ischeckmate(x)
 
 # ╔═╡ 441e2468-8ea9-4d71-a2f1-0496754df7e1
 isstalemate(x)
-
-# ╔═╡ 2da3ccd2-219b-4d8e-ab2f-4d6a1c4aa658
-one_random_game = let
-	result = []
-	try
-	board = startboard()
-	while (next_moves = moves(board); !isempty(next_moves))
-		choice = rand(next_moves)
-		board = domove(board, choice)
-		push!(result, board)
-	end
-		result
-	catch e
-		e, length(result)
-	end
-end
 
 # ╔═╡ 2f2c770b-d32f-48df-92fa-74efd64a0f4a
 md"""
@@ -605,17 +580,13 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═fb499ce6-0df2-48ca-90e6-f269b92735f9
 # ╠═e2200f0e-050b-4f66-93f8-e357f0907f1b
 # ╠═2ea956e4-be0c-4acb-9f7c-d5e0dbf32899
-# ╠═369fafb1-dfd4-4a82-a75d-c96fd60f7860
-# ╠═872935df-b452-4b19-932e-3d510b256fb6
 # ╠═d3b54370-fd6e-4acb-85ed-32f806965b82
 # ╠═55a9aea3-3897-409d-99fd-d4ff9e967179
 # ╠═27bb80a7-4a5b-4071-98d8-6df642adc29b
 # ╠═441e2468-8ea9-4d71-a2f1-0496754df7e1
-# ╠═d01216af-f09d-4ccb-a7c8-06545c870388
 # ╠═71ccaeeb-628a-4e35-9890-4813f00eabba
 # ╠═03f21ea2-e224-461d-b602-479e6e644dca
 # ╠═60391e7f-d78b-4040-b94e-1b92691ed81b
-# ╠═2da3ccd2-219b-4d8e-ab2f-4d6a1c4aa658
 # ╟─2f2c770b-d32f-48df-92fa-74efd64a0f4a
 # ╠═c3c48796-b88e-47d3-beda-ac1ef65629f2
 # ╠═cfbc94d5-cd64-4816-8166-f66d499087a1
