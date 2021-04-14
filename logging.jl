@@ -27,6 +27,12 @@ md"""
 # ╔═╡ a22411c8-24e0-4a80-9b91-bc1f0999cc3c
 Dict([1,"asdf"] => (123, [1,[2,3,[4,5, md"# asdf"]]], md"## asdf", DomainError("asdf")))
 
+# ╔═╡ dd183c9d-c070-43bc-95ff-cf64ba27071e
+
+
+# ╔═╡ 5f8496cb-d29e-4c4c-b378-1173242c7a78
+collect(rand(1000))
+
 # ╔═╡ a93ac790-7a04-418d-8117-01f01e4608c8
 :asdf  => 123
 
@@ -63,9 +69,10 @@ b
 hello
 
 # ╔═╡ 3599eb82-0003-11eb-3814-dfd0f5737846
-for i in 1:10
+for i in 1:100
 	
 	@debug i
+	@info i*100
 	
 	if isodd(i)
 		@warn "Oh no!" i
@@ -99,17 +106,19 @@ svg_data = download("https://diffeq.sciml.ai/stable/assets/multiODEplot.png") |>
 cool_plot = Show(MIME"image/png"(), svg_data)
 
 # ╔═╡ 091d33fe-fffe-11ea-131f-01f4248b30ea
-@info "23dafs lkjlkjsadf lkj asdflkj asdlkfj alskdjflkasdjflkjasdlfk jsdlkjf sdlkjf   laskjdf lkasdjflkajs df   lkjas dflkjasdlfkjsadf
-
-
-
-asdf" x [x,x,cool_plot,x]
-
-
-
-
-
-
+begin
+	@info "23dafs lkjlkjsadf lkj asdflkj asdlkfj alskdjflkasdjflkjasdlfk jsdlkjf sdlkjf   laskjdf lkasdjflkajs df   lkjas dflkjasdlfkjsadf
+	
+	
+	
+	asdf" x [x,x,cool_plot,x]
+	
+	
+	
+	
+	@error "asfdasdf"
+	
+end
 
 # ╔═╡ 504dfdc1-41da-4fcb-ba8e-aa69643d57a1
 plot(args...; kwargs...) = Plots.plot(args...; kwargs..., size=(150,120)) |> as_svg
@@ -215,6 +224,8 @@ m.g(123)
 # ╟─196080df-e8c0-4120-a97c-443cf66295ff
 # ╠═a22411c8-24e0-4a80-9b91-bc1f0999cc3c
 # ╠═091d33fe-fffe-11ea-131f-01f4248b30ea
+# ╠═dd183c9d-c070-43bc-95ff-cf64ba27071e
+# ╠═5f8496cb-d29e-4c4c-b378-1173242c7a78
 # ╠═a93ac790-7a04-418d-8117-01f01e4608c8
 # ╠═88f87c39-89ef-4492-92ae-c6cd33699c59
 # ╠═2d01cdaa-fffe-11ea-09f5-63527a1b0f87
