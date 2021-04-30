@@ -206,6 +206,26 @@ pt-dot {
 	margin-right: .7em;
 	display: block;
 	position: relative;
+	cursor: pointer;
+}
+
+pt-dot.floating {
+	position: fixed;
+	z-index: 4;
+	display: none;
+}
+.show-top-float > pt-dot.floating.top {
+	display: block;
+}
+.show-bottom-float > pt-dot.floating.bottom {
+	display: block;
+}
+
+pt-dot.floating.top {
+	top: 5px;
+}
+pt-dot.floating.bottom {
+	bottom: 5px;
 }
 
 
@@ -215,7 +235,10 @@ pt-dot {
 }
 .pass > pt-dot {
 	background: #56a038;
-
+}
+.pass > pt-dot.floating {
+	opacity: 0;
+	pointer-events: none;
 }
 
 
@@ -292,6 +315,9 @@ border-radius: 7px;
 
 # ╔═╡ 4bc1b7a4-0a36-4a07-b7ee-3d5be50350e1
 ("asd"*"asd","asd","asd"*" asd","asd","asd"*"asd","asd","asd"*"asd","asd","asd"*"asd","asd","asd"*"asd","asd","asd"*"asd","asd")
+
+# ╔═╡ 3b2e8f55-1d4b-4a36-83f6-26becbd79e4b
+# @test (@test t isa Pass) isa Pass
 
 # ╔═╡ 1ac164c8-88fc-4a87-a194-60ef616fb399
 flatmap(args...) = vcat(map(args...)...)
@@ -735,7 +761,7 @@ function frames(fs)
 		setviz()
 		
 		input.addEventListener("input", setviz)
-		
+
 		</script>
 
 
@@ -778,14 +804,62 @@ begin
 			
 			const div = currentScript.parentElement
 			div.addEventListener("click", (e) => {
-				if(!div.classList.contains("expanded") || e.target.closest("pt-dot") != null){
+				if(!div.classList.contains("expanded") || e.target.closest("pt-dot:not(.floating)") != null){
 					div.classList.toggle("expanded")
 					e.stopPropagation()
 				}
 			})
 			
+			const throttled = (f, delay) => {
+				const waiting = { current: false }
+				return () => {
+					if (!waiting.current) {
+						f()
+						waiting.current = true
+						setTimeout(() => {
+							f()
+							waiting.current = false
+						}, delay)
+					}
+				}
+			}
+			
+			
+
+			const intersect = (r) => {
+				const topdistance = r.top
+				const botdistance = window.visualViewport.height - r.bottom
+
+				div.classList.toggle("show-top-float", topdistance < 4)
+				div.classList.toggle("show-bottom-float", botdistance < 4)
+			}
+			
+			window.addEventListener("scroll", throttled(() => {
+				intersect(dot.getBoundingClientRect())
+			}, 200))
+
+			let observer = new IntersectionObserver((es) => {
+				const e = es[0]
+				intersect(e.boundingClientRect)
+			},  {
+			  rootMargin: '-4px',
+			  threshold: 1.0
+			});
+
+			const dot = div.querySelector("pt-dot")
+			observer.observe(dot)
+			invalidation.then(() => {
+				observer.unobserve(dot)
+			})
+			
+			Array.from(div.querySelectorAll("pt-dot.floating")).forEach(e => {
+				e.addEventListener("click", () => dot.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"}))
+			})
+			
 			</script>
 			<pt-dot></pt-dot>
+			<pt-dot class="floating top"></pt-dot>
+			<pt-dot class="floating bottom"></pt-dot>
 		
 			$(frames(display_slotted.( call.steps)))
 		</div>
@@ -897,9 +971,6 @@ end
 
 # ╔═╡ 716bba60-bfbb-48a4-8924-8bf4e8958cb1
 @test always_false("asd"*"asd","asd","asd"*" asd","asd","asd"*"asd","asd","asd"*"asd","asd","asd"*"asd","asd","asd"*"asd","asd","asd"*"asd","asd")
-
-# ╔═╡ 3b2e8f55-1d4b-4a36-83f6-26becbd79e4b
-@test (@test t isa Pass) isa Pass
 
 # ╔═╡ 7c1aa057-dff2-48cd-aad5-1bbc1c0a729b
 @test π ≈ 3.14 atol=0.01 rtol=1
