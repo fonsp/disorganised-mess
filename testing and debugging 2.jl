@@ -355,6 +355,9 @@ end
 # ╔═╡ 539e2c38-993b-4b3b-8aa0-f02d46d79839
 @test 1 ∈ rand(60)
 
+# ╔═╡ 3d3f3592-e056-4e7b-8896-a75e5b5dcad6
+@test rand(60) ∋ 1
+
 # ╔═╡ eb47074d-099e-4d8b-a72a-dd7014e5c5dc
 (@test isodd(3)) isa Pass
 
@@ -706,6 +709,21 @@ rs = @expr_debug_light(begin
 # ╔═╡ dea898a0-1904-4d09-ad0b-6915008fe946
 rs[rindex]
 
+# ╔═╡ 326f7661-3482-4bf2-a97b-57cc7ac60ee2
+macro visual_debug(expr)
+	quote
+		@expr_debug_light($(expr)) .|> display_slotted |> frames
+	end
+end
+
+# ╔═╡ a2cbb0c3-23b9-4091-9ca7-5ba96e85e3a3
+@visual_debug begin
+	(1+2) + (7-6)
+	plot(2000 .+ 30 .* rand(2+2))
+	4+5
+	sqrt(sqrt(sqrt(5)))
+end
+
 # ╔═╡ e968fc57-d850-4e2d-9410-8777d03b7b3c
 function frames(fs)
 	@htl("""
@@ -713,7 +731,8 @@ function frames(fs)
 		<p-frames>
 		$(fs)
 		</p-frames>
-
+		
+		<img src="https://cdn.jsdelivr.net/gh/ionic-team/ionicons@5.0.0/src/svg/refresh-outline.svg" style="width: 1em; transform: scale(-1,1); opacity: .5; margin-left: 2em;">
 		<input class="timescrub" type=range min=1 max=$(length(fs)) value=$(max(1,length(fs)-1))>
 		
 		
@@ -850,6 +869,7 @@ step(:(+(1,+(2,+(3,4)))))
 # ╠═be93a6f4-b626-43db-a2fe-4e754e79c030
 # ╟─17bd5cd9-212f-4656-ab79-590dd6c64ff8
 # ╠═539e2c38-993b-4b3b-8aa0-f02d46d79839
+# ╠═3d3f3592-e056-4e7b-8896-a75e5b5dcad6
 # ╠═8a2e8348-49cf-4855-b5b3-cdee33e5ed67
 # ╠═eb47074d-099e-4d8b-a72a-dd7014e5c5dc
 # ╠═9c3f6eab-b1c3-4607-add8-d6d7e468c11a
@@ -911,6 +931,8 @@ step(:(+(1,+(2,+(3,4)))))
 # ╠═93ed973f-daf6-408b-9d4b-d53495418610
 # ╠═dea898a0-1904-4d09-ad0b-6915008fe946
 # ╠═fb34eed2-d428-43e8-8ee6-4d441115fde4
+# ╠═326f7661-3482-4bf2-a97b-57cc7ac60ee2
+# ╠═a2cbb0c3-23b9-4091-9ca7-5ba96e85e3a3
 # ╠═e968fc57-d850-4e2d-9410-8777d03b7b3c
 # ╟─f9ed2487-a7f6-4ce9-b673-f8a298cd5fc3
 # ╟─218504da-29d1-40b3-b3f6-534813efae7a
