@@ -22,6 +22,21 @@ using PlutoUI
 # ╔═╡ 5c2cae00-cfad-43b8-9c36-3380809bb6bc
 using Plots
 
+# ╔═╡ ec1fd70a-d92a-4688-98b2-135879f07141
+md"""
+### (You need `Pluto#main` to run this notebook)
+"""
+
+# ╔═╡ 85c4575f-8466-4a42-a7b5-1b3346f60e38
+md"""
+This notebook contains **visual debugging**:
+"""
+
+# ╔═╡ 5b801f8b-1320-4208-8819-571d0a6c8c36
+md"""
+and **visual testing**:
+"""
+
 # ╔═╡ c763ed72-82c9-445c-a8f7-a0c40982e4d9
 TableOfContents()
 
@@ -47,18 +62,6 @@ struct Correct <: Pass
 	expr::Code
 end
 
-# ╔═╡ 03ccd498-83c3-41bb-84d7-625adabd7aee
-struct CorrectCall <: Pass
-	expr::Code
-	arg_results::Vector
-end
-
-# ╔═╡ 656c4190-b49e-4225-869d-eeb7e8e41e72
-struct Wrong <: Fail
-	expr::Code
-	result
-end
-
 # ╔═╡ 14c525a1-eca1-466b-8e63-3a90d7d7111c
 struct WrongCall <: Fail
 	expr::Code
@@ -69,6 +72,18 @@ end
 struct Error <: Fail
 	expr::Code
 	error
+end
+
+# ╔═╡ 656c4190-b49e-4225-869d-eeb7e8e41e72
+struct Wrong <: Fail
+	expr::Code
+	result
+end
+
+# ╔═╡ 03ccd498-83c3-41bb-84d7-625adabd7aee
+struct CorrectCall <: Pass
+	expr::Code
+	arg_results::Vector
 end
 
 # ╔═╡ a2efc968-246c-40c2-b285-2ec94b185a44
@@ -132,15 +147,6 @@ e = :(x == [1,2+2])
 
 # ╔═╡ 9d49ea50-8158-4d8b-97af-edba1f7dc38b
 x = [1,3]
-
-# ╔═╡ 4a6e3dd2-3428-4a96-a406-128124b33ee1
-Dump(:(a == b))
-
-# ╔═╡ 1647aa64-bd11-4c67-a97f-69c543685ca9
-@which show(stdout, :(a == b))
-
-# ╔═╡ 284aeeb8-5442-4761-9696-3653662550e0
-Base.isbinaryoperator(:(==))
 
 # ╔═╡ 1aa24b1c-e8ca-4de7-b614-7a3f02b4833d
 always_false(args...) = false
@@ -315,6 +321,9 @@ begin
 # 		Base.show(io, m, result)
 # 	end
 end
+
+# ╔═╡ 6762ed72-f422-43a9-a782-de78f739c0ae
+@test 4+4 ∈ [1:7...]
 
 # ╔═╡ 26b0faf0-9016-48d7-8667-c1c1cfce655e
 @test missing == 2
@@ -535,13 +544,6 @@ onestep_light(quote
 # ╔═╡ 88f6a040-07cf-47e0-a8be-2478ea350aa7
 can_interpret(x) = true
 
-# ╔═╡ 89578bff-16b9-4eb2-b8ee-b2839ff2d74c
-can_interpret(e::Expr) = if e.head === :(=) || e.head === :macrocall
-	false
-else
-	all(can_interpret, e.args)
-end
-
 # ╔═╡ a661e172-6afb-42ff-bd43-bb5b787ee5ed
 macro expr_debug_light(e)
 	if can_interpret(e)
@@ -568,6 +570,13 @@ remove_linenums( @macroexpand @expr_debug_light sqrt(sqrt(3)) )
 
 # ╔═╡ 8a5a4c26-e36c-4061-b32f-4448625ce4a6
 xasdf
+
+# ╔═╡ 89578bff-16b9-4eb2-b8ee-b2839ff2d74c
+# can_interpret(e::Expr) = if e.head === :(=) || e.head === :macrocall
+# 	false
+# else
+# 	all(can_interpret, e.args)
+# end
 
 # ╔═╡ 21d4560e-721f-4ed4-9db7-86a8151ab22c
 md"""
@@ -709,21 +718,6 @@ rs = @expr_debug_light(begin
 # ╔═╡ dea898a0-1904-4d09-ad0b-6915008fe946
 rs[rindex]
 
-# ╔═╡ 326f7661-3482-4bf2-a97b-57cc7ac60ee2
-macro visual_debug(expr)
-	quote
-		@expr_debug_light($(expr)) .|> display_slotted |> frames
-	end
-end
-
-# ╔═╡ a2cbb0c3-23b9-4091-9ca7-5ba96e85e3a3
-@visual_debug begin
-	(1+2) + (7-6)
-	plot(2000 .+ 30 .* rand(2+2))
-	4+5
-	sqrt(sqrt(sqrt(5)))
-end
-
 # ╔═╡ e968fc57-d850-4e2d-9410-8777d03b7b3c
 function frames(fs)
 	@htl("""
@@ -732,7 +726,7 @@ function frames(fs)
 		$(fs)
 		</p-frames>
 		
-		<img src="https://cdn.jsdelivr.net/gh/ionic-team/ionicons@5.0.0/src/svg/refresh-outline.svg" style="width: 1em; transform: scale(-1,1); opacity: .5; margin-left: 2em;">
+		<img src="https://cdn.jsdelivr.net/gh/ionic-team/ionicons@5.0.0/src/svg/time-outline.svg" style="width: 1em; transform: scale(-1,1); opacity: .5; margin-left: 2em;">
 		<input class="timescrub" type=range min=1 max=$(length(fs)) value=$(max(1,length(fs)-1))>
 		
 		
@@ -766,6 +760,35 @@ end
 # ╔═╡ fb34eed2-d428-43e8-8ee6-4d441115fde4
 frames(rs)
 
+# ╔═╡ 326f7661-3482-4bf2-a97b-57cc7ac60ee2
+macro visual_debug(expr)
+	frames
+	display_slotted
+	quote
+		@expr_debug_light($(expr)) .|> display_slotted |> frames
+	end
+end
+
+# ╔═╡ d6c53f95-ea61-4aed-a469-76d0319d29de
+@visual_debug begin
+	(1+2) + (7-6)
+	plot(2000 .+ 30 .* rand(2+2))
+	4+5
+	sqrt(sqrt(sqrt(5)))
+	md"# asdf"
+end
+
+# ╔═╡ fe7f8cce-a706-476d-8680-a2fe793b474f
+@visual_debug !always_false(rand(2), rand(2),123)
+
+# ╔═╡ a2cbb0c3-23b9-4091-9ca7-5ba96e85e3a3
+@visual_debug begin
+	(1+2) + (7-6)
+	plot(2000 .+ 30 .* rand(2+2))
+	4+5
+	sqrt(sqrt(sqrt(5)))
+end
+
 # ╔═╡ f9ed2487-a7f6-4ce9-b673-f8a298cd5fc3
 
 
@@ -784,66 +807,25 @@ frames(rs)
 # ╔═╡ aebe40a7-c0e4-412d-be4c-960ef173d394
 
 
-# ╔═╡ fea622d8-ec4b-4423-8450-c41553e34b66
-md"""
-# Debugging 2
-"""
-
-# ╔═╡ eb64d014-66a5-4613-8559-efafe70ce933
-struct BeforeAfter
-	before
-	step
-	after
-end
-
-# ╔═╡ ee2ec1db-267c-417a-9189-f4e3e1393b33
-after(x) = x
-
-# ╔═╡ a99cca77-e7d2-41e4-983f-f53829ebc722
-after(e::Expr) = Expr(e.head, after.(e.args)...)
-
-# ╔═╡ b20819d9-4ba2-4903-bdf4-b1704bd11d60
-after(x::BeforeAfter) = x.after
-
-# ╔═╡ da3ec249-21e9-4eba-a303-284cf9cb9fc6
-function step(expr)
-	
-	if Meta.isexpr(expr, :call)
-		
-		fname = expr.args[1]
-		
-		inners = step.(expr.args[2:end])
-		
-		innersteps = 
-
-		BeforeAfter(expr, 
-			
-	end
-end
-
-# ╔═╡ b6375d7c-657a-43dd-b38b-a5bc191b1997
-
-
-# ╔═╡ 72f2a998-5311-4dcc-b998-e5263daacf72
-step(:(+(1,+(2,+(3,4)))))
-
-# ╔═╡ 7db03941-464e-45c3-9a95-8a9b9fb4299f
-
-
 # ╔═╡ Cell order:
+# ╟─ec1fd70a-d92a-4688-98b2-135879f07141
+# ╟─85c4575f-8466-4a42-a7b5-1b3346f60e38
+# ╠═d6c53f95-ea61-4aed-a469-76d0319d29de
+# ╟─5b801f8b-1320-4208-8819-571d0a6c8c36
+# ╠═6762ed72-f422-43a9-a782-de78f739c0ae
+# ╠═c763ed72-82c9-445c-a8f7-a0c40982e4d9
 # ╠═285809d3-9a72-4eb6-9ebc-ddefd459ab6a
 # ╠═b16145b1-66da-4d96-a648-9e083c407e9a
-# ╠═c763ed72-82c9-445c-a8f7-a0c40982e4d9
 # ╟─0d70962a-3880-4dee-a439-35068d019f5a
 # ╠═113cc425-e224-4f77-bfbd-ef4eb1d1ed70
 # ╠═6188f559-bcab-4da6-84b2-a3fe522a5c3c
 # ╠═c24b46ce-bcbb-4dc9-8a59-b5b1bd2cd617
 # ╠═5041085e-a406-4ed4-ab82-84d8f126cf0f
 # ╠═8c92bad9-234e-47dd-a599-b75dc6d5db89
-# ╠═03ccd498-83c3-41bb-84d7-625adabd7aee
-# ╠═656c4190-b49e-4225-869d-eeb7e8e41e72
 # ╠═14c525a1-eca1-466b-8e63-3a90d7d7111c
 # ╠═1bcf8bd1-c8a3-49a1-9791-d813aa856399
+# ╠═656c4190-b49e-4225-869d-eeb7e8e41e72
+# ╠═03ccd498-83c3-41bb-84d7-625adabd7aee
 # ╟─a2efc968-246c-40c2-b285-2ec94b185a44
 # ╠═b6e8a170-12cc-4d97-905d-274e2609bfd8
 # ╟─bfe4dc61-9160-4c7e-8897-9c723b309adc
@@ -852,12 +834,10 @@ step(:(+(1,+(2,+(3,4)))))
 # ╠═9d49ea50-8158-4d8b-97af-edba1f7dc38b
 # ╠═26b0faf0-9016-48d7-8667-c1c1cfce655e
 # ╠═26b4fb86-892f-415c-8046-6a5449052fd7
-# ╠═4a6e3dd2-3428-4a96-a406-128124b33ee1
-# ╠═1647aa64-bd11-4c67-a97f-69c543685ca9
-# ╠═284aeeb8-5442-4761-9696-3653662550e0
 # ╠═eab4ba31-c787-46dd-8024-693eca7fd1a0
 # ╠═96dc7b01-3766-4206-88ba-eca1665bc5cb
 # ╠═7c6ce205-053d-434c-b5b1-500babb8ec02
+# ╠═fe7f8cce-a706-476d-8680-a2fe793b474f
 # ╠═1aa24b1c-e8ca-4de7-b614-7a3f02b4833d
 # ╠═8d340983-ea07-4038-872f-22a165003ed2
 # ╠═ea5a4fc0-db62-41dd-9600-a21d4eabf822
@@ -940,12 +920,3 @@ step(:(+(1,+(2,+(3,4)))))
 # ╟─54ed587c-5526-46c0-a9cf-2110f5fc9a29
 # ╟─d1381f83-2165-4121-bae3-ed28241f90ef
 # ╟─aebe40a7-c0e4-412d-be4c-960ef173d394
-# ╟─fea622d8-ec4b-4423-8450-c41553e34b66
-# ╠═eb64d014-66a5-4613-8559-efafe70ce933
-# ╠═ee2ec1db-267c-417a-9189-f4e3e1393b33
-# ╠═a99cca77-e7d2-41e4-983f-f53829ebc722
-# ╠═b20819d9-4ba2-4903-bdf4-b1704bd11d60
-# ╠═da3ec249-21e9-4eba-a303-284cf9cb9fc6
-# ╠═b6375d7c-657a-43dd-b38b-a5bc191b1997
-# ╠═72f2a998-5311-4dcc-b998-e5263daacf72
-# ╠═7db03941-464e-45c3-9a95-8a9b9fb4299f
