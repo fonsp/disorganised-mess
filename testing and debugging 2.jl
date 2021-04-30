@@ -93,7 +93,7 @@ md"""
 
 # ╔═╡ b6e8a170-12cc-4d97-905d-274e2609bfd8
 function test(expr)
-	if Meta.isexpr(expr, :call)#, 3) && expr.args[1] === :(==)
+	if Meta.isexpr(expr, :call)
 	quote
 		expr_raw = $(QuoteNode(expr))
 		try
@@ -148,8 +148,13 @@ e = :(x == [1,2+2])
 # ╔═╡ 9d49ea50-8158-4d8b-97af-edba1f7dc38b
 x = [1,3]
 
+# ╔═╡ 40d031f7-e6c6-4b32-8aa8-81a3173689d2
+Dump(:(
+		f(1,2...,x=3)
+		))
+
 # ╔═╡ 1aa24b1c-e8ca-4de7-b614-7a3f02b4833d
-always_false(args...) = false
+always_false(args...; kwargs...) = false
 
 # ╔═╡ c369b4b5-2fcf-4029-a1f6-352120b2fc4b
 @bind n Slider(1:10)
@@ -269,7 +274,7 @@ begin
 		
 		fname = call.expr.args[1]
 		
-		infix = length(call.arg_results) == 2 && Base.isbinaryoperator(fname)
+		infix = length(call.arg_results) == 2 && Meta.isbinaryoperator(fname)
 		
 		classes = [
 			"pluto-test", 
@@ -544,17 +549,36 @@ onestep_light(quote
 # ╔═╡ 88f6a040-07cf-47e0-a8be-2478ea350aa7
 can_interpret(x) = true
 
+# ╔═╡ d36a8a72-eced-4e63-9130-7fcb6c86df76
+can_interpret_call_arg(e::Expr) = !(e.head === :(...) || e.head === :kw || e.head === :parameters)
+
+# ╔═╡ e9659020-d433-4357-9099-71a65b66a091
+can_interpret_call_arg(x) = true
+
+# ╔═╡ c3fc3292-b7eb-4b01-8fba-159c86228de9
+Meta.isbinaryoperator(:(==))
+
+# ╔═╡ 89578bff-16b9-4eb2-b8ee-b2839ff2d74c
+can_interpret(e::Expr) = if false
+	false
+elseif e.head === :call && !all(can_interpret_call_arg, e.args)
+	false
+# elseif e.head === :(=) || e.head === :macrocall
+# 	false
+else
+	all(can_interpret, e.args)
+end
+
 # ╔═╡ a661e172-6afb-42ff-bd43-bb5b787ee5ed
 macro expr_debug_light(e)
+	Computed
 	if can_interpret(e)
 		quote
 			Any[$(QuoteNode(e)), $(onestep_light(e; m=__module__))...]
 		end
 	else
 		quote
-			[$(QuoteNode(e)), begin
-					$(esc(e))
-				end]
+			[$(QuoteNode(e)), Computed($(esc(e)))]
 		end
 	end
 end
@@ -570,13 +594,6 @@ remove_linenums( @macroexpand @expr_debug_light sqrt(sqrt(3)) )
 
 # ╔═╡ 8a5a4c26-e36c-4061-b32f-4448625ce4a6
 xasdf
-
-# ╔═╡ 89578bff-16b9-4eb2-b8ee-b2839ff2d74c
-# can_interpret(e::Expr) = if e.head === :(=) || e.head === :macrocall
-# 	false
-# else
-# 	all(can_interpret, e.args)
-# end
 
 # ╔═╡ 21d4560e-721f-4ed4-9db7-86a8151ab22c
 md"""
@@ -764,6 +781,7 @@ frames(rs)
 macro visual_debug(expr)
 	frames
 	display_slotted
+	var"@expr_debug_light"
 	quote
 		@expr_debug_light($(expr)) .|> display_slotted |> frames
 	end
@@ -780,6 +798,12 @@ end
 
 # ╔═╡ fe7f8cce-a706-476d-8680-a2fe793b474f
 @visual_debug !always_false(rand(2), rand(2),123)
+
+# ╔═╡ 1872f785-1ae5-43ea-bce1-6c5cd893f3a8
+@visual_debug !!always_false(rand(2), rand(2),123; r=123)
+
+# ╔═╡ 5570972e-9309-4458-99a6-ea718ec2c3ab
+@visual_debug always_false([1,2,3]...)
 
 # ╔═╡ a2cbb0c3-23b9-4091-9ca7-5ba96e85e3a3
 @visual_debug begin
@@ -838,6 +862,9 @@ end
 # ╠═96dc7b01-3766-4206-88ba-eca1665bc5cb
 # ╠═7c6ce205-053d-434c-b5b1-500babb8ec02
 # ╠═fe7f8cce-a706-476d-8680-a2fe793b474f
+# ╠═1872f785-1ae5-43ea-bce1-6c5cd893f3a8
+# ╠═5570972e-9309-4458-99a6-ea718ec2c3ab
+# ╠═40d031f7-e6c6-4b32-8aa8-81a3173689d2
 # ╠═1aa24b1c-e8ca-4de7-b614-7a3f02b4833d
 # ╠═8d340983-ea07-4038-872f-22a165003ed2
 # ╠═ea5a4fc0-db62-41dd-9600-a21d4eabf822
@@ -888,6 +915,9 @@ end
 # ╠═8a5a4c26-e36c-4061-b32f-4448625ce4a6
 # ╠═8ef356ea-7d54-43e6-a936-7c8be04c595f
 # ╠═88f6a040-07cf-47e0-a8be-2478ea350aa7
+# ╠═d36a8a72-eced-4e63-9130-7fcb6c86df76
+# ╠═e9659020-d433-4357-9099-71a65b66a091
+# ╠═c3fc3292-b7eb-4b01-8fba-159c86228de9
 # ╠═89578bff-16b9-4eb2-b8ee-b2839ff2d74c
 # ╟─21d4560e-721f-4ed4-9db7-86a8151ab22c
 # ╠═f7cb57ba-df21-43be-8827-cfe11ab02d51
