@@ -379,7 +379,11 @@ end
 
 
 # ╔═╡ 4d5f44e4-85e9-4985-9b76-73be5e097186
-remove_linenums(e::Expr) = Expr(e.head, (remove_linenums(x) for x in e.args if !(x isa LineNumberNode))...)
+remove_linenums(e::Expr) = if e.head === :macrocall
+	Expr(e.head, (remove_linenums(x) for x in e.args)...)
+else
+	Expr(e.head, (remove_linenums(x) for x in e.args if !(x isa LineNumberNode))...)
+end
 
 # ╔═╡ dd495e00-d74d-47d4-a5d5-422fb147ec3b
 remove_linenums(x) = x
@@ -388,7 +392,7 @@ remove_linenums(x) = x
 prettycolors(e) = Markdown.MD([Markdown.Code("julia", string(remove_linenums(e)))])
 
 # ╔═╡ ac02b12a-3982-4526-a51c-0bf85198b81b
-(@macroexpand @test x == [1,2+2]) |> prettycolors
+var"@test"; macroexpand(@__MODULE__, :(@test x == [1,2+2]); recursive=false) |> prettycolors
 
 # ╔═╡ 9a7fbf1b-ade8-41dc-b4ff-c0df6cfd39d2
 md"""
@@ -527,17 +531,6 @@ function onestep_light(e::Expr; m=Module())
 	results
 end
 
-# ╔═╡ 855babe6-1462-42e4-9f8c-038819b3c5cb
-macro xoxo(e)
-	
-	quote
-		@expr_debug_light($e)
-	end
-end
-
-# ╔═╡ 0d2251c4-8759-4bf2-9c9a-840b72cae3c5
-@xoxo 123+23
-
 # ╔═╡ 8ef356ea-7d54-43e6-a936-7c8be04c595f
 onestep_light(quote
 		1+2
@@ -570,7 +563,7 @@ else
 end
 
 # ╔═╡ a661e172-6afb-42ff-bd43-bb5b787ee5ed
-macro expr_debug_light(e)
+macro eval_step_by_step(e)
 	Computed
 	if can_interpret(e)
 		quote
@@ -584,13 +577,13 @@ macro expr_debug_light(e)
 end
 
 # ╔═╡ 13e463c6-4afd-474e-abe2-a6e0fd57dfe5
-remove_linenums( @macroexpand @expr_debug_light sqrt(sqrt(3)) )
+remove_linenums( @macroexpand @eval_step_by_step sqrt(sqrt(3)) )
 
 # ╔═╡ 68ba60db-44ad-43e4-b33e-d27696babc99
-@expr_debug_light sqrt(sqrt(length([1,2])))
+@eval_step_by_step sqrt(sqrt(length([1,2])))
 
 # ╔═╡ 807bcd72-26c3-44d3-a295-56874cb51a89
-@expr_debug_light xasdf = 123
+@eval_step_by_step xasdf = 123
 
 # ╔═╡ 8a5a4c26-e36c-4061-b32f-4448625ce4a6
 xasdf
@@ -711,7 +704,7 @@ line-like {
 """
 
 # ╔═╡ 3e1b28f1-6745-4deb-b88e-a11d3f8cbf58
-# rs = @expr_debug_light(begin
+# rs = @eval_step_by_step(begin
 # 		(1+2) + (7-6)
 # 		first(2000 .+ 30 .* rand(2+2))
 # 		4+5
@@ -722,7 +715,7 @@ line-like {
 plot(args...; kwargs...) = Plots.plot(args...; size=(100,100), kwargs...)
 
 # ╔═╡ b4b317d7-bed1-489c-9650-8d336e330689
-rs = @expr_debug_light(begin
+rs = @eval_step_by_step(begin
 		(1+2) + (7-6)
 		plot(2000 .+ 30 .* rand(2+2))
 		4+5
@@ -781,9 +774,9 @@ frames(rs)
 macro visual_debug(expr)
 	frames
 	display_slotted
-	var"@expr_debug_light"
+	var"@eval_step_by_step"
 	quote
-		@expr_debug_light($(expr)) .|> display_slotted |> frames
+		@eval_step_by_step($(expr)) .|> display_slotted |> frames
 	end
 end
 
@@ -907,8 +900,6 @@ end
 # ╠═12119016-fa61-4d38-8c58-821ea435df7d
 # ╠═450a36ea-2c43-4f01-a775-0b8c59bf6dca
 # ╠═a661e172-6afb-42ff-bd43-bb5b787ee5ed
-# ╠═855babe6-1462-42e4-9f8c-038819b3c5cb
-# ╠═0d2251c4-8759-4bf2-9c9a-840b72cae3c5
 # ╠═13e463c6-4afd-474e-abe2-a6e0fd57dfe5
 # ╠═68ba60db-44ad-43e4-b33e-d27696babc99
 # ╠═807bcd72-26c3-44d3-a295-56874cb51a89
