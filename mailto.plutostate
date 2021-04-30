@@ -1,26 +1,4 @@
-Œ¥bonds€¬cell_results…Ù$607c4fa0-8243-11eb-181e-c7f45befd4e6†¦queuedÂ§runningÂ¦output…¤bodyÚ»
-<script>
-
-const nbfile_url = window.location.href.replace("edit", "notebookfile")
-
-const a = html`<a target="_blank">Send to my teacher</a>`
-
-const handle = setInterval(async () => {
-const content = await (await fetch(nbfile_url)).text()
-
-a.href = `mailto:teacher@gmail.com?subject=${encodeURIComponent("Hello friends!")}&body=${encodeURIComponent(content)}`
-
-}, 500)
-
-invalidation.then(() => {
-clearInterval(handle)
-})
-
-return a
-
-</script>
-
-°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ!°lãq¬rootassigneeÀ§cell_idÙ$607c4fa0-8243-11eb-181e-c7f45befd4e6§runtimeÍ l§erroredÂÙ$b3eb465c-d855-4fbd-9952-c2fee0e6f192†¦queuedÂ§runningÂ¦output…¤body°"Hello friends!"°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ!°kìD¬rootassignee§subject§cell_idÙ$b3eb465c-d855-4fbd-9952-c2fee0e6f192§runtimeÌÈ§erroredÂÙ$2eab5cb6-250a-4d09-bc80-9ffef253d989†¦queuedÂ§runningÂ¦output…¤body±90182309123098123°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ!°k÷¿º¬rootassignee©something§cell_idÙ$2eab5cb6-250a-4d09-bc80-9ffef253d989§runtimed§erroredÂÙ$4866592b-179c-4890-89a4-b26d7a36c1ce†¦queuedÂ§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ!°k¤î¬rootassigneeÀ§cell_idÙ$4866592b-179c-4890-89a4-b26d7a36c1ce§runtimeÎ¡{§erroredÂÙ$914e6151-7ab6-4dde-8f30-4e75ea98cc9e†¦queuedÂ§runningÂ¦output…¤body¥"%20"°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ!°lqÎ¬rootassigneeÀ§cell_idÙ$914e6151-7ab6-4dde-8f30-4e75ea98cc9e§runtimeÎÖ“§erroredÂ±cell_dependencies…Ù$607c4fa0-8243-11eb-181e-c7f45befd4e6„´precedence_heuristic§cell_idÙ$607c4fa0-8243-11eb-181e-c7f45befd4e6´downstream_cells_map€²upstream_cells_mapƒ¤HTML¤repr§subject‘Ù$b3eb465c-d855-4fbd-9952-c2fee0e6f192Ù$b3eb465c-d855-4fbd-9952-c2fee0e6f192„´precedence_heuristic§cell_idÙ$b3eb465c-d855-4fbd-9952-c2fee0e6f192´downstream_cells_map§subject‘Ù$607c4fa0-8243-11eb-181e-c7f45befd4e6²upstream_cells_map€Ù$2eab5cb6-250a-4d09-bc80-9ffef253d989„´precedence_heuristic§cell_idÙ$2eab5cb6-250a-4d09-bc80-9ffef253d989´downstream_cells_map©something²upstream_cells_map€Ù$4866592b-179c-4890-89a4-b26d7a36c1ce„´precedence_heuristic§cell_idÙ$4866592b-179c-4890-89a4-b26d7a36c1ce´downstream_cells_map¤URIs²upstream_cells_map€Ù$914e6151-7ab6-4dde-8f30-4e75ea98cc9e„´precedence_heuristic§cell_idÙ$914e6151-7ab6-4dde-8f30-4e75ea98cc9e´downstream_cells_map€²upstream_cells_map©escapeuri´cell_execution_order•Ù$4866592b-179c-4890-89a4-b26d7a36c1ceÙ$b3eb465c-d855-4fbd-9952-c2fee0e6f192Ù$2eab5cb6-250a-4d09-bc80-9ffef253d989Ù$607c4fa0-8243-11eb-181e-c7f45befd4e6Ù$914e6151-7ab6-4dde-8f30-4e75ea98cc9e©shortpath©mailto.jl®process_status¥ready¤pathÙ?/home/runner/work/disorganised-mess/disorganised-mess/mailto.jlªcell_order•Ù$b3eb465c-d855-4fbd-9952-c2fee0e6f192Ù$2eab5cb6-250a-4d09-bc80-9ffef253d989Ù$607c4fa0-8243-11eb-181e-c7f45befd4e6Ù$4866592b-179c-4890-89a4-b26d7a36c1ceÙ$914e6151-7ab6-4dde-8f30-4e75ea98cc9e¥nbpkg„²installed_versions¤URIs¥1.2.0§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputs…Ù$607c4fa0-8243-11eb-181e-c7f45befd4e6ƒ§cell_idÙ$607c4fa0-8243-11eb-181e-c7f45befd4e6¤codeÚËHTML("""
+Œ±cell_dependencies…Ù$2eab5cb6-250a-4d09-bc80-9ffef253d989„´precedence_heuristic§cell_idÙ$2eab5cb6-250a-4d09-bc80-9ffef253d989´downstream_cells_map©something²upstream_cells_map€Ù$607c4fa0-8243-11eb-181e-c7f45befd4e6„´precedence_heuristic§cell_idÙ$607c4fa0-8243-11eb-181e-c7f45befd4e6´downstream_cells_map€²upstream_cells_mapƒ¤HTML¤repr§subject‘Ù$b3eb465c-d855-4fbd-9952-c2fee0e6f192Ù$b3eb465c-d855-4fbd-9952-c2fee0e6f192„´precedence_heuristic§cell_idÙ$b3eb465c-d855-4fbd-9952-c2fee0e6f192´downstream_cells_map§subject‘Ù$607c4fa0-8243-11eb-181e-c7f45befd4e6²upstream_cells_map€Ù$914e6151-7ab6-4dde-8f30-4e75ea98cc9e„´precedence_heuristic§cell_idÙ$914e6151-7ab6-4dde-8f30-4e75ea98cc9e´downstream_cells_map€²upstream_cells_map©escapeuriÙ$4866592b-179c-4890-89a4-b26d7a36c1ce„´precedence_heuristic§cell_idÙ$4866592b-179c-4890-89a4-b26d7a36c1ce´downstream_cells_map¤URIs²upstream_cells_map€´cell_execution_order•Ù$4866592b-179c-4890-89a4-b26d7a36c1ceÙ$b3eb465c-d855-4fbd-9952-c2fee0e6f192Ù$2eab5cb6-250a-4d09-bc80-9ffef253d989Ù$607c4fa0-8243-11eb-181e-c7f45befd4e6Ù$914e6151-7ab6-4dde-8f30-4e75ea98cc9e®process_status¥ready¤pathÙ?/home/runner/work/disorganised-mess/disorganised-mess/mailto.jlªcell_order•Ù$b3eb465c-d855-4fbd-9952-c2fee0e6f192Ù$2eab5cb6-250a-4d09-bc80-9ffef253d989Ù$607c4fa0-8243-11eb-181e-c7f45befd4e6Ù$4866592b-179c-4890-89a4-b26d7a36c1ceÙ$914e6151-7ab6-4dde-8f30-4e75ea98cc9e¥nbpkg„²installed_versions¤URIs¥1.2.0§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputs…Ù$2eab5cb6-250a-4d09-bc80-9ffef253d989ƒ§cell_idÙ$2eab5cb6-250a-4d09-bc80-9ffef253d989¤code½something = 90182309123098123«code_foldedÂÙ$607c4fa0-8243-11eb-181e-c7f45befd4e6ƒ§cell_idÙ$607c4fa0-8243-11eb-181e-c7f45befd4e6¤codeÚËHTML("""
 
 <script>
 
@@ -44,4 +22,26 @@ return a
 </script>
 
 """)
-«code_foldedÂÙ$b3eb465c-d855-4fbd-9952-c2fee0e6f192ƒ§cell_idÙ$b3eb465c-d855-4fbd-9952-c2fee0e6f192¤codeºsubject = "Hello friends!"«code_foldedÂÙ$2eab5cb6-250a-4d09-bc80-9ffef253d989ƒ§cell_idÙ$2eab5cb6-250a-4d09-bc80-9ffef253d989¤code½something = 90182309123098123«code_foldedÂÙ$4866592b-179c-4890-89a4-b26d7a36c1ceƒ§cell_idÙ$4866592b-179c-4890-89a4-b26d7a36c1ce¤codeªusing URIs«code_foldedÂÙ$914e6151-7ab6-4dde-8f30-4e75ea98cc9eƒ§cell_idÙ$914e6151-7ab6-4dde-8f30-4e75ea98cc9e¤code®escapeuri(" ")«code_foldedÂ«notebook_idÙ$459e7fce-a694-11eb-3606-9b3de72e8b13«in_temp_dirÂ
+«code_foldedÂÙ$b3eb465c-d855-4fbd-9952-c2fee0e6f192ƒ§cell_idÙ$b3eb465c-d855-4fbd-9952-c2fee0e6f192¤codeºsubject = "Hello friends!"«code_foldedÂÙ$914e6151-7ab6-4dde-8f30-4e75ea98cc9eƒ§cell_idÙ$914e6151-7ab6-4dde-8f30-4e75ea98cc9e¤code®escapeuri(" ")«code_foldedÂÙ$4866592b-179c-4890-89a4-b26d7a36c1ceƒ§cell_idÙ$4866592b-179c-4890-89a4-b26d7a36c1ce¤codeªusing URIs«code_foldedÂ«notebook_idÙ$459e7fce-a694-11eb-3606-9b3de72e8b13¥bonds€¬cell_results…Ù$2eab5cb6-250a-4d09-bc80-9ffef253d989†¦queuedÂ§runningÂ¦output…¤body±90182309123098123°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ!°k÷¿º¬rootassignee©something§cell_idÙ$2eab5cb6-250a-4d09-bc80-9ffef253d989§runtimed§erroredÂÙ$607c4fa0-8243-11eb-181e-c7f45befd4e6†¦queuedÂ§runningÂ¦output…¤bodyÚ»
+<script>
+
+const nbfile_url = window.location.href.replace("edit", "notebookfile")
+
+const a = html`<a target="_blank">Send to my teacher</a>`
+
+const handle = setInterval(async () => {
+const content = await (await fetch(nbfile_url)).text()
+
+a.href = `mailto:teacher@gmail.com?subject=${encodeURIComponent("Hello friends!")}&body=${encodeURIComponent(content)}`
+
+}, 500)
+
+invalidation.then(() => {
+clearInterval(handle)
+})
+
+return a
+
+</script>
+
+°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ!°lãq¬rootassigneeÀ§cell_idÙ$607c4fa0-8243-11eb-181e-c7f45befd4e6§runtimeÍ l§erroredÂÙ$b3eb465c-d855-4fbd-9952-c2fee0e6f192†¦queuedÂ§runningÂ¦output…¤body°"Hello friends!"°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ!°kìD¬rootassignee§subject§cell_idÙ$b3eb465c-d855-4fbd-9952-c2fee0e6f192§runtimeÌÈ§erroredÂÙ$914e6151-7ab6-4dde-8f30-4e75ea98cc9e†¦queuedÂ§runningÂ¦output…¤body¥"%20"°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ!°lqÎ¬rootassigneeÀ§cell_idÙ$914e6151-7ab6-4dde-8f30-4e75ea98cc9e§runtimeÎÖ“§erroredÂÙ$4866592b-179c-4890-89a4-b26d7a36c1ce†¦queuedÂ§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ!°k¤î¬rootassigneeÀ§cell_idÙ$4866592b-179c-4890-89a4-b26d7a36c1ce§runtimeÎ¡{§erroredÂ©shortpath©mailto.jl«in_temp_dirÂ
