@@ -175,7 +175,7 @@ md"""
 # end
 
 # ╔═╡ 7db7a1d5-a70b-4997-943e-963e6f5affc9
-e = :(x == [1,2+2])
+# e = :(x == [1,2+2])
 
 # ╔═╡ 9d49ea50-8158-4d8b-97af-edba1f7dc38b
 x = [1,3]
@@ -211,8 +211,9 @@ pt-dot {
 
 pt-dot.floating {
 	position: fixed;
-	z-index: 4;
+	z-index: 60;
 	display: none;
+	transition: transform linear 120ms;
 }
 .show-top-float > pt-dot.floating.top {
 	display: block;
@@ -310,6 +311,19 @@ border-radius: 7px;
 }
 .pluto-test.expanded > p-frame-viewer > p-frames > slotted-code > line-like > pluto-display[mime="application/vnd.pluto.tree+object"] {
 	/*flex-basis: 100%;*/
+}
+"""
+
+# ╔═╡ 42671258-07a0-4015-8f47-4b3032595f08
+html"""
+<style>
+p-frame-viewer {
+	display: inline-flex;
+	flex-direction: column;
+}
+p-frames,
+p-frame-controls {
+	display: inline-flex;
 }
 """
 
@@ -459,9 +473,65 @@ expand_computed(e::Expr) = Expr(e.head, expand_computed.(e.args)...)
 # ╔═╡ ef45af85-11f8-4505-9f1e-3ffb15a47142
 onestep_light(x::Any; m=Module()) = [Computed(Core.eval(m,x))]
 
+# ╔═╡ afe29447-5397-4e1e-956b-a13ee59d7e29
+function lazyevalwrap(x)
+	Expr(:($), x)
+end
+
+# ╔═╡ 1002e882-0384-4e65-8997-7ce6516029b0
+function lazycomputedwrap(x)
+	Computed
+	Expr(:($), Expr(:call, GlobalRef(@__MODULE__, :Computed), x))
+end
+
+# ╔═╡ 61688af2-169e-4c1f-a37f-cc7cc35679dc
+macro cool()
+	
+	x = Expr(:call, :+, :([1,2]), lazycomputedwrap(:([1,2,z])))
+	quote
+		$(esc(Expr(:quote, x)))
+	end
+end
+
+# ╔═╡ b475c9b1-c1db-4b85-a04a-3cbac64e69d1
+macro showme(expr)
+	
+	quote
+		$(Expr(:quote, Expr(:quote, expr)))
+	end
+end
+
+# ╔═╡ 65672c8b-7d96-4de1-a10c-892dd7018b32
+@showme a + $b
+
+# ╔═╡ 65bbf031-5af2-4529-8b3b-695670f7e7eb
+@__MODULE__
+
+# ╔═╡ fce0b2de-7f7b-4ce8-8a16-079428041fb8
+module XX
+	z = Main.workspace2594.@cool()
+end
+
+# ╔═╡ 4fcf99dc-8044-4f26-925b-07e168801ea8
+XX.z
+
+# ╔═╡ 9e91102a-4361-4e15-8c71-d058335aba35
+let
+	z = 1299
+	@cool()
+end
+
+# ╔═╡ a71d0a72-3d01-4650-a24c-65bcafdf26a7
+@cool() |> Dump
+
+# ╔═╡ b3085b18-dcb8-48b0-a999-6c10844cb7af
+Dump(@macroexpand @cool(); maxdepth=999)
+
 # ╔═╡ 450a36ea-2c43-4f01-a775-0b8c59bf6dca
 function onestep_light(e::Expr; m=Module())
 	results = Any[]
+	
+	seval(ex) = Computed(Core.eval(m,ex))
 	
 	# will be modified
 	arg_results = Any[a for a in e.args]
@@ -479,7 +549,7 @@ function onestep_light(e::Expr; m=Module())
 				a
 				
 			elseif a isa Symbol
-				arg_results[i] = Computed(Core.eval(m,a))
+				arg_results[i] = seval(a)
 				push_intermediate()
 				
 			elseif a isa Expr
@@ -496,9 +566,15 @@ function onestep_light(e::Expr; m=Module())
 		end
 	end
 	
-	push!(results, Computed(Core.eval(m, expand_computed(Expr(e.head, arg_results...)))))
+	push!(results, seval(expand_computed(Expr(e.head, arg_results...))))
 	
 	results
+end
+
+# ╔═╡ 1c3294ed-3e3e-48b5-929c-71b50b66f68e
+macro wow(ex)
+	# esc(Core.eval(__module__, Expr(:quote, e)))
+    esc(Expr(:call, GlobalRef(Core, :eval), __module__, Expr(:quote, ex)))
 end
 
 # ╔═╡ 8ef356ea-7d54-43e6-a936-7c8be04c595f
@@ -532,29 +608,32 @@ else
 	all(can_interpret, e.args)
 end
 
-# ╔═╡ a661e172-6afb-42ff-bd43-bb5b787ee5ed
-macro eval_step_by_step(e)
+# ╔═╡ e1c306e3-0a47-4149-a9fb-ec7ab380fa11
+function step_by_step(expr; __module__)
 	Computed
 	onestep_light
-	if can_interpret(e)
+	if can_interpret(expr)
 		quote
-			Any[$(QuoteNode(e)), $(onestep_light(e; m=__module__))...]
+			Any[$(QuoteNode(expr)), $(onestep_light)($(esc(Expr(:quote,expr))); m=$(__module__))...]
 		end
 	else
 		quote
-			[$(QuoteNode(e)), Computed($(esc(e)))]
+			[$(QuoteNode(expr)), Computed($(esc(expr)))]
 		end
 	end
 end
 
 # ╔═╡ b6e8a170-12cc-4d97-905d-274e2609bfd8
-function test(expr, extra_args...)
-	var"@eval_step_by_step"
+function test(expr, extra_args...; __module__)
+	step_by_step
 	Test.test_expr!("", expr, extra_args...)
+		
 	quote
 		expr_raw = $(QuoteNode(expr))
 		try
-			steps = @eval_step_by_step($(expr))
+			# steps = @eval_step_by_step($(expr))
+			
+			steps = $(step_by_step(expr; __module__=__module__))
 			
 # 			arg_results = [$((expr.args[2:end] .|> esc)...)]
 			
@@ -576,11 +655,29 @@ function test(expr, extra_args...)
 	end
 end
 
-# ╔═╡ 930f8244-cf25-4c1a-95f6-5c8963559c62
-@eval_step_by_step x == [1,2]
+# ╔═╡ a661e172-6afb-42ff-bd43-bb5b787ee5ed
+macro eval_step_by_step(e)
+	step_by_step(e; __module__=__module__)
+end
+
+# ╔═╡ e19f298e-7135-4f27-bcae-0b6eb9df326c
+map(1:1) do i
+	@eval_step_by_step 2 + $i
+end
 
 # ╔═╡ 13e463c6-4afd-474e-abe2-a6e0fd57dfe5
-remove_linenums( @macroexpand @eval_step_by_step sqrt(sqrt(3)) )
+let
+	i = 123
+	remove_linenums( @macroexpand @eval_step_by_step sqrt(sqrt(3 + 2)) )
+end
+
+# ╔═╡ 3294b126-ea0d-4b42-a2f7-14b1ba4f2d50
+map(1:1) do i
+	@macroexpand @eval_step_by_step 2342342 + $i
+end
+
+# ╔═╡ 930f8244-cf25-4c1a-95f6-5c8963559c62
+@macroexpand @eval_step_by_step x == [1,2]
 
 # ╔═╡ 68ba60db-44ad-43e4-b33e-d27696babc99
 @eval_step_by_step sqrt(sqrt(length([1,2])))
@@ -776,7 +873,7 @@ end
 # ╔═╡ 9c3f6eab-b1c3-4607-add8-d6d7e468c11a
 begin
 	macro test(expr...)
-		test(expr...)
+		test(expr...; __module__=__module__)
 	end
 	
 	function Base.show(io::IO, m::MIME"text/html", call::Union{WrongCall,CorrectCall})
@@ -824,11 +921,17 @@ begin
 				}
 			}
 			
-			
+			const dot_top = div.querySelector("pt-dot.top")
+			const dot_bot = div.querySelector("pt-dot.bottom")
 
 			const intersect = (r) => {
 				const topdistance = r.top
 				const botdistance = window.visualViewport.height - r.bottom
+			
+				
+				const t = (x) => `translate(\${2*Math.sqrt(Math.max(0,-50-x))}px,0)`
+				dot_top.style.transform = t(topdistance)
+				dot_bot.style.transform = t(botdistance)
 
 				div.classList.toggle("show-top-float", topdistance < 4)
 				div.classList.toggle("show-bottom-float", botdistance < 4)
@@ -836,7 +939,7 @@ begin
 			
 			window.addEventListener("scroll", throttled(() => {
 				intersect(dot.getBoundingClientRect())
-			}, 200))
+			}, 100))
 
 			let observer = new IntersectionObserver((es) => {
 				const e = es[0]
@@ -903,8 +1006,18 @@ end
 # ╔═╡ f77275b9-90aa-4e07-a608-981b5df727af
 @test is_good_boy(first(friends))
 
+# ╔═╡ c39021dc-157c-4bcb-a3a9-fec8d9286b48
+map(1:10) do i
+	@test 1 + $i
+end
+
+# ╔═╡ c7852ef5-7ee0-4ee4-afdd-2b741e85abbc
+map(1:10) do i
+	@test 1 + i
+end
+
 # ╔═╡ ac02b12a-3982-4526-a51c-0bf85198b81b
-var"@test"; macroexpand(@__MODULE__, :(@test x == [1,2+2]); recursive=false) |> prettycolors
+var"@test"; macroexpand(@__MODULE__, :(@test x == [1,2+i]); recursive=false) |> prettycolors
 
 # ╔═╡ 26b0faf0-9016-48d7-8667-c1c1cfce655e
 @test missing == 2
@@ -944,6 +1057,16 @@ var"@test"; macroexpand(@__MODULE__, :(@test x == [1,2+2]); recursive=false) |> 
 
 # ╔═╡ 064e28de-0c22-48b5-b427-6eb343880287
 @test isempty((1:k) .^ 2)
+
+# ╔═╡ 3a6a6ee1-c619-4044-b9b1-68e5ae9d2463
+map(1:10) do i
+	@test sqrt($i) < 3
+end
+
+# ╔═╡ 9182ddcd-a275-48a0-a921-8669b50eb56a
+map(1:10) do i
+	@test sqrt(i) < 0
+end
 
 # ╔═╡ be93a6f4-b626-43db-a2fe-4e754e79c030
 @test isempty([1,sqrt(2)])
@@ -1057,6 +1180,9 @@ end
 # ╠═656c4190-b49e-4225-869d-eeb7e8e41e72
 # ╠═14c525a1-eca1-466b-8e63-3a90d7d7111c
 # ╟─a2efc968-246c-40c2-b285-2ec94b185a44
+# ╠═c39021dc-157c-4bcb-a3a9-fec8d9286b48
+# ╠═c7852ef5-7ee0-4ee4-afdd-2b741e85abbc
+# ╠═e1c306e3-0a47-4149-a9fb-ec7ab380fa11
 # ╠═b6e8a170-12cc-4d97-905d-274e2609bfd8
 # ╟─bfe4dc61-9160-4c7e-8897-9c723b309adc
 # ╠═ac02b12a-3982-4526-a51c-0bf85198b81b
@@ -1079,11 +1205,14 @@ end
 # ╠═98992db9-4f14-4aa6-a7c5-477622266112
 # ╠═8360d1bc-b1f4-4263-a042-724cbd120227
 # ╠═064e28de-0c22-48b5-b427-6eb343880287
+# ╠═3a6a6ee1-c619-4044-b9b1-68e5ae9d2463
+# ╠═9182ddcd-a275-48a0-a921-8669b50eb56a
 # ╠═be93a6f4-b626-43db-a2fe-4e754e79c030
 # ╟─17bd5cd9-212f-4656-ab79-590dd6c64ff8
 # ╟─539e2c38-993b-4b3b-8aa0-f02d46d79839
 # ╟─3d3f3592-e056-4e7b-8896-a75e5b5dcad6
 # ╠═8a2e8348-49cf-4855-b5b3-cdee33e5ed67
+# ╠═42671258-07a0-4015-8f47-4b3032595f08
 # ╠═bb770f3f-72dd-4a71-8d71-9e773224df05
 # ╠═22a33c8c-e07f-445e-9d8d-a676f704ec45
 # ╠═176f39f1-fa36-4ce1-86ba-76248848a834
@@ -1117,10 +1246,24 @@ end
 # ╠═ae95b691-f54b-4bf5-b17b-3e5bd1edf75e
 # ╠═12119016-fa61-4d38-8c58-821ea435df7d
 # ╠═ef45af85-11f8-4505-9f1e-3ffb15a47142
+# ╠═afe29447-5397-4e1e-956b-a13ee59d7e29
+# ╠═1002e882-0384-4e65-8997-7ce6516029b0
+# ╠═61688af2-169e-4c1f-a37f-cc7cc35679dc
+# ╠═b475c9b1-c1db-4b85-a04a-3cbac64e69d1
+# ╠═65672c8b-7d96-4de1-a10c-892dd7018b32
+# ╠═65bbf031-5af2-4529-8b3b-695670f7e7eb
+# ╠═fce0b2de-7f7b-4ce8-8a16-079428041fb8
+# ╠═4fcf99dc-8044-4f26-925b-07e168801ea8
+# ╠═9e91102a-4361-4e15-8c71-d058335aba35
+# ╠═a71d0a72-3d01-4650-a24c-65bcafdf26a7
+# ╠═b3085b18-dcb8-48b0-a999-6c10844cb7af
 # ╠═450a36ea-2c43-4f01-a775-0b8c59bf6dca
+# ╠═e19f298e-7135-4f27-bcae-0b6eb9df326c
 # ╠═a661e172-6afb-42ff-bd43-bb5b787ee5ed
-# ╠═930f8244-cf25-4c1a-95f6-5c8963559c62
+# ╠═1c3294ed-3e3e-48b5-929c-71b50b66f68e
 # ╠═13e463c6-4afd-474e-abe2-a6e0fd57dfe5
+# ╠═3294b126-ea0d-4b42-a2f7-14b1ba4f2d50
+# ╠═930f8244-cf25-4c1a-95f6-5c8963559c62
 # ╠═68ba60db-44ad-43e4-b33e-d27696babc99
 # ╠═807bcd72-26c3-44d3-a295-56874cb51a89
 # ╠═8a5a4c26-e36c-4061-b32f-4448625ce4a6
