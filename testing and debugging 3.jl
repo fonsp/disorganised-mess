@@ -87,14 +87,14 @@ x = [1,3]
 # ╔═╡ a6f82260-3519-4254-a21e-abc7bb19ec4e
 @bind howmuch Slider(0:100)
 
-# ╔═╡ 1aa24b1c-e8ca-4de7-b614-7a3f02b4833d
-always_false(args...; kwargs...) = false
-
 # ╔═╡ c369b4b5-2fcf-4029-a1f6-352120b2fc4b
 @bind n Slider(1:10)
 
 # ╔═╡ 98992db9-4f14-4aa6-a7c5-477622266112
 @bind k Slider(0:15)
+
+# ╔═╡ 1aa24b1c-e8ca-4de7-b614-7a3f02b4833d
+always_false(args...; kwargs...) = true
 
 # ╔═╡ 8a2e8348-49cf-4855-b5b3-cdee33e5ed67
 html"""
@@ -116,14 +116,13 @@ pt-dot {
 pt-dot.floating {
 	position: fixed;
 	z-index: 60;
-	display: none;
+	visibility: hidden;
 	transition: transform linear 120ms;
+	opacity: .8;
 }
-.show-top-float > pt-dot.floating.top {
-	display: block;
-}
+.show-top-float > pt-dot.floating.top,
 .show-bottom-float > pt-dot.floating.bottom {
-	display: block;
+	visibility: visible;
 }
 
 pt-dot.floating.top {
@@ -141,9 +140,22 @@ pt-dot.floating.bottom {
 .pass > pt-dot {
 	background: #56a038;
 }
+
+@keyframes fadeout {
+    0% { opacity: 1;}
+    100% { opacity: 0; pointer-events: none;}
+}
+
+
 .pass > pt-dot.floating {
-	opacity: 0;
-	pointer-events: none;
+
+    animation: fadeout 2s;
+
+	animation-fill-mode: both;
+	animation-delay: 2s;
+
+	/*opacity: 0.4;*/
+	
 }
 
 
@@ -858,6 +870,7 @@ begin
 				}
 			}
 			
+			const dot = div.querySelector("pt-dot")
 			const dot_top = div.querySelector("pt-dot.top")
 			const dot_bot = div.querySelector("pt-dot.bottom")
 
@@ -874,6 +887,8 @@ begin
 				div.classList.toggle("show-bottom-float", botdistance < 4)
 			}
 			
+			intersect(dot.getBoundingClientRect())
+			
 			window.addEventListener("scroll", throttled(() => {
 				intersect(dot.getBoundingClientRect())
 			}, 100))
@@ -886,7 +901,6 @@ begin
 			  threshold: 1.0
 			});
 
-			const dot = div.querySelector("pt-dot")
 			observer.observe(dot)
 			invalidation.then(() => {
 				observer.unobserve(dot)
@@ -939,7 +953,7 @@ end
 @test always_false(rand(howmuch), rand(howmuch),123)
 
 # ╔═╡ fe7f8cce-a706-476d-8680-a2fe793b474f
-@test !always_false(rand(2), rand(2),123)
+@test always_false(rand(2), rand(2),123)
 
 # ╔═╡ 1872f785-1ae5-43ea-bce1-6c5cd893f3a8
 @test !!always_false(rand(2), rand(2),123; r=123)
@@ -964,7 +978,7 @@ end
 
 # ╔═╡ 3a6a6ee1-c619-4044-b9b1-68e5ae9d2463
 map(1:10) do i
-	@test sqrt($i) < 3
+	@test sqrt($i) < 3 && always_false()
 end
 
 # ╔═╡ be93a6f4-b626-43db-a2fe-4e754e79c030
@@ -1087,7 +1101,6 @@ end
 # ╠═fe7f8cce-a706-476d-8680-a2fe793b474f
 # ╠═1872f785-1ae5-43ea-bce1-6c5cd893f3a8
 # ╠═5570972e-9309-4458-99a6-ea718ec2c3ab
-# ╠═1aa24b1c-e8ca-4de7-b614-7a3f02b4833d
 # ╠═8d340983-ea07-4038-872f-22a165003ed2
 # ╠═ea5a4fc0-db62-41dd-9600-a21d4eabf822
 # ╠═c369b4b5-2fcf-4029-a1f6-352120b2fc4b
@@ -1100,6 +1113,7 @@ end
 # ╟─17bd5cd9-212f-4656-ab79-590dd6c64ff8
 # ╟─539e2c38-993b-4b3b-8aa0-f02d46d79839
 # ╟─3d3f3592-e056-4e7b-8896-a75e5b5dcad6
+# ╠═1aa24b1c-e8ca-4de7-b614-7a3f02b4833d
 # ╠═8a2e8348-49cf-4855-b5b3-cdee33e5ed67
 # ╠═42671258-07a0-4015-8f47-4b3032595f08
 # ╠═285809d3-9a72-4eb6-9ebc-ddefd459ab6a
