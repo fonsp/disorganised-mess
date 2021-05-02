@@ -16,12 +16,6 @@ end
 # ╔═╡ 285809d3-9a72-4eb6-9ebc-ddefd459ab6a
 using HypertextLiteral
 
-# ╔═╡ b16145b1-66da-4d96-a648-9e083c407e9a
-using PlutoUI
-
-# ╔═╡ 5c2cae00-cfad-43b8-9c36-3380809bb6bc
-using Plots
-
 # ╔═╡ ab02837b-79ec-40d7-bff1-c1d2dd7362ef
 md"""
 # PlutoTest.jl
@@ -53,23 +47,6 @@ md"""
 This notebook contains **visual debugging**:
 """
 
-# ╔═╡ e46cf3e0-aa15-4c17-a925-3e9fc5109d54
-Hannes = let
-	url = "https://user-images.githubusercontent.com/6933510/116753174-fa40ab80-aa06-11eb-94d7-88f4171970b2.jpeg"
-	data = read(download(url))
-	PlutoUI.Show(MIME"image/jpg"(), data)
-end;
-
-# ╔═╡ 5b70aaf1-9623-4f55-b055-4263ed8be31d
-Floep = let
-	url = "https://user-images.githubusercontent.com/6933510/116753861-142ebe00-aa08-11eb-8ce8-684af1098935.jpeg"
-	data = read(download(url))
-	PlutoUI.Show(MIME"image/jpg"(), data)
-end;
-
-# ╔═╡ bf2abe01-6ae0-4066-8704-12f64e04511b
-friends = Any[Hannes, Floep];
-
 # ╔═╡ fd8428a3-9fa3-471a-8b2d-5bbb8fdb3137
 is_good_boy(x) = true;
 
@@ -78,28 +55,14 @@ md"""
 ### (You need `Pluto#main` to run this notebook)
 """
 
-# ╔═╡ c763ed72-82c9-445c-a8f7-a0c40982e4d9
-TableOfContents()
-
 # ╔═╡ 9d49ea50-8158-4d8b-97af-edba1f7dc38b
 x = [1,3]
-
-# ╔═╡ a6f82260-3519-4254-a21e-abc7bb19ec4e
-@bind howmuch Slider(0:100)
-
-# ╔═╡ c369b4b5-2fcf-4029-a1f6-352120b2fc4b
-@bind n Slider(1:10)
-
-# ╔═╡ 98992db9-4f14-4aa6-a7c5-477622266112
-@bind k Slider(0:15)
 
 # ╔═╡ 1aa24b1c-e8ca-4de7-b614-7a3f02b4833d
 always_false(args...; kwargs...) = true
 
 # ╔═╡ 8a2e8348-49cf-4855-b5b3-cdee33e5ed67
-html"""
-<style>
-
+const pluto_test_css = """
 pt-dot {
 	flex: 0 0 auto;
 	background: grey;
@@ -231,8 +194,7 @@ border-radius: 7px;
 """
 
 # ╔═╡ 42671258-07a0-4015-8f47-4b3032595f08
-html"""
-<style>
+const frames_css = """
 p-frame-viewer {
 	display: inline-flex;
 	flex-direction: column;
@@ -243,12 +205,15 @@ p-frame-controls {
 }
 """
 
+# ╔═╡ b16145b1-66da-4d96-a648-9e083c407e9a
+# using PlutoUI
+
 # ╔═╡ 80b2fb3f-94b2-4024-94ff-d111a249c8b0
 import Test
 
 # ╔═╡ 05f42764-acfe-4370-b85b-ce0e7c4270d0
 begin
-	export test_nowarn, test_warn, test_logs, test_skip, test_broken, test_throws, test_deprecated
+	export @test_nowarn, @test_warn, @test_logs, @test_skip, @test_broken, @test_throws, @test_deprecated
 	
 	var"@test_warn" = Test.var"@test_warn"
 	var"@test_nowarn" = Test.var"@test_nowarn"
@@ -342,19 +307,16 @@ md"""
 # ╔═╡ 3b2e8f55-1d4b-4a36-83f6-26becbd79e4b
 # @test (@test t isa Pass) isa Pass
 
+# ╔═╡ ec2ed42c-1227-4e0d-b642-20e6f3503d2a
+embed_display = if isdefined(Main, :PlutoRunner) && isdefined(Main.PlutoRunner, :embed_display)
+	# if this package is used inside Pluto, and Pluto is new enough
+	Main.PlutoRunner.embed_display
+else
+	identity
+end
+
 # ╔═╡ 1ac164c8-88fc-4a87-a194-60ef616fb399
 flatmap(args...) = vcat(map(args...)...)
-
-# ╔═╡ e604cc80-5224-4579-a7b4-f194f1ac99b2
-function commas(xs, comma=@htl("<span class='comma'>, </span>"))
-	flatmap(enumerate(xs)) do (i,x)
-		if i == length(xs)
-			[x]
-		else
-			[x,comma]
-		end
-	end
-end
 
 # ╔═╡ 98ac4c36-49c7-4f65-982d-0b8bf6c372c0
 emb = embed_display
@@ -395,9 +357,6 @@ In Julia, expressions are objects! This means that, before evaluation, code is e
 # ╔═╡ d97987a0-bdc0-46ed-a6a5-f35c1ce961dc
 ex1 = :(first([56,sqrt(9)]))
 
-# ╔═╡ a6709e08-964d-46ea-9813-2c70a834824b
-Dump(ex1)
-
 # ╔═╡ 7c2bab29-8609-4575-b2ca-7feb34915645
 md"""
 You can use `Core.eval` to evaluate expressions at runtime:
@@ -419,9 +378,6 @@ ex2_inner_result = Core.eval(Module(), ex2_inner)
 
 # ╔═╡ 275c5f57-623d-439f-b09d-f7c745e0bed6
 ex2 = Expr(:call, :first, ex2_inner_result)
-
-# ╔═╡ 10803c0d-d0a5-45c5-b7ef-9659e441df69
-Dump(ex2)
 
 # ╔═╡ b056a99d-5b13-47ba-a199-d788410e3c99
 md"""
@@ -456,9 +412,6 @@ prettycolors(e) = Markdown.MD([Markdown.Code("julia", expr_to_str(e))])
 
 # ╔═╡ 38e54516-cdf4-4c1d-815b-68e1e7a7f6f7
 ex3 = Expr(:call, :first, Computed(ex2_inner_result))
-
-# ╔═╡ 411271a6-4236-45e2-ab34-f26410108821
-Dump(ex3)
 
 # ╔═╡ f9c81ab1-556c-4d81-bee8-2897c20e324d
 md"""
@@ -731,9 +684,8 @@ function Base.show(io::IO, m::MIME"text/html", sd::SlottedDisplay)
 	show(io, m, h)
 end
 
-# ╔═╡ d3b83bc1-cd48-4f35-9617-dc8fecd7e0f9
-html"""
-<style>
+# ╔═╡ 8480d0d7-bdf7-468d-9344-5b789e33921c
+const slotted_code_css = """
 slotted-code {
 	font-family: "JuliaMono", monospace;
 	font-size: .75rem;
@@ -749,23 +701,6 @@ line-like {
 	align-items: baseline;
 }
 """
-
-# ╔═╡ 6f5ba692-4b6a-405a-8cd3-1a8f9cc06611
-plot(args...; kwargs...) = Plots.plot(args...; size=(100,100), kwargs...)
-
-# ╔═╡ b4b317d7-bed1-489c-9650-8d336e330689
-rs = @eval_step_by_step(begin
-		(1+2) + (7-6)
-		plot(2000 .+ 30 .* rand(2+2))
-		4+5
-		sqrt(sqrt(sqrt(5)))
-	end) .|> SlottedDisplay
-
-# ╔═╡ 93ed973f-daf6-408b-9d4b-d53495418610
-@bind rindex Slider(eachindex(rs))
-
-# ╔═╡ dea898a0-1904-4d09-ad0b-6915008fe946
-rs[rindex]
 
 # ╔═╡ b5763c10-e11c-4389-b6fc-421d2c9682f1
 md"""
@@ -813,14 +748,364 @@ function frames(fs::Vector)
 
 
 		</p-frame-viewer>
+		
+		<style>
+		$(frames_css)
+		</style>
 		""")
 	
 	
 	
 end
 
+# ╔═╡ 3d5abd58-02ab-4b91-a7a3-d9068d4df017
+md"""
+#### Macro to test frames
+"""
+
+# ╔═╡ 326f7661-3482-4bf2-a97b-57cc7ac60ee2
+macro visual_debug(expr)
+	frames
+	SlottedDisplay
+	var"@eval_step_by_step"
+	quote
+		@eval_step_by_step($(expr)) .|> SlottedDisplay |> frames
+	end
+end
+
+# ╔═╡ 34f613a3-85fb-45a8-be3b-cd8e6b3cb5a2
+
+
+# ╔═╡ f9ed2487-a7f6-4ce9-b673-f8a298cd5fc3
+md"""
+# Appendix
+"""
+
+# ╔═╡ 35f63c4e-3583-4ea8-a057-31f18f8a09d6
+md"## DisplayOnly"
+
+# ╔═╡ 35b2770e-1db6-4327-bf86-c27a4b61dbd3
+function is_inside_pluto(m::Module)::Bool
+	if isdefined(m, :PlutoForceDisplay)
+		return m.PlutoForceDisplay
+	else
+		isdefined(m, :PlutoRunner) && parentmodule(m) === Main
+	end
+end
+
+# ╔═╡ 22640a2f-ea38-4517-a4f3-7a65e60ffebe
+"""
+	@displayonly expression
+
+Marks a expression as Pluto-only, which means that it won't be executed when running outside Pluto. Do not use this for your own projects.
+"""
+macro skip_as_script(ex) is_inside_pluto(__module__) ? esc(ex) : nothing end
+
+# ╔═╡ d414f840-4952-4de5-a565-7fdc81a94817
+"The opposite of `@skip_as_script`"
+macro only_as_script(ex) is_inside_pluto(__module__) ? nothing : esc(ex) end
+
+# ╔═╡ 326825b0-a17f-427a-9056-8e8156098418
+@skip_as_script "hello"
+
+# ╔═╡ 64bf02a4-4fe3-424d-ae6e-5906c3395278
+md"""
+## PlutoUI favourites
+"""
+
+# ╔═╡ f3916810-1911-48bd-936b-776206fcad54
+const toc_css = """
+@media screen and (min-width: 1081px) {
+	.plutoui-toc.aside {
+		position:fixed; 
+		right: 1rem;
+		top: 5rem; 
+		width:25%; 
+		padding: 10px;
+		border: 3px solid rgba(0, 0, 0, 0.15);
+		border-radius: 10px;
+		box-shadow: 0 0 11px 0px #00000010;
+		/* That is, viewport minus top minus Live Docs */
+		max-height: calc(100vh - 5rem - 56px);
+		overflow: auto;
+		z-index: 5;
+		background: white;
+	}
+}
+
+.plutoui-toc header {
+	display: block;
+	font-size: 1.5em;
+	margin-top: 0.67em;
+	margin-bottom: 0.67em;
+	margin-left: 0;
+	margin-right: 0;
+	font-weight: bold;
+	border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+}
+
+.plutoui-toc section .toc-row {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding-bottom: 2px;
+}
+
+.highlight-pluto-cell-shoulder {
+	background: rgba(0, 0, 0, 0.05);
+	background-clip: padding-box;
+}
+
+.plutoui-toc section a {
+	text-decoration: none;
+	font-weight: normal;
+	color: gray;
+}
+.plutoui-toc section a:hover {
+	color: black;
+}
+
+.plutoui-toc.indent section a.H1 {
+	font-weight: 700;
+	line-height: 1em;
+}
+
+.plutoui-toc.indent section a.H1 {
+	padding-left: 0px;
+}
+.plutoui-toc.indent section a.H2 {
+	padding-left: 10px;
+}
+.plutoui-toc.indent section a.H3 {
+	padding-left: 20px;
+}
+.plutoui-toc.indent section a.H4 {
+	padding-left: 30px;
+}
+.plutoui-toc.indent section a.H5 {
+	padding-left: 40px;
+}
+.plutoui-toc.indent section a.H6 {
+	padding-left: 50px;
+}
+"""
+
+# ╔═╡ 122c27a5-a6e8-45ef-a968-b9b4b3f9ad09
+const toc_js = toc -> """
+const getParentCell = el => el.closest("pluto-cell")
+
+const getHeaders = () => {
+	const depth = Math.max(1, Math.min(6, $(toc.depth))) // should be in range 1:6
+	const range = Array.from({length: depth}, (x, i) => i+1) // [1, ..., depth]
+	
+	const selector = range.map(i => `pluto-notebook pluto-cell h\${i}`).join(",")
+	return Array.from(document.querySelectorAll(selector))
+}
+
+const indent = $(repr(toc.indent))
+const aside = $(repr(toc.aside))
+
+const render = (el) => html`\${el.map(h => {
+	const parent_cell = getParentCell(h)
+
+	const a = html`<a 
+		class="\${h.nodeName}" 
+		href="#\${parent_cell.id}"
+	>\${h.innerText}</a>`
+	/* a.onmouseover=()=>{
+		parent_cell.firstElementChild.classList.add(
+			'highlight-pluto-cell-shoulder'
+		)
+	}
+	a.onmouseout=() => {
+		parent_cell.firstElementChild.classList.remove(
+			'highlight-pluto-cell-shoulder'
+		)
+	} */
+	a.onclick=(e) => {
+		e.preventDefault();
+		h.scrollIntoView({
+			behavior: 'smooth', 
+			block: 'center'
+		})
+	}
+
+	return html`<div class="toc-row">\${a}</div>`
+})}`
+
+const tocNode = html`<nav class="plutoui-toc">
+	<header>$(toc.title)</header>
+	<section></section>
+</nav>`
+tocNode.classList.toggle("aside", aside)
+tocNode.classList.toggle("indent", aside)
+
+const updateCallback = () => {
+	tocNode.querySelector("section").replaceWith(
+		html`<section>\${render(getHeaders())}</section>`
+	)
+}
+updateCallback()
+
+
+const notebook = document.querySelector("pluto-notebook")
+
+
+// We have a mutationobserver for each cell:
+const observers = {
+	current: [],
+}
+
+const createCellObservers = () => {
+	observers.current.forEach((o) => o.disconnect())
+	observers.current = Array.from(notebook.querySelectorAll("pluto-cell")).map(el => {
+		const o = new MutationObserver(updateCallback)
+		o.observe(el, {attributeFilter: ["class"]})
+		return o
+	})
+}
+createCellObservers()
+
+// And one for the notebook's child list, which updates our cell observers:
+const notebookObserver = new MutationObserver(() => {
+	updateCallback()
+	createCellObservers()
+})
+notebookObserver.observe(notebook, {childList: true})
+
+// And finally, an observer for the document.body classList, to make sure that the toc also works when if is loaded during notebook initialization
+const bodyClassObserver = new MutationObserver(updateCallback)
+bodyClassObserver.observe(document.body, {attributeFilter: ["class"]})
+
+invalidation.then(() => {
+	notebookObserver.disconnect()
+	bodyClassObserver.disconnect()
+	observers.current.forEach((o) => o.disconnect())
+})
+
+return tocNode
+"""
+
+# ╔═╡ 9126f47d-cbc7-411f-93bd-8684ba06c9e9
+toc() = HTML("""
+	<script>
+	$(toc_js((;title="Table of Contents", indent=true, depth=3, aside=true)))
+	</script>
+	<style>
+	$(toc_css)
+	</style>
+	""")
+
+# ╔═╡ c763ed72-82c9-445c-a8f7-a0c40982e4d9
+toc()
+
+# ╔═╡ 955705f9-c90d-495d-86b4-5f3b5bc9fc8e
+begin
+	struct Slider
+		xs
+	end
+	
+	Base.get(s::Slider) = first(s.xs)
+	
+	Base.show(io::IO, m::MIME"text/html", s::Slider) = show(io, m, @htl("<input type=range min=$(minimum(s.xs)) max=$(maximum(s.xs)) value=$(first(s.xs))>"))
+	
+	Slider
+end
+
+# ╔═╡ a6f82260-3519-4254-a21e-abc7bb19ec4e
+@bind howmuch Slider(0:100)
+
+# ╔═╡ c369b4b5-2fcf-4029-a1f6-352120b2fc4b
+@bind n Slider(1:10)
+
+# ╔═╡ 98992db9-4f14-4aa6-a7c5-477622266112
+@bind k Slider(0:15)
+
+# ╔═╡ 187c3005-cd43-45a0-8cbd-bc96b9cb39da
+Dump(x; maxdepth=8) = sprint(io -> dump(io, x; maxdepth=maxdepth)) |> Text
+
+# ╔═╡ a6709e08-964d-46ea-9813-2c70a834824b
+Dump(ex1)
+
+# ╔═╡ 10803c0d-d0a5-45c5-b7ef-9659e441df69
+Dump(ex2)
+
+# ╔═╡ 411271a6-4236-45e2-ab34-f26410108821
+Dump(ex3)
+
+# ╔═╡ daee414b-3e3c-4e2a-a25a-429a1e7275d5
+Dump(Ref(1))
+
+# ╔═╡ 6c0156a9-7281-4326-9e1f-989efa73bb7b
+begin
+	struct Show{M <: MIME}
+		mime::M
+		data
+	end
+
+	Base.show(io::IO, ::M, x::Show{M}) where M <: MIME = write(io, x.data)
+	
+	Show
+end
+
+# ╔═╡ e46cf3e0-aa15-4c17-a925-3e9fc5109d54
+Hannes = let
+	url = "https://user-images.githubusercontent.com/6933510/116753174-fa40ab80-aa06-11eb-94d7-88f4171970b2.jpeg"
+	data = read(download(url))
+	Show(MIME"image/jpg"(), data)
+end;
+
+# ╔═╡ 6f5ba692-4b6a-405a-8cd3-1a8f9cc06611
+plot(args...; kwargs...) = Hannes
+
+# ╔═╡ d6c53f95-ea61-4aed-a469-76d0319d29de
+@visual_debug begin
+	(1+2) + (7-6)
+	plot(2000 .+ 30 .* rand(2+2))
+	4+5
+	sqrt(sqrt(sqrt(5)))
+	md"# Wow"
+end
+
+# ╔═╡ b4b317d7-bed1-489c-9650-8d336e330689
+rs = @eval_step_by_step(begin
+		(1+2) + (7-6)
+		plot(2000 .+ 30 .* rand(2+2))
+		4+5
+		sqrt(sqrt(sqrt(5)))
+	end) .|> SlottedDisplay
+
+# ╔═╡ 93ed973f-daf6-408b-9d4b-d53495418610
+@bind rindex Slider(eachindex(rs))
+
+# ╔═╡ dea898a0-1904-4d09-ad0b-6915008fe946
+rs[rindex]
+
+# ╔═╡ 74c19786-1ba7-4865-a993-590a779ae564
+frames(rs)
+
+# ╔═╡ a2cbb0c3-23b9-4091-9ca7-5ba96e85e3a3
+@visual_debug begin
+	(1+2) + (7-6)
+	plot(2000 .+ 30 .* rand(2+2))
+	4+5
+	sqrt(sqrt(sqrt(5)))
+end
+
+# ╔═╡ 5b70aaf1-9623-4f55-b055-4263ed8be31d
+Floep = let
+	url = "https://user-images.githubusercontent.com/6933510/116753861-142ebe00-aa08-11eb-8ce8-684af1098935.jpeg"
+	data = read(download(url))
+	Show(MIME"image/jpg"(), data)
+end;
+
+# ╔═╡ bf2abe01-6ae0-4066-8704-12f64e04511b
+friends = Any[Hannes, Floep];
+
 # ╔═╡ 9c3f6eab-b1c3-4607-add8-d6d7e468c11a
 begin
+	export @test
+	
 	macro test(expr...)
 		test(expr...; __module__=__module__)
 	end
@@ -917,7 +1202,10 @@ begin
 		
 			$(frames(SlottedDisplay.( call.steps)))
 		</div>
-		
+		<style>
+		$(pluto_test_css)
+		$(slotted_code_css)
+		</style>
 		
 		
 		""")
@@ -995,7 +1283,7 @@ end
 
 # ╔═╡ c39021dc-157c-4bcb-a3a9-fec8d9286b48
 map(1:15) do i
-	@test 2 * $i > 19
+	@test 2 * $i > 0.19
 end
 
 # ╔═╡ ac02b12a-3982-4526-a51c-0bf85198b81b
@@ -1011,7 +1299,10 @@ t = @test always_false(rand(20), rand(20),123)
 end
 
 # ╔═╡ 176f39f1-fa36-4ce1-86ba-76248848a834
-@test (@test always_false(rand(3),rand(3),123)) isa Fail
+@test (@test always_false(rand(30),123)) isa Fail
+
+# ╔═╡ 8150cb7e-b2e2-4ee8-a475-db4454c954f0
+embed_display(@test false)
 
 # ╔═╡ 716bba60-bfbb-48a4-8924-8bf4e8958cb1
 @test always_false("asd"*"asd","asd","asd"*" asd","asd","asd"*"asd","asd","asd"*"asd","asd","asd"*"asd","asd","asd"*"asd","asd","asd"*"asd","asd")
@@ -1019,57 +1310,7 @@ end
 # ╔═╡ 7c1aa057-dff2-48cd-aad5-1bbc1c0a729b
 @test π ≈ 3.14 atol=0.01 rtol=1
 
-# ╔═╡ 74c19786-1ba7-4865-a993-590a779ae564
-frames(rs)
-
-# ╔═╡ 3d5abd58-02ab-4b91-a7a3-d9068d4df017
-md"""
-#### Macro to test frames
-"""
-
-# ╔═╡ 326f7661-3482-4bf2-a97b-57cc7ac60ee2
-macro visual_debug(expr)
-	frames
-	SlottedDisplay
-	var"@eval_step_by_step"
-	quote
-		@eval_step_by_step($(expr)) .|> SlottedDisplay |> frames
-	end
-end
-
-# ╔═╡ d6c53f95-ea61-4aed-a469-76d0319d29de
-@visual_debug begin
-	(1+2) + (7-6)
-	plot(2000 .+ 30 .* rand(2+2))
-	4+5
-	sqrt(sqrt(sqrt(5)))
-	md"# Wow"
-end
-
-# ╔═╡ a2cbb0c3-23b9-4091-9ca7-5ba96e85e3a3
-@visual_debug begin
-	(1+2) + (7-6)
-	plot(2000 .+ 30 .* rand(2+2))
-	4+5
-	sqrt(sqrt(sqrt(5)))
-end
-
-# ╔═╡ f9ed2487-a7f6-4ce9-b673-f8a298cd5fc3
-
-
-# ╔═╡ 218504da-29d1-40b3-b3f6-534813efae7a
-
-
-# ╔═╡ 3de910db-584c-4867-83c2-59390623eafb
-
-
-# ╔═╡ 54ed587c-5526-46c0-a9cf-2110f5fc9a29
-
-
-# ╔═╡ d1381f83-2165-4121-bae3-ed28241f90ef
-
-
-# ╔═╡ aebe40a7-c0e4-412d-be4c-960ef173d394
+# ╔═╡ de62537b-a428-48d3-a866-151127b3255b
 
 
 # ╔═╡ Cell order:
@@ -1090,7 +1331,7 @@ end
 # ╟─5b70aaf1-9623-4f55-b055-4263ed8be31d
 # ╟─fd8428a3-9fa3-471a-8b2d-5bbb8fdb3137
 # ╟─ec1fd70a-d92a-4688-98b2-135879f07141
-# ╟─c763ed72-82c9-445c-a8f7-a0c40982e4d9
+# ╠═c763ed72-82c9-445c-a8f7-a0c40982e4d9
 # ╠═9d49ea50-8158-4d8b-97af-edba1f7dc38b
 # ╠═eab4ba31-c787-46dd-8024-693eca7fd1a0
 # ╠═26b0faf0-9016-48d7-8667-c1c1cfce655e
@@ -1139,13 +1380,14 @@ end
 # ╠═bb770f3f-72dd-4a71-8d71-9e773224df05
 # ╠═22a33c8c-e07f-445e-9d8d-a676f704ec45
 # ╠═176f39f1-fa36-4ce1-86ba-76248848a834
+# ╠═8150cb7e-b2e2-4ee8-a475-db4454c954f0
 # ╠═716bba60-bfbb-48a4-8924-8bf4e8958cb1
 # ╠═4bc1b7a4-0a36-4a07-b7ee-3d5be50350e1
 # ╠═3b2e8f55-1d4b-4a36-83f6-26becbd79e4b
 # ╠═7c1aa057-dff2-48cd-aad5-1bbc1c0a729b
+# ╠═ec2ed42c-1227-4e0d-b642-20e6f3503d2a
 # ╠═9c3f6eab-b1c3-4607-add8-d6d7e468c11a
 # ╠═1ac164c8-88fc-4a87-a194-60ef616fb399
-# ╠═e604cc80-5224-4579-a7b4-f194f1ac99b2
 # ╠═98ac4c36-49c7-4f65-982d-0b8bf6c372c0
 # ╠═0fcc6cb0-2711-4609-9bf3-634cf9407840
 # ╠═69200d7c-b7bc-4c7e-a9a1-5e26979179a3
@@ -1204,8 +1446,7 @@ end
 # ╠═872b4877-30dd-4a92-a3c8-69eb50675dcb
 # ╠═c877c109-db16-468c-8f3c-8294db859d6d
 # ╠═ab0a19b8-cf7c-4c4f-802a-f85eef81fc02
-# ╠═d3b83bc1-cd48-4f35-9617-dc8fecd7e0f9
-# ╠═5c2cae00-cfad-43b8-9c36-3380809bb6bc
+# ╠═8480d0d7-bdf7-468d-9344-5b789e33921c
 # ╠═6f5ba692-4b6a-405a-8cd3-1a8f9cc06611
 # ╠═b4b317d7-bed1-489c-9650-8d336e330689
 # ╠═93ed973f-daf6-408b-9d4b-d53495418610
@@ -1216,9 +1457,19 @@ end
 # ╟─3d5abd58-02ab-4b91-a7a3-d9068d4df017
 # ╠═326f7661-3482-4bf2-a97b-57cc7ac60ee2
 # ╠═a2cbb0c3-23b9-4091-9ca7-5ba96e85e3a3
+# ╟─34f613a3-85fb-45a8-be3b-cd8e6b3cb5a2
 # ╟─f9ed2487-a7f6-4ce9-b673-f8a298cd5fc3
-# ╟─218504da-29d1-40b3-b3f6-534813efae7a
-# ╟─3de910db-584c-4867-83c2-59390623eafb
-# ╟─54ed587c-5526-46c0-a9cf-2110f5fc9a29
-# ╟─d1381f83-2165-4121-bae3-ed28241f90ef
-# ╟─aebe40a7-c0e4-412d-be4c-960ef173d394
+# ╟─35f63c4e-3583-4ea8-a057-31f18f8a09d6
+# ╟─35b2770e-1db6-4327-bf86-c27a4b61dbd3
+# ╟─22640a2f-ea38-4517-a4f3-7a65e60ffebe
+# ╟─d414f840-4952-4de5-a565-7fdc81a94817
+# ╠═326825b0-a17f-427a-9056-8e8156098418
+# ╟─64bf02a4-4fe3-424d-ae6e-5906c3395278
+# ╟─f3916810-1911-48bd-936b-776206fcad54
+# ╟─122c27a5-a6e8-45ef-a968-b9b4b3f9ad09
+# ╟─9126f47d-cbc7-411f-93bd-8684ba06c9e9
+# ╟─955705f9-c90d-495d-86b4-5f3b5bc9fc8e
+# ╟─187c3005-cd43-45a0-8cbd-bc96b9cb39da
+# ╠═daee414b-3e3c-4e2a-a25a-429a1e7275d5
+# ╟─6c0156a9-7281-4326-9e1f-989efa73bb7b
+# ╠═de62537b-a428-48d3-a866-151127b3255b
