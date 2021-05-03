@@ -34,7 +34,7 @@ justthefilename(s) = split(String(s), "#==#")[1]
 function get_expr_for(m::Method)
 	notebookcode = read(justthefilename(m.file), String)
 	method_cellid = justthecellid(m.file)
-	all_cells_kindof = split(notebookcode, "# ╔═╡ ")
+	all_cells_kindof = split(notebookcode, "# " * "╔═╡ ")
 	m_cell_code = all_cells_kindof[findfirst(startswith(method_cellid), all_cells_kindof)]
 	method_code_raw = strip(split(m_cell_code, method_cellid)[2])
 	method_code_expr = Meta.parse(method_code_raw)
