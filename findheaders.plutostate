@@ -1,18 +1,4 @@
-Œ¥bonds€¬cell_resultsƒÙ$aba17712-e16f-11ea-3a8e-f338dc28583c‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙ+<div class="markdown"><h1>World</h1>
-</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ(¿™YÅÅ¬rootassigneeÀ§cell_idÙ$aba17712-e16f-11ea-3a8e-f338dc28583c§runtimeÍ §erroredÂÙ$27096552-e16d-11ea-0190-c3adf4a91cec‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙÆ<script>
-const headers = Array.from(
-	document.querySelectorAll(
-		"pluto-notebook pluto-output h1"
-	)
-)
-
-return html`<ul>${headers.map(h1 => 
-			html`<li>${h1.innerText}</li>`
-	)}</ul>`
-
-</script>
-°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ(¿™YÑş¬rootassigneeÀ§cell_idÙ$27096552-e16d-11ea-0190-c3adf4a91cec§runtimeÍ4§erroredÂÙ$673b77fc-e16d-11ea-3718-113715701f75‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙ+<div class="markdown"><h1>Hello</h1>
-</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ(¿™Y¸»¬rootassigneeÀ§cell_idÙ$673b77fc-e16d-11ea-3718-113715701f75§runtimeÍ¼§erroredÂ±cell_dependenciesƒÙ$aba17712-e16f-11ea-3a8e-f338dc28583c„´precedence_heuristic§cell_idÙ$aba17712-e16f-11ea-3a8e-f338dc28583c´downstream_cells_map€²upstream_cells_map‚§@md_str¨getindexÙ$27096552-e16d-11ea-0190-c3adf4a91cec„´precedence_heuristic§cell_idÙ$27096552-e16d-11ea-0190-c3adf4a91cec´downstream_cells_map€²upstream_cells_map©@html_strÙ$673b77fc-e16d-11ea-3718-113715701f75„´precedence_heuristic§cell_idÙ$673b77fc-e16d-11ea-3718-113715701f75´downstream_cells_map€²upstream_cells_map‚§@md_str¨getindex´cell_execution_order“Ù$673b77fc-e16d-11ea-3718-113715701f75Ù$aba17712-e16f-11ea-3a8e-f338dc28583cÙ$27096552-e16d-11ea-0190-c3adf4a91cec©shortpath®findheaders.jl®process_status¥ready¤pathÙD/home/runner/work/disorganised-mess/disorganised-mess/findheaders.jlªcell_order“Ù$673b77fc-e16d-11ea-3718-113715701f75Ù$aba17712-e16f-11ea-3a8e-f338dc28583cÙ$27096552-e16d-11ea-0190-c3adf4a91cec¥nbpkg„²installed_versions€§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputsƒÙ$aba17712-e16f-11ea-3a8e-f338dc28583cƒ§cell_idÙ$aba17712-e16f-11ea-3a8e-f338dc28583c¤code«md"# World"«code_foldedÂÙ$27096552-e16d-11ea-0190-c3adf4a91cecƒ§cell_idÙ$27096552-e16d-11ea-0190-c3adf4a91cec¤codeÙÑhtml"""
+Œ±cell_dependenciesƒÙ$673b77fc-e16d-11ea-3718-113715701f75„´precedence_heuristic§cell_idÙ$673b77fc-e16d-11ea-3718-113715701f75´downstream_cells_map€²upstream_cells_map‚§@md_str¨getindexÙ$27096552-e16d-11ea-0190-c3adf4a91cec„´precedence_heuristic§cell_idÙ$27096552-e16d-11ea-0190-c3adf4a91cec´downstream_cells_map€²upstream_cells_map©@html_strÙ$aba17712-e16f-11ea-3a8e-f338dc28583c„´precedence_heuristic§cell_idÙ$aba17712-e16f-11ea-3a8e-f338dc28583c´downstream_cells_map€²upstream_cells_map‚§@md_str¨getindex´cell_execution_order“Ù$673b77fc-e16d-11ea-3718-113715701f75Ù$aba17712-e16f-11ea-3a8e-f338dc28583cÙ$27096552-e16d-11ea-0190-c3adf4a91cec®process_status¥ready¤pathÙD/home/runner/work/disorganised-mess/disorganised-mess/findheaders.jlªcell_order“Ù$673b77fc-e16d-11ea-3718-113715701f75Ù$aba17712-e16f-11ea-3a8e-f338dc28583cÙ$27096552-e16d-11ea-0190-c3adf4a91cec¥nbpkg„²installed_versions€§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputsƒÙ$673b77fc-e16d-11ea-3718-113715701f75ƒ§cell_idÙ$673b77fc-e16d-11ea-3718-113715701f75¤code«md"# Hello"«code_foldedÂÙ$27096552-e16d-11ea-0190-c3adf4a91cecƒ§cell_idÙ$27096552-e16d-11ea-0190-c3adf4a91cec¤codeÙÑhtml"""
 <script>
 const headers = Array.from(
 	document.querySelectorAll(
@@ -25,4 +11,18 @@ return html`<ul>${headers.map(h1 =>
 	)}</ul>`
 
 </script>
-"""«code_foldedÂÙ$673b77fc-e16d-11ea-3718-113715701f75ƒ§cell_idÙ$673b77fc-e16d-11ea-3718-113715701f75¤code«md"# Hello"«code_foldedÂ«notebook_idÙ$f23a2f64-b768-11eb-25bc-7def27d81233«in_temp_dirÂ
+"""«code_foldedÂÙ$aba17712-e16f-11ea-3a8e-f338dc28583cƒ§cell_idÙ$aba17712-e16f-11ea-3a8e-f338dc28583c¤code«md"# World"«code_foldedÂ«notebook_idÙ$f23a2f64-b768-11eb-25bc-7def27d81233¥bonds€¬cell_resultsƒÙ$673b77fc-e16d-11ea-3718-113715701f75‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙ+<div class="markdown"><h1>Hello</h1>
+</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ(¿™Y¸»¬rootassigneeÀ§cell_idÙ$673b77fc-e16d-11ea-3718-113715701f75§runtimeÍ¼§erroredÂÙ$27096552-e16d-11ea-0190-c3adf4a91cec‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙÆ<script>
+const headers = Array.from(
+	document.querySelectorAll(
+		"pluto-notebook pluto-output h1"
+	)
+)
+
+return html`<ul>${headers.map(h1 => 
+			html`<li>${h1.innerText}</li>`
+	)}</ul>`
+
+</script>
+°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ(¿™YÑş¬rootassigneeÀ§cell_idÙ$27096552-e16d-11ea-0190-c3adf4a91cec§runtimeÍ4§erroredÂÙ$aba17712-e16f-11ea-3a8e-f338dc28583c‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙ+<div class="markdown"><h1>World</h1>
+</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ(¿™YÅÅ¬rootassigneeÀ§cell_idÙ$aba17712-e16f-11ea-3a8e-f338dc28583c§runtimeÍ §erroredÂ©shortpath®findheaders.jl«in_temp_dirÂ
