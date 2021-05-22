@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.17
+# v0.14.5
 
 using Markdown
 using InteractiveUtils
@@ -40,11 +40,17 @@ time = let
 	d.initial_year:d.dt:d.final_year
 end
 
+# ╔═╡ 717b904e-1547-4718-af20-67ee34f2ed71
+N = length(time)
+
 # ╔═╡ fca12051-3d72-45b1-b791-7ddec21704cd
 
 
 # ╔═╡ 24ffa39d-5206-4ea7-a680-6da8dc0daa1d
 max_slope_M = .02
+
+# ╔═╡ bcea1e6e-0aac-44ac-ac97-1b4d5e926238
+max_slope_R = .02
 
 # ╔═╡ 575d53ed-ede5-4d09-a9bd-38f2a3962c55
 md"""
@@ -56,39 +62,44 @@ To keep things simple, we wrap MARGO's forward model in a number of functions wi
 """
 
 # ╔═╡ 79a0b0b4-adbc-48a2-874a-bfb88c1a2a36
-function temperatures_controlled(M::Vector{<:Real})::Vector{<:Real}
+function temperatures_controlled(M::Vector{<:Real}, R::Vector{<:Real})::Vector{<:Real}
 	model = ClimateModel(model_parameters)
 	
 	model.controls.mitigate = M
-	T(model; M=true, R=true, G=true)
+	model.controls.remove = R
+	T_adapt(model; M=true, R=true, G=true, A=true)
 end
 
 # ╔═╡ cdac10a8-99a2-47f0-8e5b-6275b0801baf
 sample_M = fill(0.5, length(time))
 
+# ╔═╡ f1894a62-f2ef-482c-9d78-57dbf942be8c
+sample_R = 0.5 .* sample_M
+
 # ╔═╡ 8cf95f10-6445-41e3-b67e-0a6868af0944
-temperatures_controlled(sample_M)
+temperatures_controlled(sample_M, sample_R)
 
 # ╔═╡ fde600f7-b359-44cb-878b-bfcc9d89388b
-function final_temperature_controlled(M::Vector{<:Real})::Real
-	temperatures_controlled(M)[end]
+function final_temperature_controlled(M::Vector{<:Real}, R::Vector{<:Real})::Real
+	temperatures_controlled(M, R)[end]
 end
 
 # ╔═╡ cdac2914-a1f7-4c29-97c4-931146703a94
-final_temperature_controlled(sample_M)
+final_temperature_controlled(sample_M, sample_R)
 
 # ╔═╡ 8c8c1573-0dac-44d2-9486-ccc134a3142d
-function control_costs(M::Array{<:Real,1})::Real
+function control_costs(M::Array{<:Real,1}, R::Vector{<:Real})::Real
 	model = ClimateModel(model_parameters)
 	
 	model.controls.mitigate = M
-	costs = cost(model; M=true, discounting=true)
+	model.controls.remove = R
+	costs = cost(model; M=true, R=true, discounting=true)
 	
 	sum(costs .* model.domain.dt)
 end
 
 # ╔═╡ 51d79aed-0316-4e13-b25a-aadc5b1e266f
-control_costs(sample_M)
+control_costs(sample_M, sample_R)
 
 # ╔═╡ 0f550146-9c67-474e-bcf5-a8f66f6d5928
 md"""
@@ -96,7 +107,7 @@ md"""
 """
 
 # ╔═╡ 76abb0dd-3ba0-48f5-a909-c5bb97f10854
-import Ipopt
+import ClimateMARGO.Optimization.Ipopt
 
 # ╔═╡ 6659e62c-b019-4f42-bde6-c5957a6e9c90
 setup_opt_model() = Model(optimizer_with_attributes(Ipopt.Optimizer,
@@ -117,14 +128,32 @@ You cannot call a JuMP-registered Julia function with a JuMP vector, but you can
 # ╔═╡ e10c98a3-1bfc-4d0a-a550-46c0a014532d
 temperatures_controlled_jump(M...) = temperatures_controlled(collect(M))
 
+# ╔═╡ 97aeb55a-385c-4ed8-8f68-c1f06106d1ac
+
+
 # ╔═╡ 98fe65f7-7a60-43af-8509-690aaa7828c6
-final_temperature_controlled_jump(M...) = final_temperature_controlled(collect(M))
+# final_temperature_controlled_jump(M...) = final_temperature_controlled(collect(M))
+
+# ╔═╡ 5a7345e2-6da1-4123-9df7-5a77972a806c
+function final_temperature_controlled_jump(MR...)
+	
+	M = collect(MR[        1 : 1 * N])
+	R = collect(MR[    N + 1 : 2 * N])
+	
+	final_temperature_controlled(M, R)
+end
 
 # ╔═╡ 11612fc8-382a-4fdb-ae87-51d7819c284d
-control_costs_jump(M...) = control_costs(collect(M))
+function control_costs_jump(MR...)
+	
+	M = collect(MR[        1 : 1 * N])
+	R = collect(MR[    N + 1 : 2 * N])
+	
+	control_costs(M, R)
+end
 
 # ╔═╡ 3c6b1f01-bc0e-492e-b6d0-aca9a26c9f86
-T_max = 2.5
+T_max = 2.2
 
 # ╔═╡ 28e345c0-9b4c-47b5-9d87-4c0d7ef96de3
 begin
@@ -134,6 +163,7 @@ begin
 	local N = length(time)
 	
 	M = @variable(model_optimizer, 0.0 <= M[1:N] <= 1.0)
+	R = @variable(model_optimizer, 0.0 <= R[1:N] <= 1.0)
 
 	
 	# Register our wrapper functions
@@ -141,13 +171,13 @@ begin
 	
 	register(m, 
 		:final_temperature_controlled_jump, 
-		N, 
+		N * 2, 
 		final_temperature_controlled_jump, 
 		autodiff=true
 	)
 	register(m, 
 		:control_costs_jump, 
-		N, 
+		N * 2, 
 		control_costs_jump, 
 		autodiff=true
 	)
@@ -163,7 +193,7 @@ begin
 	###
 	
     temp_constraints = @NLconstraint(m, 
-		final_temperature_controlled_jump(M...) <= T_max)
+		final_temperature_controlled_jump(M..., R...) <= T_max)
 	
 	
 	
@@ -171,19 +201,29 @@ begin
 	###
 	
 	max_difference_M = max_slope_M * step(time)
+	max_difference_R = max_slope_R * step(time)
 	
 	dM = @variable(m, 
 		-max_difference_M <= dM[1:N-1] <= max_difference_M
 	)
-	diff_con = @constraint(m, diff_con[i = 1:N-1],
+	dR = @variable(m, 
+		-max_difference_R <= dR[1:N-1] <= max_difference_R
+	)
+	diff_con_M = @constraint(m, diff_con_M[i = 1:N-1],
 		dM[i] == (M[i+1] - M[i])
+	)
+	diff_con_R = @constraint(m, diff_con_R[i = 1:N-1],
+		dR[i] == (R[i+1] - R[i])
 	)
 	
 	# Initial value constraint
 	###
 	
-	init_con = @constraint(m, init_con,
+	init_con_M = @constraint(m, init_con_M,
 		M[1] == 0.0
+	)
+	init_con_R = @constraint(m, init_con_R,
+		R[1] == 0.0
 	)
 	
 	
@@ -192,7 +232,7 @@ begin
 	
 	min_objective = @NLobjective(
 		m, Min, 
-		control_costs_jump(M...)
+		control_costs_jump(M..., R...)
 	)
 	
 	model_optimizer
@@ -221,6 +261,12 @@ M_optimized = let
 	value.(M)
 end
 
+# ╔═╡ a6fad854-a165-4693-9034-4d8f1b1d9841
+R_optimized = let
+	model_optimized
+	value.(R)
+end
+
 # ╔═╡ f7c5bb61-9bee-41e5-b337-b68850c3f956
 md"""
 ## Result
@@ -231,8 +277,13 @@ plot(time, M_optimized,
 	title="Optimized Mitigation",
 	dpi=300, size=(400,200))
 
+# ╔═╡ 9526372e-2180-42a9-8221-7caa1bb5521e
+plot(time, R_optimized, 
+	title="Optimized Removal",
+	dpi=300, size=(400,200))
+
 # ╔═╡ 7a5f2082-c634-4b67-9ab5-c65fca14c169
-plot(time, temperatures_controlled(M_optimized), 
+plot(time, temperatures_controlled(M_optimized, R_optimized), 
 	title="Temperature increase",
 	dpi=300, size=(400,200))
 
@@ -276,8 +327,12 @@ function f_wrapped(MRGA...)
 	M = collect(MRGA[              1 : 1 * small_N])
 	R = collect(MRGA[    small_N + 1 : 2 * small_N])
 	G = collect(MRGA[2 * small_N + 1 : 3 * small_N])
-	A = collect(MRGA[3 * small_N + 1 : end])
-	f(M, R, G, A)
+	A = collect(MRGA[3 * small_N + 1 : 4 * small_N])
+	
+	# remaining arguments
+	e = collect(MRGA[4 * small_N + 1 : end])
+	
+	f(M, R, G, A, e...)
 end
 
 # ╔═╡ b05800fb-2075-441b-b2c7-7182fd1adb3f
@@ -293,6 +348,32 @@ let
 	f_wrapped(M..., R..., G..., A...)
 end
 
+# ╔═╡ 9f229c35-fa35-49a4-8ed4-a8dc9264920e
+g(M,R,G,A,i) = f(M,R,G,A)[i]
+
+# ╔═╡ 9c920e1a-9e47-4fb1-9ed2-581aad8779a3
+function g_wrapped(MRGA...)
+	M = collect(MRGA[              1 : 1 * small_N])
+	R = collect(MRGA[    small_N + 1 : 2 * small_N])
+	G = collect(MRGA[2 * small_N + 1 : 3 * small_N])
+	A = collect(MRGA[3 * small_N + 1 : 4 * small_N])
+	
+	# remaining arguments
+	e = collect(MRGA[4 * small_N + 1 : end])
+	
+	g(M, R, G, A, e...)
+end
+
+# ╔═╡ c6a3509c-5655-406b-a0d7-162b19cbfda0
+let
+	# in jump it would look a bit like:
+	M = [1, 0]
+	R = [2, 0]
+	G = [3, 0]
+	A = [4, 0]
+	g_wrapped(M..., R..., G..., A..., 1)
+end
+
 # ╔═╡ Cell order:
 # ╟─a26a5645-bbe7-4efd-85d6-0d3fb3b487a7
 # ╠═3c6b68f0-4081-11eb-2393-2b8fb00657e2
@@ -301,11 +382,14 @@ end
 # ╠═b44a65a4-cab8-4038-b830-1eeabed4f9e9
 # ╟─52597d62-c730-42da-b983-61f2b9816f01
 # ╠═1cf5a0c0-0b97-4802-87f9-8410d47f4873
+# ╠═717b904e-1547-4718-af20-67ee34f2ed71
 # ╠═fca12051-3d72-45b1-b791-7ddec21704cd
 # ╠═24ffa39d-5206-4ea7-a680-6da8dc0daa1d
+# ╠═bcea1e6e-0aac-44ac-ac97-1b4d5e926238
 # ╟─575d53ed-ede5-4d09-a9bd-38f2a3962c55
 # ╠═79a0b0b4-adbc-48a2-874a-bfb88c1a2a36
 # ╟─cdac10a8-99a2-47f0-8e5b-6275b0801baf
+# ╠═f1894a62-f2ef-482c-9d78-57dbf942be8c
 # ╠═8cf95f10-6445-41e3-b67e-0a6868af0944
 # ╠═fde600f7-b359-44cb-878b-bfcc9d89388b
 # ╠═cdac2914-a1f7-4c29-97c4-931146703a94
@@ -317,7 +401,9 @@ end
 # ╠═6659e62c-b019-4f42-bde6-c5957a6e9c90
 # ╟─d4c7acf5-dbd7-448c-9ecf-1dcef1c00033
 # ╠═e10c98a3-1bfc-4d0a-a550-46c0a014532d
+# ╠═97aeb55a-385c-4ed8-8f68-c1f06106d1ac
 # ╠═98fe65f7-7a60-43af-8509-690aaa7828c6
+# ╠═5a7345e2-6da1-4123-9df7-5a77972a806c
 # ╠═11612fc8-382a-4fdb-ae87-51d7819c284d
 # ╠═3c6b1f01-bc0e-492e-b6d0-aca9a26c9f86
 # ╠═28e345c0-9b4c-47b5-9d87-4c0d7ef96de3
@@ -326,10 +412,12 @@ end
 # ╠═2cbcf37f-657e-4b0e-933f-ff2818b54a57
 # ╠═8e9344df-0633-4608-8fc1-0ab601d69bd6
 # ╠═fd32e430-3b4f-4de6-aa46-2ce265de5add
+# ╠═a6fad854-a165-4693-9034-4d8f1b1d9841
 # ╟─f7c5bb61-9bee-41e5-b337-b68850c3f956
 # ╠═8f260d68-b919-44a4-acae-423a357cef3c
 # ╠═0794d76e-9413-4c28-b4a9-104dc12d0b6d
 # ╠═333a1520-9edf-4789-ac1f-75c5e7e2a694
+# ╠═9526372e-2180-42a9-8221-7caa1bb5521e
 # ╠═7a5f2082-c634-4b67-9ab5-c65fca14c169
 # ╟─c3dcfc24-2bab-4327-a639-30f3020a8f2f
 # ╟─06170709-ac84-46ec-ada4-149732b08256
@@ -338,3 +426,6 @@ end
 # ╠═57b82807-2954-43ad-9c54-7745944986da
 # ╠═b05800fb-2075-441b-b2c7-7182fd1adb3f
 # ╠═0eab42af-b05c-47ef-9ce4-d49dddf6e2bd
+# ╠═9f229c35-fa35-49a4-8ed4-a8dc9264920e
+# ╠═9c920e1a-9e47-4fb1-9ed2-581aad8779a3
+# ╠═c6a3509c-5655-406b-a0d7-162b19cbfda0
