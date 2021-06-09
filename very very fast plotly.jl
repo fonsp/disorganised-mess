@@ -88,11 +88,25 @@ xs = rand(50000)
 # ╔═╡ 18c94fd9-b8e1-42f8-8961-7a35a6e554f1
 @bind y Slider(0:.01:1)
 
+# ╔═╡ 201ec44d-f440-4352-a544-9d923afa01d6
+@bind y2 Slider(0:.01:1)
+
+# ╔═╡ 98d7d1b8-73e8-4e82-b263-8fe126a96339
+xsy2 = xs .+ y2
+
 # ╔═╡ 7d8f9236-4e92-4a5b-b51d-1c08c95218a6
 @bind x Slider(1:length(xs))
 
+# ╔═╡ 0977a954-aaf3-4bc4-90ea-55833575d470
+d = y .+ xs[1:x]
+
 # ╔═╡ b85f1cd5-9b93-4f50-a187-f2bf65c277e9
-x; plot(y .+ xs[1:x]; ylim=(0,1))
+let
+	
+	p = plot(; ylim=(0,1))
+	plot!(xsy2)
+	plot!([xs[1:x] d])
+end
 
 # ╔═╡ 0da9685c-446f-43e4-a279-b0153180c5e7
 methods
@@ -111,7 +125,10 @@ p2 = plot(1:20, [x1 x2 rand(20)])
 # ╠═fabf4032-770c-4f76-b311-641daf561bea
 # ╠═070bb8b7-19b0-4016-afb4-eba65d8bc4d7
 # ╠═b85f1cd5-9b93-4f50-a187-f2bf65c277e9
+# ╠═98d7d1b8-73e8-4e82-b263-8fe126a96339
+# ╠═0977a954-aaf3-4bc4-90ea-55833575d470
 # ╠═18c94fd9-b8e1-42f8-8961-7a35a6e554f1
+# ╠═201ec44d-f440-4352-a544-9d923afa01d6
 # ╠═7d8f9236-4e92-4a5b-b51d-1c08c95218a6
 # ╠═0da9685c-446f-43e4-a279-b0153180c5e7
 # ╠═cc980426-7d0e-4881-81ce-cf4c58b3b7d5
