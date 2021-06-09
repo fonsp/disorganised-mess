@@ -107,7 +107,14 @@ end
 
 # ╔═╡ 6d43f0c4-2475-44e5-9365-d717f98e3bba
 begin
-	macro tex(x::Expr)
+	macro tex(x)
+		tex(x)
+	end
+	macro tex_str(_x::String)
+		x = Meta.parse("\"" * _x * "\"")
+ 		tex(x)
+	end
+	function tex(x::Expr)
 		@assert x.head === :string
 		SlottedLaTeX
 		quote
@@ -117,7 +124,7 @@ begin
 			)
 		end
 	end
-	macro tex(x::String)
+	function tex(x::String)
 		SlottedLaTeX(
 			parts=[x],
 			slots=[],
