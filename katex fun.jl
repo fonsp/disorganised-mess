@@ -110,10 +110,11 @@ begin
 	macro tex(x)
 		tex(x)
 	end
-	macro tex_str(_x::String)
-		x = Meta.parse("\"" * _x * "\"")
- 		tex(x)
-	end
+	# `_str` macros with interpolation are not reactive in pluto 🙈 until https://github.com/fonsp/Pluto.jl/pull/1032 is fixed. :((
+	#macro tex_str(_x::String)
+	#	x = Meta.parse("\"" * _x * "\"")
+ 	#	tex(x)
+	#end
 	function tex(x::Expr)
 		@assert x.head === :string
 		SlottedLaTeX
