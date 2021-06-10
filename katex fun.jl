@@ -117,8 +117,13 @@ begin
 	#end
 	function tex(ex::Expr)
 		@assert ex.head === :string
-		parts = String[ex.args[1] isa String ? ex.args[1] : "\\hspace{0pt}"]
-		slots = Any[]
+		if ex.args[1] isa String
+			parts = String[ex.args[1]]
+			slots = Any[]
+		else
+			parts = ["\\hspace{0pt}"]
+			slots = [ex.args[1]]
+		end
 		for x in ex.args[2:end]
 			if x isa String			
 				all(==(' '), x) ? push!(parts, "\\hspace{0pt}") : push!(parts, x)
@@ -126,6 +131,15 @@ begin
 				length(parts) != length(slots) + 1 && push!(parts, "\\hspace{0pt}")
 				push!(slots, x)
 			end
+		end
+		if length(slots) == length(parts)
+			push!(parts, "\\hspace{0pt}")
+		end
+		quote
+			SlottedLaTeX(
+				parts = $parts,
+				slots = [$(esc.(slots)...)],
+			)
 		end
 	end
 	function tex(x::String)
