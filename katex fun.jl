@@ -115,14 +115,17 @@ begin
 	#	x = Meta.parse("\"" * _x * "\"")
  	#	tex(x)
 	#end
-	function tex(x::Expr)
-		@assert x.head === :string
-		SlottedLaTeX
-		quote
-			SlottedLaTeX(
-				parts = $(x.args[1:2:end]),
-				slots = [$(esc.(x.args[2:2:end])...)],
-			)
+	function tex(ex::Expr)
+		@assert ex.head === :string
+		parts = String[ex.args[1] isa String ? ex.args[1] : "\\hspace{0pt}"]
+		slots = Any[]
+		for x in ex.args[2:end]
+			if x isa String			
+				all(==(' '), x) ? push!(parts, "\\hspace{0pt}") : push!(parts, x)
+			else
+				length(parts) != length(slots) + 1 && push!(parts, "\\hspace{0pt}")
+				push!(slots, x)
+			end
 		end
 	end
 	function tex(x::String)
