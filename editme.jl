@@ -31,7 +31,7 @@ function EditMe(initial)
 			const new_command = `EditMe(\${JSON.stringify(el.value)})`
 			
 			
-			cm.setValue(old_value.replace(/EditMe\\(\\".+\\"\\)/, new_command))
+			cm.setValue(old_value.replace(/EditMe\\(\\".*\\"\\)/, new_command))
 			
 	})
 		
@@ -50,7 +50,7 @@ begin
 	# wow i spent a really long time writing this comment!!!
 	
 	
-	EditMe("asdfasdfasdfasdfasdfasdfasdfasdfasdfasdffasdfasdf")
+	EditMe("")
 end
 
 # ╔═╡ d357b372-ca0b-11eb-3ad6-35d924725b87
