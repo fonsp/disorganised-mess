@@ -1,0 +1,85 @@
+Œ¥bonds€¬cell_resultsŒÙ$950faf39-8e9b-4cdd-afed-0f2aecfb4ef0‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙ'EditMe (generic function with 1 method)°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ0’î8¬rootassigneeÀ§cell_idÙ$950faf39-8e9b-4cdd-afed-0f2aecfb4ef0§runtimeÍ}É§erroredÂÙ$598b7498-0e19-41ad-9386-f11b67c11a93‡¦queuedÂ±published_objects€§runningÂ¦output…¤body‚£msg½UndefVarError: nb not definedªstacktrace‘…¤call¯top-level scope§inlinedÂ¤fileÙ1editme.jl#==#598b7498-0e19-41ad-9386-f11b67c11a93¤line¤pathÙg/home/runner/work/disorganised-mess/disorganised-mess/editme.jl#==#598b7498-0e19-41ad-9386-f11b67c11a93°persist_js_stateÂ¤mimeÙ'application/vnd.pluto.stacktrace+object²last_run_timestampËAØ0’~bÃ¬rootassigneeÀ§cell_idÙ$598b7498-0e19-41ad-9386-f11b67c11a93§runtimeÀ§erroredÃÙ$6bb4cefd-ff3e-4cf3-afac-b70c63a03766‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚ¿	
+	<script>
+	
+	const init = "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdffasdfasdf"
+	
+	const el = html`<input>`
+	
+	el.value = init
+	
+	const cm = currentScript.closest("pluto-cell").querySelector(".CodeMirror").CodeMirror
+	
+	el.addEventListener("input", () => {
+		const old_value = cm.getValue()
+	
+		const new_command = `EditMe(${JSON.stringify(el.value)})`
+		
+		
+		cm.setValue(old_value.replace(/EditMe\(\".+\"\)/, new_command))
+		
+})
+	
+	return el
+	
+	°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ0’<•§¬rootassigneeÀ§cell_idÙ$6bb4cefd-ff3e-4cf3-afac-b70c63a03766§runtimeÍ§erroredÂÙ$2a4b192a-71ad-4a5a-8ccd-a16d1e4ec92c‡¦queuedÂ±published_objects€§runningÂ¦output…¤body‚£msgÙvMultiple definitions for can_drink.
+Combine all definitions into a single reactive cell using a `begin ... end` block.ªstacktrace°persist_js_stateÂ¤mimeÙ'application/vnd.pluto.stacktrace+object²last_run_timestampËAØ0’.Ş¹¬rootassigneeÀ§cell_idÙ$2a4b192a-71ad-4a5a-8ccd-a16d1e4ec92c§runtimeÀ§erroredÃÙ$d357b372-ca0b-11eb-3ad6-35d924725b87‡¦queuedÂ±published_objects€§runningÂ¦output…¤body‚£msgÙ+UndefVarError: kjasdlkfjasdlkjf not definedªstacktrace‘…¤call¯top-level scope§inlinedÂ¤fileÙ1editme.jl#==#d357b372-ca0b-11eb-3ad6-35d924725b87¤line¤pathÙg/home/runner/work/disorganised-mess/disorganised-mess/editme.jl#==#d357b372-ca0b-11eb-3ad6-35d924725b87°persist_js_stateÂ¤mimeÙ'application/vnd.pluto.stacktrace+object²last_run_timestampËAØ0’sÒ5¬rootassignee¢df§cell_idÙ$d357b372-ca0b-11eb-3ad6-35d924725b87§runtimeÀ§erroredÃÙ$b66eb5a1-a78f-4f21-aec4-a0cef9345972‡¦queuedÂ±published_objects€§runningÂ¦output…¤body‚£msg½UndefVarError: df not definedªstacktrace‘…¤call¯top-level scope§inlinedÂ¤fileÙ1editme.jl#==#b66eb5a1-a78f-4f21-aec4-a0cef9345972¤line¤pathÙg/home/runner/work/disorganised-mess/disorganised-mess/editme.jl#==#b66eb5a1-a78f-4f21-aec4-a0cef9345972°persist_js_stateÂ¤mimeÙ'application/vnd.pluto.stacktrace+object²last_run_timestampËAØ0’{R¬rootassigneeÀ§cell_idÙ$b66eb5a1-a78f-4f21-aec4-a0cef9345972§runtimeÀ§erroredÃÙ$e3654826-c3e0-4473-ac0a-e750cd2677c9‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚ®	
+	<script>
+	
+	const init = "asdfasdfasdfasdfasdfasdfasdfasdf"
+	
+	const el = html`<input>`
+	
+	el.value = init
+	
+	const cm = currentScript.closest("pluto-cell").querySelector(".CodeMirror").CodeMirror
+	
+	el.addEventListener("input", () => {
+		const old_value = cm.getValue()
+	
+		const new_command = `EditMe(${JSON.stringify(el.value)})`
+		
+		
+		cm.setValue(old_value.replace(/EditMe\(\".+\"\)/, new_command))
+		
+})
+	
+	return el
+	
+	°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ0’1Ò‰¬rootassignee¡e§cell_idÙ$e3654826-c3e0-4473-ac0a-e750cd2677c9§runtimeÍ §erroredÂÙ$7c271a29-c53a-414c-bc5b-05e325403fc1‡¦queuedÂ±published_objects€§runningÂ¦output…¤body‚£msg½UndefVarError: nb not definedªstacktrace‘…¤call¯top-level scope§inlinedÂ¤fileÙ1editme.jl#==#7c271a29-c53a-414c-bc5b-05e325403fc1¤line¤pathÙg/home/runner/work/disorganised-mess/disorganised-mess/editme.jl#==#7c271a29-c53a-414c-bc5b-05e325403fc1°persist_js_stateÂ¤mimeÙ'application/vnd.pluto.stacktrace+object²last_run_timestampËAØ0’„N¬rootassigneeÀ§cell_idÙ$7c271a29-c53a-414c-bc5b-05e325403fc1§runtimeÀ§erroredÃÙ$1f9ffe73-8018-4e5e-ad47-8f3836bbddb0‡¦queuedÂ±published_objects€§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ0’ŞÆi¬rootassigneeÀ§cell_idÙ$1f9ffe73-8018-4e5e-ad47-8f3836bbddb0§runtimeÌÈ§erroredÂÙ$d1696d25-1f3c-4a4a-b287-7f0035c897c7‡¦queuedÂ±published_objects€§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ0’‘Z¬rootassigneeÀ§cell_idÙ$d1696d25-1f3c-4a4a-b287-7f0035c897c7§runtimeÎ3ÿë‘§erroredÂÙ$368ed753-4d37-498a-abff-1bf5c3d55750‡¦queuedÂ±published_objects€§runningÂ¦output…¤body‚£msgÙRsyntax: invalid syntax (incomplete #<julia: "incomplete: premature end of input">)ªstacktrace‘…¤call¯top-level scope§inlinedÂ¤file¤none¤line¤path¤none°persist_js_stateÂ¤mimeÙ'application/vnd.pluto.stacktrace+object²last_run_timestampËAØ0’ÀY¬rootassigneeÀ§cell_idÙ$368ed753-4d37-498a-abff-1bf5c3d55750§runtimeÀ§erroredÃÙ$0a4863b9-a753-4842-8216-a25ecf63ba1d‡¦queuedÂ±published_objects€§runningÂ¦output…¤body‚£msgÙvMultiple definitions for can_drink.
+Combine all definitions into a single reactive cell using a `begin ... end` block.ªstacktrace°persist_js_stateÂ¤mimeÙ'application/vnd.pluto.stacktrace+object²last_run_timestampËAØ0’.İ‹¬rootassigneeÀ§cell_idÙ$0a4863b9-a753-4842-8216-a25ecf63ba1d§runtimeÀ§erroredÃ±cell_dependenciesŒÙ$950faf39-8e9b-4cdd-afed-0f2aecfb4ef0„´precedence_heuristic§cell_idÙ$950faf39-8e9b-4cdd-afed-0f2aecfb4ef0´downstream_cells_map¦EditMe’Ù$e3654826-c3e0-4473-ac0a-e750cd2677c9Ù$6bb4cefd-ff3e-4cf3-afac-b70c63a03766²upstream_cells_map¤@htlÙ$598b7498-0e19-41ad-9386-f11b67c11a93„´precedence_heuristic§cell_idÙ$598b7498-0e19-41ad-9386-f11b67c11a93´downstream_cells_map€²upstream_cells_map¢nbÙ$6bb4cefd-ff3e-4cf3-afac-b70c63a03766„´precedence_heuristic§cell_idÙ$6bb4cefd-ff3e-4cf3-afac-b70c63a03766´downstream_cells_map€²upstream_cells_map¦EditMe‘Ù$950faf39-8e9b-4cdd-afed-0f2aecfb4ef0Ù$2a4b192a-71ad-4a5a-8ccd-a16d1e4ec92c„´precedence_heuristic§cell_idÙ$2a4b192a-71ad-4a5a-8ccd-a16d1e4ec92c´downstream_cells_map©can_drink‘Ù$b66eb5a1-a78f-4f21-aec4-a0cef9345972²upstream_cells_map‚¡>¢df‘Ù$d357b372-ca0b-11eb-3ad6-35d924725b87Ù$d357b372-ca0b-11eb-3ad6-35d924725b87„´precedence_heuristic§cell_idÙ$d357b372-ca0b-11eb-3ad6-35d924725b87´downstream_cells_map¢df”Ù$2a4b192a-71ad-4a5a-8ccd-a16d1e4ec92cÙ$0a4863b9-a753-4842-8216-a25ecf63ba1dÙ$b66eb5a1-a78f-4f21-aec4-a0cef9345972Ù$7c271a29-c53a-414c-bc5b-05e325403fc1²upstream_cells_map°kjasdlkfjasdlkjfÙ$b66eb5a1-a78f-4f21-aec4-a0cef9345972„´precedence_heuristic§cell_idÙ$b66eb5a1-a78f-4f21-aec4-a0cef9345972´downstream_cells_map€²upstream_cells_map‚¢df‘Ù$d357b372-ca0b-11eb-3ad6-35d924725b87©can_drink’Ù$2a4b192a-71ad-4a5a-8ccd-a16d1e4ec92cÙ$0a4863b9-a753-4842-8216-a25ecf63ba1dÙ$e3654826-c3e0-4473-ac0a-e750cd2677c9„´precedence_heuristic§cell_idÙ$e3654826-c3e0-4473-ac0a-e750cd2677c9´downstream_cells_map¡e²upstream_cells_map¦EditMe‘Ù$950faf39-8e9b-4cdd-afed-0f2aecfb4ef0Ù$7c271a29-c53a-414c-bc5b-05e325403fc1„´precedence_heuristic§cell_idÙ$7c271a29-c53a-414c-bc5b-05e325403fc1´downstream_cells_map€²upstream_cells_mapƒ£map¢df‘Ù$d357b372-ca0b-11eb-3ad6-35d924725b87¢nbÙ$1f9ffe73-8018-4e5e-ad47-8f3836bbddb0„´precedence_heuristic§cell_idÙ$1f9ffe73-8018-4e5e-ad47-8f3836bbddb0´downstream_cells_map€²upstream_cells_map€Ù$d1696d25-1f3c-4a4a-b287-7f0035c897c7„´precedence_heuristic§cell_idÙ$d1696d25-1f3c-4a4a-b287-7f0035c897c7´downstream_cells_map°HypertextLiteral²upstream_cells_map€Ù$368ed753-4d37-498a-abff-1bf5c3d55750„´precedence_heuristic§cell_idÙ$368ed753-4d37-498a-abff-1bf5c3d55750´downstream_cells_map€²upstream_cells_map€Ù$0a4863b9-a753-4842-8216-a25ecf63ba1d„´precedence_heuristic§cell_idÙ$0a4863b9-a753-4842-8216-a25ecf63ba1d´downstream_cells_map‚¸anon11050919107848516530©can_drink‘Ù$b66eb5a1-a78f-4f21-aec4-a0cef9345972²upstream_cells_map„£map¢df‘Ù$d357b372-ca0b-11eb-3ad6-35d924725b87¡*£zip´cell_execution_orderœÙ$d1696d25-1f3c-4a4a-b287-7f0035c897c7Ù$1f9ffe73-8018-4e5e-ad47-8f3836bbddb0Ù$950faf39-8e9b-4cdd-afed-0f2aecfb4ef0Ù$e3654826-c3e0-4473-ac0a-e750cd2677c9Ù$6bb4cefd-ff3e-4cf3-afac-b70c63a03766Ù$d357b372-ca0b-11eb-3ad6-35d924725b87Ù$b66eb5a1-a78f-4f21-aec4-a0cef9345972Ù$368ed753-4d37-498a-abff-1bf5c3d55750Ù$598b7498-0e19-41ad-9386-f11b67c11a93Ù$7c271a29-c53a-414c-bc5b-05e325403fc1Ù$0a4863b9-a753-4842-8216-a25ecf63ba1dÙ$2a4b192a-71ad-4a5a-8ccd-a16d1e4ec92c©shortpath©editme.jl®process_status¥ready¤pathÙ?/home/runner/work/disorganised-mess/disorganised-mess/editme.jlªcell_orderœÙ$e3654826-c3e0-4473-ac0a-e750cd2677c9Ù$1f9ffe73-8018-4e5e-ad47-8f3836bbddb0Ù$6bb4cefd-ff3e-4cf3-afac-b70c63a03766Ù$d1696d25-1f3c-4a4a-b287-7f0035c897c7Ù$950faf39-8e9b-4cdd-afed-0f2aecfb4ef0Ù$d357b372-ca0b-11eb-3ad6-35d924725b87Ù$2a4b192a-71ad-4a5a-8ccd-a16d1e4ec92cÙ$0a4863b9-a753-4842-8216-a25ecf63ba1dÙ$b66eb5a1-a78f-4f21-aec4-a0cef9345972Ù$368ed753-4d37-498a-abff-1bf5c3d55750Ù$598b7498-0e19-41ad-9386-f11b67c11a93Ù$7c271a29-c53a-414c-bc5b-05e325403fc1¥nbpkg„²installed_versions°HypertextLiteral¥0.7.0§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputsŒÙ$950faf39-8e9b-4cdd-afed-0f2aecfb4ef0ƒ§cell_idÙ$950faf39-8e9b-4cdd-afed-0f2aecfb4ef0¤codeÚäfunction EditMe(initial)
+	
+	@htl("""
+		
+		<script>
+		
+		const init = $(initial)
+		
+		const el = html`<input>`
+		
+		el.value = init
+		
+		const cm = currentScript.closest("pluto-cell").querySelector(".CodeMirror").CodeMirror
+		
+		el.addEventListener("input", () => {
+			const old_value = cm.getValue()
+		
+			const new_command = `EditMe(\${JSON.stringify(el.value)})`
+			
+			
+			cm.setValue(old_value.replace(/EditMe\\(\\".+\\"\\)/, new_command))
+			
+	})
+		
+		return el
+		
+		""")
+	
+	
+end«code_foldedÂÙ$598b7498-0e19-41ad-9386-f11b67c11a93ƒ§cell_idÙ$598b7498-0e19-41ad-9386-f11b67c11a93¤code¬nb(;x = 123)«code_foldedÂÙ$6bb4cefd-ff3e-4cf3-afac-b70c63a03766ƒ§cell_idÙ$6bb4cefd-ff3e-4cf3-afac-b70c63a03766¤codeÙ„begin
+	# wow i spent a really long time writing this comment!!!
+	
+	
+	EditMe("asdfasdfasdfasdfasdfasdfasdfasdfasdfasdffasdfasdf")
+end«code_foldedÂÙ$2a4b192a-71ad-4a5a-8ccd-a16d1e4ec92cƒ§cell_idÙ$2a4b192a-71ad-4a5a-8ccd-a16d1e4ec92c¤code»can_drink = df["age"] .> 18«code_foldedÂÙ$d357b372-ca0b-11eb-3ad6-35d924725b87ƒ§cell_idÙ$d357b372-ca0b-11eb-3ad6-35d924725b87¤codeµdf = kjasdlkfjasdlkjf«code_foldedÂÙ$b66eb5a1-a78f-4f21-aec4-a0cef9345972ƒ§cell_idÙ$b66eb5a1-a78f-4f21-aec4-a0cef9345972¤code¯[df; can_drink]«code_foldedÂÙ$e3654826-c3e0-4473-ac0a-e750cd2677c9ƒ§cell_idÙ$e3654826-c3e0-4473-ac0a-e750cd2677c9¤codeÙ.e = EditMe("asdfasdfasdfasdfasdfasdfasdfasdf")«code_foldedÂÙ$7c271a29-c53a-414c-bc5b-05e325403fc1ƒ§cell_idÙ$7c271a29-c53a-414c-bc5b-05e325403fc1¤code«map(nb, df)«code_foldedÂÙ$1f9ffe73-8018-4e5e-ad47-8f3836bbddb0ƒ§cell_idÙ$1f9ffe73-8018-4e5e-ad47-8f3836bbddb0¤code «code_foldedÂÙ$d1696d25-1f3c-4a4a-b287-7f0035c897c7ƒ§cell_idÙ$d1696d25-1f3c-4a4a-b287-7f0035c897c7¤code¶using HypertextLiteral«code_foldedÂÙ$368ed753-4d37-498a-abff-1bf5c3d55750ƒ§cell_idÙ$368ed753-4d37-498a-abff-1bf5c3d55750¤code¥nb = «code_foldedÂÙ$0a4863b9-a753-4842-8216-a25ecf63ba1dƒ§cell_idÙ$0a4863b9-a753-4842-8216-a25ecf63ba1d¤codeÙacan_drink = map(zip(df["first name"], df["last name"])) do (first, last)
+	first * ", " * last
+end«code_foldedÂ«notebook_idÙ$152bdafa-ca0f-11eb-04a6-313cb823d44e«in_temp_dirÂ
