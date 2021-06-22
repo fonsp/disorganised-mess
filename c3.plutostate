@@ -1,32 +1,4 @@
-Œ¥bonds€¬cell_results„Ù$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚ<!-- Load c3.css -->
-<link href="https://cdn.jsdelivr.net/npm/c3@0.7.20/c3.min.css" rel="stylesheet">
-
-<!-- Load d3.js and c3.js -->
-<script src="https://cdn.jsdelivr.net/npm/d3@5/dist/d3.min.js" charset="utf-8"></script>
-<script src="https://cdn.jsdelivr.net/npm/c3@0.7.20/c3.min.js"></script>
-
-
-<div id="chart"></div>
-
-<script>
-let chart = c3.generate({
-    bindto: '#chart',
-    data: {
-      columns: [
-        ['data1', 30, 200, 100, 400, 150, 250],
-        ['data2', 50, 20, 10, 40, 15, 25]
-      ]
-    }
-});
-
-</script>
-
-°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ4u
-Ò´1¬rootassigneeÀ§cell_idÙ$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15§runtimeÍ§erroredÂÙ$3d989d8d-ad60-4809-a77a-3fc69dd88a85‡¦queuedÂ±published_objects€§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ4u–%¬rootassigneeÀ§cell_idÙ$3d989d8d-ad60-4809-a77a-3fc69dd88a85§runtimeÎN‰§erroredÂÙ$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3‡¦queuedÂ±published_objects€§runningÂ¦output…¤body£
-
-
-°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ4u
-Ò¨œ¬rootassigneeÀ§cell_idÙ$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3§runtimeÍl§erroredÂÙ$edf80d00-9caa-11eb-0068-3bb6690019b7‡¦queuedÂ±published_objects€§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ4uˆæ*¬rootassigneeÀ§cell_idÙ$edf80d00-9caa-11eb-0068-3bb6690019b7§runtimeÎ–§erroredÂ±cell_dependencies„Ù$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15„´precedence_heuristic§cell_idÙ$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15´downstream_cells_map€²upstream_cells_map©@html_strÙ$3d989d8d-ad60-4809-a77a-3fc69dd88a85„´precedence_heuristic§cell_idÙ$3d989d8d-ad60-4809-a77a-3fc69dd88a85´downstream_cells_map¤JSON²upstream_cells_map€Ù$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3„´precedence_heuristic§cell_idÙ$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3´downstream_cells_map€²upstream_cells_map©@html_strÙ$edf80d00-9caa-11eb-0068-3bb6690019b7„´precedence_heuristic§cell_idÙ$edf80d00-9caa-11eb-0068-3bb6690019b7´downstream_cells_map°HypertextLiteral²upstream_cells_map€´cell_execution_order”Ù$edf80d00-9caa-11eb-0068-3bb6690019b7Ù$3d989d8d-ad60-4809-a77a-3fc69dd88a85Ù$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3Ù$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15©shortpath¥c3.jl®process_status¥ready¤pathÙ;/home/runner/work/disorganised-mess/disorganised-mess/c3.jlªcell_order”Ù$edf80d00-9caa-11eb-0068-3bb6690019b7Ù$3d989d8d-ad60-4809-a77a-3fc69dd88a85Ù$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3Ù$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15¥nbpkg„²installed_versions‚¤JSON¦0.21.1°HypertextLiteral¥0.8.0§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputs„Ù$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15ƒ§cell_idÙ$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15¤codeÚhtml"""
+Œ±cell_dependencies„Ù$3d989d8d-ad60-4809-a77a-3fc69dd88a85„´precedence_heuristic§cell_idÙ$3d989d8d-ad60-4809-a77a-3fc69dd88a85´downstream_cells_map¤JSON²upstream_cells_map€Ù$edf80d00-9caa-11eb-0068-3bb6690019b7„´precedence_heuristic§cell_idÙ$edf80d00-9caa-11eb-0068-3bb6690019b7´downstream_cells_map°HypertextLiteral²upstream_cells_map€Ù$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15„´precedence_heuristic§cell_idÙ$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15´downstream_cells_map€²upstream_cells_map©@html_strÙ$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3„´precedence_heuristic§cell_idÙ$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3´downstream_cells_map€²upstream_cells_map©@html_str´cell_execution_order”Ù$edf80d00-9caa-11eb-0068-3bb6690019b7Ù$3d989d8d-ad60-4809-a77a-3fc69dd88a85Ù$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3Ù$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15®process_status¥ready¤pathÙ;/home/runner/work/disorganised-mess/disorganised-mess/c3.jlªcell_order”Ù$edf80d00-9caa-11eb-0068-3bb6690019b7Ù$3d989d8d-ad60-4809-a77a-3fc69dd88a85Ù$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3Ù$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15¥nbpkg„²installed_versions‚¤JSON¦0.21.1°HypertextLiteral¥0.8.0§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputs„Ù$3d989d8d-ad60-4809-a77a-3fc69dd88a85ƒ§cell_idÙ$3d989d8d-ad60-4809-a77a-3fc69dd88a85¤codeªusing JSON«code_foldedÂÙ$edf80d00-9caa-11eb-0068-3bb6690019b7ƒ§cell_idÙ$edf80d00-9caa-11eb-0068-3bb6690019b7¤code¶using HypertextLiteral«code_foldedÂÙ$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15ƒ§cell_idÙ$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15¤codeÚhtml"""
 <!-- Load c3.css -->
 <link href="https://cdn.jsdelivr.net/npm/c3@0.7.20/c3.min.css" rel="stylesheet">
 
@@ -50,8 +22,36 @@ let chart = c3.generate({
 
 </script>
 
-"""«code_foldedÂÙ$3d989d8d-ad60-4809-a77a-3fc69dd88a85ƒ§cell_idÙ$3d989d8d-ad60-4809-a77a-3fc69dd88a85¤codeªusing JSON«code_foldedÂÙ$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3ƒ§cell_idÙ$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3¤code®html"""
+"""«code_foldedÂÙ$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3ƒ§cell_idÙ$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3¤code®html"""
 
 
 
-"""«code_foldedÂÙ$edf80d00-9caa-11eb-0068-3bb6690019b7ƒ§cell_idÙ$edf80d00-9caa-11eb-0068-3bb6690019b7¤code¶using HypertextLiteral«code_foldedÂ«notebook_idÙ$68666fee-d353-11eb-12b9-3b2d323f51ba«in_temp_dirÂ
+"""«code_foldedÂ«notebook_idÙ$68666fee-d353-11eb-12b9-3b2d323f51ba¥bonds€¬cell_results„Ù$3d989d8d-ad60-4809-a77a-3fc69dd88a85‡¦queuedÂ±published_objects€§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ4u–%¬rootassigneeÀ§cell_idÙ$3d989d8d-ad60-4809-a77a-3fc69dd88a85§runtimeÎN‰§erroredÂÙ$edf80d00-9caa-11eb-0068-3bb6690019b7‡¦queuedÂ±published_objects€§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ4uˆæ*¬rootassigneeÀ§cell_idÙ$edf80d00-9caa-11eb-0068-3bb6690019b7§runtimeÎ–§erroredÂÙ$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚ<!-- Load c3.css -->
+<link href="https://cdn.jsdelivr.net/npm/c3@0.7.20/c3.min.css" rel="stylesheet">
+
+<!-- Load d3.js and c3.js -->
+<script src="https://cdn.jsdelivr.net/npm/d3@5/dist/d3.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/c3@0.7.20/c3.min.js"></script>
+
+
+<div id="chart"></div>
+
+<script>
+let chart = c3.generate({
+    bindto: '#chart',
+    data: {
+      columns: [
+        ['data1', 30, 200, 100, 400, 150, 250],
+        ['data2', 50, 20, 10, 40, 15, 25]
+      ]
+    }
+});
+
+</script>
+
+°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ4u
+Ò´1¬rootassigneeÀ§cell_idÙ$fe4f2aa9-09c6-47ec-bcd8-92b1d6436c15§runtimeÍ§erroredÂÙ$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3‡¦queuedÂ±published_objects€§runningÂ¦output…¤body£
+
+
+°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ4u
+Ò¨œ¬rootassigneeÀ§cell_idÙ$8b1361b8-cf8c-49d3-bed8-5f4e24a3a3a3§runtimeÍl§erroredÂ©shortpath¥c3.jl«in_temp_dirÂ
