@@ -1,41 +1,4 @@
-Œ¥bonds€¬cell_resultsƒÙ$cc6e3ee2-3914-4fc8-99e7-755615c95c5e‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚ<bond def="zz"><div>
-<button>Take one step!</button>&nbsp;&nbsp;&nbsp;&nbsp;
-<a id="reset" href="#">Start over!</a>
-</div>
-
-<script id="blabla">
-
-// Select elements relative to `currentScript`
-const div = currentScript.previousElementSibling
-const button = div.querySelector("button")
-const reset = div.querySelector("#reset")
-
-// we wrapped the button in a `div` to hide its default behaviour from Pluto
-
-let count = 0
-
-button.addEventListener("click", (e) => {
-	count += 1
-	
-	div.value = count
-	div.dispatchEvent(new CustomEvent("input"))
-	e.stopPropagation()
-})
-
-	reset.addEventListener("click", (e) => {
-	count = 0
-	
-	div.value = count
-	div.dispatchEvent(new CustomEvent("input"))
-	e.stopPropagation()
-	e.preventDefault()
-})
-
-// Set the initial value
-div.value = count
-
-</script>
-</bond>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØT,5n]¬rootassigneeÀ§cell_idÙ$cc6e3ee2-3914-4fc8-99e7-755615c95c5e§runtimeÎ€§erroredÂÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3‡¦queuedÂ±published_objects€§runningÂ¦output…¤body§missing°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØT,c£M¬rootassigneeÀ§cell_idÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3§runtimeÌÈ§erroredÂÙ$a5572edc-3946-4690-888d-cbbb83b33012‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙ7ClickCounterWithReset (generic function with 3 methods)°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØT,&Õ¬rootassigneeÀ§cell_idÙ$a5572edc-3946-4690-888d-cbbb83b33012§runtimeÍ¼H§erroredÂ±cell_dependenciesƒÙ$cc6e3ee2-3914-4fc8-99e7-755615c95c5e„´precedence_heuristic§cell_idÙ$cc6e3ee2-3914-4fc8-99e7-755615c95c5e´downstream_cells_map¢zz‘Ù$493d8938-8a87-4e03-a976-6ce35dcf87b3²upstream_cells_mapˆ¤Core¤Base«PlutoRunner°PlutoRunner.Bond¯Core.applicable¥@bind¨Base.getµClickCounterWithReset‘Ù$a5572edc-3946-4690-888d-cbbb83b33012Ù$493d8938-8a87-4e03-a976-6ce35dcf87b3„´precedence_heuristic§cell_idÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3´downstream_cells_map€²upstream_cells_map¢zz‘Ù$cc6e3ee2-3914-4fc8-99e7-755615c95c5eÙ$a5572edc-3946-4690-888d-cbbb83b33012„´precedence_heuristic§cell_idÙ$a5572edc-3946-4690-888d-cbbb83b33012´downstream_cells_mapµClickCounterWithReset‘Ù$cc6e3ee2-3914-4fc8-99e7-755615c95c5e²upstream_cells_map¤HTML´cell_execution_order“Ù$a5572edc-3946-4690-888d-cbbb83b33012Ù$cc6e3ee2-3914-4fc8-99e7-755615c95c5eÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3©shortpath°click counter.jl®process_status¥ready¤pathÙF/home/runner/work/disorganised-mess/disorganised-mess/click counter.jlªcell_order“Ù$cc6e3ee2-3914-4fc8-99e7-755615c95c5eÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3Ù$a5572edc-3946-4690-888d-cbbb83b33012¥nbpkg„²installed_versions€§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputsƒÙ$cc6e3ee2-3914-4fc8-99e7-755615c95c5eƒ§cell_idÙ$cc6e3ee2-3914-4fc8-99e7-755615c95c5e¤codeÙ?@bind zz ClickCounterWithReset("Take one step!", "Start over!")«code_foldedÂÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3ƒ§cell_idÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3¤code¢zz«code_foldedÂÙ$a5572edc-3946-4690-888d-cbbb83b33012ƒ§cell_idÙ$a5572edc-3946-4690-888d-cbbb83b33012¤codeÚCClickCounterWithReset(text="Click", reset_text="Reset") = HTML("""
+Œ±cell_dependenciesƒÙ$cc6e3ee2-3914-4fc8-99e7-755615c95c5e„´precedence_heuristic§cell_idÙ$cc6e3ee2-3914-4fc8-99e7-755615c95c5e´downstream_cells_map¢zz‘Ù$493d8938-8a87-4e03-a976-6ce35dcf87b3²upstream_cells_mapˆ¤Core¤Base«PlutoRunner°PlutoRunner.Bond¯Core.applicable¥@bind¨Base.getµClickCounterWithReset‘Ù$a5572edc-3946-4690-888d-cbbb83b33012Ù$a5572edc-3946-4690-888d-cbbb83b33012„´precedence_heuristic§cell_idÙ$a5572edc-3946-4690-888d-cbbb83b33012´downstream_cells_mapµClickCounterWithReset‘Ù$cc6e3ee2-3914-4fc8-99e7-755615c95c5e²upstream_cells_map¤HTMLÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3„´precedence_heuristic§cell_idÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3´downstream_cells_map€²upstream_cells_map¢zz‘Ù$cc6e3ee2-3914-4fc8-99e7-755615c95c5e´cell_execution_order“Ù$a5572edc-3946-4690-888d-cbbb83b33012Ù$cc6e3ee2-3914-4fc8-99e7-755615c95c5eÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3®process_status¥ready¤pathÙF/home/runner/work/disorganised-mess/disorganised-mess/click counter.jlªcell_order“Ù$cc6e3ee2-3914-4fc8-99e7-755615c95c5eÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3Ù$a5572edc-3946-4690-888d-cbbb83b33012¥nbpkg„²installed_versions€§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputsƒÙ$cc6e3ee2-3914-4fc8-99e7-755615c95c5eƒ§cell_idÙ$cc6e3ee2-3914-4fc8-99e7-755615c95c5e¤codeÙ?@bind zz ClickCounterWithReset("Take one step!", "Start over!")«code_foldedÂÙ$a5572edc-3946-4690-888d-cbbb83b33012ƒ§cell_idÙ$a5572edc-3946-4690-888d-cbbb83b33012¤codeÚCClickCounterWithReset(text="Click", reset_text="Reset") = HTML("""
 <div>
 <button>$(text)</button>&nbsp;&nbsp;&nbsp;&nbsp;
 <a id="reset" href="#">$(reset_text)</a>
@@ -73,4 +36,41 @@ button.addEventListener("click", (e) => {
 div.value = count
 
 </script>
-""")«code_foldedÂ«notebook_idÙ$d117f2b4-1ef1-11ec-019f-3d3fd24148b9«in_temp_dirÂ
+""")«code_foldedÂÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3ƒ§cell_idÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3¤code¢zz«code_foldedÂ«notebook_idÙ$d117f2b4-1ef1-11ec-019f-3d3fd24148b9¥bonds€¬cell_resultsƒÙ$cc6e3ee2-3914-4fc8-99e7-755615c95c5e‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚ<bond def="zz"><div>
+<button>Take one step!</button>&nbsp;&nbsp;&nbsp;&nbsp;
+<a id="reset" href="#">Start over!</a>
+</div>
+
+<script id="blabla">
+
+// Select elements relative to `currentScript`
+const div = currentScript.previousElementSibling
+const button = div.querySelector("button")
+const reset = div.querySelector("#reset")
+
+// we wrapped the button in a `div` to hide its default behaviour from Pluto
+
+let count = 0
+
+button.addEventListener("click", (e) => {
+	count += 1
+	
+	div.value = count
+	div.dispatchEvent(new CustomEvent("input"))
+	e.stopPropagation()
+})
+
+	reset.addEventListener("click", (e) => {
+	count = 0
+	
+	div.value = count
+	div.dispatchEvent(new CustomEvent("input"))
+	e.stopPropagation()
+	e.preventDefault()
+})
+
+// Set the initial value
+div.value = count
+
+</script>
+</bond>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØT,5n]¬rootassigneeÀ§cell_idÙ$cc6e3ee2-3914-4fc8-99e7-755615c95c5e§runtimeÎ€§erroredÂÙ$a5572edc-3946-4690-888d-cbbb83b33012‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙ7ClickCounterWithReset (generic function with 3 methods)°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØT,&Õ¬rootassigneeÀ§cell_idÙ$a5572edc-3946-4690-888d-cbbb83b33012§runtimeÍ¼H§erroredÂÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3‡¦queuedÂ±published_objects€§runningÂ¦output…¤body§missing°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØT,c£M¬rootassigneeÀ§cell_idÙ$493d8938-8a87-4e03-a976-6ce35dcf87b3§runtimeÌÈ§erroredÂ©shortpath°click counter.jl«in_temp_dirÂ

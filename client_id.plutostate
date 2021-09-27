@@ -1,17 +1,4 @@
-Œ¥bonds€¬cell_results‚Ù$cc93a52f-f01b-4086-a323-235f34f11358‡¦queuedÂ±published_objects€§runningÂ¦output…¤body§missing°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØT,Œ9ü¬rootassigneeÀ§cell_idÙ$cc93a52f-f01b-4086-a323-235f34f11358§runtimed§erroredÂÙ$4cddacfc-df19-11eb-1e4a-f358d91fa394‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚ»<bond def="a"><script>
-const base64_arraybuffer = async (/** @type {BufferSource} */ data) => {
-    const base64url = await new Promise((r) => {
-        const reader = new FileReader()
-        reader.onload = () => r(reader.result)
-        reader.readAsDataURL(new Blob([data]))
-    })
-
-    return base64url.split(",", 2)[1]
-}
-
-currentScript.value = await base64_arraybuffer(crypto.getRandomValues(new Uint32Array(6)).buffer)
-</script>
-</bond>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØT,‹ÔXX¬rootassigneeÀ§cell_idÙ$4cddacfc-df19-11eb-1e4a-f358d91fa394§runtimeÎ½}Ô§erroredÂ±cell_dependencies‚Ù$cc93a52f-f01b-4086-a323-235f34f11358„´precedence_heuristic§cell_idÙ$cc93a52f-f01b-4086-a323-235f34f11358´downstream_cells_map€²upstream_cells_map¡a‘Ù$4cddacfc-df19-11eb-1e4a-f358d91fa394Ù$4cddacfc-df19-11eb-1e4a-f358d91fa394„´precedence_heuristic§cell_idÙ$4cddacfc-df19-11eb-1e4a-f358d91fa394´downstream_cells_map¡a‘Ù$cc93a52f-f01b-4086-a323-235f34f11358²upstream_cells_mapˆ¤Core¤Base«PlutoRunner©@html_str°PlutoRunner.Bond¯Core.applicable¥@bind¨Base.get´cell_execution_order’Ù$4cddacfc-df19-11eb-1e4a-f358d91fa394Ù$cc93a52f-f01b-4086-a323-235f34f11358©shortpath¬client_id.jl®process_status¥ready¤pathÙB/home/runner/work/disorganised-mess/disorganised-mess/client_id.jlªcell_order’Ù$4cddacfc-df19-11eb-1e4a-f358d91fa394Ù$cc93a52f-f01b-4086-a323-235f34f11358¥nbpkg„²installed_versions€§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputs‚Ù$cc93a52f-f01b-4086-a323-235f34f11358ƒ§cell_idÙ$cc93a52f-f01b-4086-a323-235f34f11358¤code¡a«code_foldedÂÙ$4cddacfc-df19-11eb-1e4a-f358d91fa394ƒ§cell_idÙ$4cddacfc-df19-11eb-1e4a-f358d91fa394¤codeÚ¹@bind a html"""
+Œ±cell_dependencies‚Ù$cc93a52f-f01b-4086-a323-235f34f11358„´precedence_heuristic§cell_idÙ$cc93a52f-f01b-4086-a323-235f34f11358´downstream_cells_map€²upstream_cells_map¡a‘Ù$4cddacfc-df19-11eb-1e4a-f358d91fa394Ù$4cddacfc-df19-11eb-1e4a-f358d91fa394„´precedence_heuristic§cell_idÙ$4cddacfc-df19-11eb-1e4a-f358d91fa394´downstream_cells_map¡a‘Ù$cc93a52f-f01b-4086-a323-235f34f11358²upstream_cells_mapˆ¤Core¤Base«PlutoRunner©@html_str°PlutoRunner.Bond¯Core.applicable¥@bind¨Base.get´cell_execution_order’Ù$4cddacfc-df19-11eb-1e4a-f358d91fa394Ù$cc93a52f-f01b-4086-a323-235f34f11358®process_status¥ready¤pathÙB/home/runner/work/disorganised-mess/disorganised-mess/client_id.jlªcell_order’Ù$4cddacfc-df19-11eb-1e4a-f358d91fa394Ù$cc93a52f-f01b-4086-a323-235f34f11358¥nbpkg„²installed_versions€§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputs‚Ù$cc93a52f-f01b-4086-a323-235f34f11358ƒ§cell_idÙ$cc93a52f-f01b-4086-a323-235f34f11358¤code¡a«code_foldedÂÙ$4cddacfc-df19-11eb-1e4a-f358d91fa394ƒ§cell_idÙ$4cddacfc-df19-11eb-1e4a-f358d91fa394¤codeÚ¹@bind a html"""
 <script>
 const base64_arraybuffer = async (/** @type {BufferSource} */ data) => {
     const base64url = await new Promise((r) => {
@@ -25,4 +12,17 @@ const base64_arraybuffer = async (/** @type {BufferSource} */ data) => {
 
 currentScript.value = await base64_arraybuffer(crypto.getRandomValues(new Uint32Array(6)).buffer)
 </script>
-"""«code_foldedÂ«notebook_idÙ$c973a268-1ef1-11ec-3086-35ab12231665«in_temp_dirÂ
+"""«code_foldedÂ«notebook_idÙ$c973a268-1ef1-11ec-3086-35ab12231665¥bonds€¬cell_results‚Ù$cc93a52f-f01b-4086-a323-235f34f11358‡¦queuedÂ±published_objects€§runningÂ¦output…¤body§missing°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØT,Œ9ü¬rootassigneeÀ§cell_idÙ$cc93a52f-f01b-4086-a323-235f34f11358§runtimed§erroredÂÙ$4cddacfc-df19-11eb-1e4a-f358d91fa394‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚ»<bond def="a"><script>
+const base64_arraybuffer = async (/** @type {BufferSource} */ data) => {
+    const base64url = await new Promise((r) => {
+        const reader = new FileReader()
+        reader.onload = () => r(reader.result)
+        reader.readAsDataURL(new Blob([data]))
+    })
+
+    return base64url.split(",", 2)[1]
+}
+
+currentScript.value = await base64_arraybuffer(crypto.getRandomValues(new Uint32Array(6)).buffer)
+</script>
+</bond>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØT,‹ÔXX¬rootassigneeÀ§cell_idÙ$4cddacfc-df19-11eb-1e4a-f358d91fa394§runtimeÎ½}Ô§erroredÂ©shortpath¬client_id.jl«in_temp_dirÂ
