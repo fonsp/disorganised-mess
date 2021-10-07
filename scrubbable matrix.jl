@@ -484,6 +484,9 @@ end
 # ╔═╡ f80662e7-e437-4871-b084-28eb6903ba94
 @bind B_raw scrub_matrix(A)
 
+# ╔═╡ e57c8302-4238-46a6-83ac-588609a42924
+B_raw
+
 # ╔═╡ a2a655ac-7a8b-4079-9f82-996206e793db
 B = unwrap(A, B_raw)
 
@@ -498,9 +501,12 @@ unwrap(A99, result)
 
 # ╔═╡ a63fc547-4693-4fc2-9f07-99fac42d8eab
 @bind together BondDefault(combine(@htl("""
-
-$(combined_child(Slider(1:10)))
-$(combined_child(Slider(1:10)))
+<p>Hello world!</p>
+$(combined_child(TextField()))
+$([
+	combined_child(Slider(1:10))
+	for _ in 1:10
+])
 
 """)), [1,1])
 
@@ -1809,8 +1815,9 @@ version = "0.9.1+5"
 # ╠═fcc00027-618a-44aa-be77-e137d1518ac1
 # ╠═9699d51e-22ad-4138-b91b-88a3e730dd3c
 # ╟─51a7ca06-5723-4c2b-8aba-bcdce5d33432
-# ╟─f80662e7-e437-4871-b084-28eb6903ba94
-# ╟─a2a655ac-7a8b-4079-9f82-996206e793db
+# ╠═f80662e7-e437-4871-b084-28eb6903ba94
+# ╠═e57c8302-4238-46a6-83ac-588609a42924
+# ╠═a2a655ac-7a8b-4079-9f82-996206e793db
 # ╟─969e2478-9785-487f-90e2-fdea675a9b0d
 # ╟─969b76be-ed55-4a5a-96ed-a5a90941e56d
 # ╟─d2aaaf27-bef4-4578-9560-38f41abfd685
