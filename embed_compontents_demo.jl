@@ -13,6 +13,9 @@ macro bind(def, element)
     end
 end
 
+# ╔═╡ c2b213da-9e73-46e6-b199-8ec881e5d44d
+using PlutoUI.ExperimentalLayout: grid, vbox, hbox, Div
+
 # ╔═╡ 46a3d211-ad00-4a75-a457-4e3a60d8b95f
 using PlutoUI
 
@@ -25,9 +28,6 @@ using UUIDs
 # ╔═╡ d4e2fa9d-a1d1-478a-9d10-12e85a78f75c
 using HypertextLiteral
 
-# ╔═╡ 4a70a791-8abc-405c-8184-35c1f59514ce
-
-
 # ╔═╡ 622842fd-8a37-4cdc-a970-09323be1e015
 bond = @bind x Slider(1:10)
 
@@ -39,14 +39,12 @@ ids = UUID.([
 ])
 
 # ╔═╡ 1caae88c-c64c-4a69-be12-773daab192b9
-PlutoRunner.DivElement(
-	children=[
-		bond, 
-		map(ids) do id
-			PlutoRunner.EmbeddableCellOutput(id)
-		end...
-	]
-)
+vbox([
+	bond, 
+	map(ids) do id
+		PlutoRunner.EmbeddableCellOutput(id)
+	end...
+])
 
 # ╔═╡ 63af282f-5a93-40ec-b8e3-9820d289c26a
 PlutoRunner.EmbeddableCellOutput(ids[1])
@@ -77,14 +75,10 @@ p1 = slowplot(x)
 p2 = slowplot(x)
 
 # ╔═╡ 5a535af1-8f0c-4e04-a903-b0f3a95c95da
-PlutoRunner.DivElement(
-	children=[bond, p1, p2]
-)
+hbox([bond, p1, p2])
 
 # ╔═╡ 162abddc-08fa-43ca-88c4-b4f0bef554d6
-PlutoRunner.DivElement(
-	children=[bond, bond, p1, p2]
-)
+hbox([bond, bond, p1, p2])
 
 # ╔═╡ ced34576-1ed6-11ec-0677-0d80a8beff1e
 
@@ -105,8 +99,60 @@ FINALLY
 # ╔═╡ ba9a2a3e-697c-4efd-b2e6-99ef997460bd
 slider1 = @bind hello Slider(1:100)
 
+# ╔═╡ cf577e7d-adf8-46ee-b892-cb509ca2d370
+slider2 = @bind hello2 Slider(1:.1:10)
+
 # ╔═╡ 1d5154d4-fc15-414a-a2ae-d32ca2fc2d3e
 
+
+# ╔═╡ 7264c1d2-f694-48b5-8759-425623e7713f
+sidebar = Div([
+	md"""### Parameters
+	Lorem ipsum asdfasdf dolor sit amet, consectetur adipiscing elit. """,
+	slider1,
+	md"---",
+	slider2,
+	
+	md"Enable something: $(@bind enable1 CheckBox())",
+	md"And this: $(@bind other_number NumberField(0:20))",
+	md"---",
+	],
+	
+	style="flex: 1 1 120px; background: #fef; padding: 1em; border-radius: 1em;"
+)
+
+# ╔═╡ c4ae6a0e-6c3e-4824-961d-c8561bc42f1a
+output1 = plot(rand(hello) .^ hello2; size=(200,100), legend=enable1)
+
+# ╔═╡ 8ac2d431-2858-4340-b85b-2d0f09177b12
+PlutoRunner.DivElement(
+	children=[
+		slider1,
+		output1
+	],
+)
+
+# ╔═╡ 145670bc-2d6d-48cc-bb53-4c90ae51855d
+coolness = Text(repeat("😎", other_number))
+
+# ╔═╡ b70bcaab-e0aa-4cad-9e42-d7acb2c4b210
+main = Div([
+	md"""## Results""",
+	grid([
+		output1 123
+		output1 output1
+	]),
+	coolness
+	],
+	
+	style="display: flex; flex-direction: column; flex: 1 1 auto;"
+)
+
+# ╔═╡ b9ae81b9-3467-496f-882a-c9ce1fcb5e7c
+hbox([
+	main,
+	sidebar,
+])
 
 # ╔═╡ fe54be5b-e940-474c-9362-01147d9159c4
 
@@ -126,74 +172,28 @@ md"""
 """
 
 # ╔═╡ 8fa4f64f-dd7d-47bc-b1af-e834cb95bb03
-Div(args...; style::String="") = PlutoRunner.DivElement(
-	children=[args...],
-	style=style
-)
+# Div(args...; style::String="") = PlutoRunner.DivElement(
+# 	children=[args...],
+# 	style=style
+# )
 
 # ╔═╡ 18748a11-9a25-4366-81cf-2688f37080cc
-Div(; children=[], style::String="") = PlutoRunner.DivElement(
-	children=children,
-	style=style
-)
-
-# ╔═╡ 7264c1d2-f694-48b5-8759-425623e7713f
-sidebar = Div(
-	md"""### Parameters
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit. """,
-	slider1,
-	md"---",
-	Slider(1:100),
-	
-	md"Enable something: $(@bind enable1 CheckBox())",
-	md"And this: $(NumberField(5:20))",
-	md"---",
-
-	
-	style="flex: 1 1 120px; background: #fef; padding: 1em; border-radius: 1em;"
-)
-
-# ╔═╡ c4ae6a0e-6c3e-4824-961d-c8561bc42f1a
-output1 = plot(rand(hello); size=(200,100), legend=enable1)
-
-# ╔═╡ 8ac2d431-2858-4340-b85b-2d0f09177b12
-PlutoRunner.DivElement(
-	children=[
-		slider1,
-		output1
-	],
-)
+# Div(; children=[], style::String="") = PlutoRunner.DivElement(
+# 	children=children,
+# 	style=style
+# )
 
 # ╔═╡ 04936ff1-df04-4fba-881f-2b171a2ac9bf
-function grid(items::AbstractMatrix; fill_width::Bool=true)
-	Div(
-		children=Div.(vec(permutedims(items, [2,1]))), 
-		style="""
-			display: $(fill_width ? "grid" : "inline-grid"); 
-			grid-template-columns: repeat($(size(items,2)), auto);
-			column-gap: 1em;
-		""",
-	)
-end
-
-# ╔═╡ b70bcaab-e0aa-4cad-9e42-d7acb2c4b210
-main = Div(
-	md"""## Results""",
-	grid([
-		output1 output1
-		output1 output1
-	]),
-
-	
-	style="display: flex; flex-direction: column; flex: 1 1 auto;"
-)
-
-# ╔═╡ b9ae81b9-3467-496f-882a-c9ce1fcb5e7c
-Div(
-	main,
-	sidebar,
-	style="display: flex; flex-direction: row;"
-)
+# function grid(items::AbstractMatrix; fill_width::Bool=true)
+# 	Div(
+# 		children=Div.(vec(permutedims(items, [2,1]))), 
+# 		style="""
+# 			display: $(fill_width ? "grid" : "inline-grid"); 
+# 			grid-template-columns: repeat($(size(items,2)), auto);
+# 			column-gap: 1em;
+# 		""",
+# 	)
+# end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -204,9 +204,9 @@ PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 UUIDs = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 
 [compat]
-HypertextLiteral = "~0.9.0"
-Plots = "~1.22.2"
-PlutoUI = "~0.7.11"
+HypertextLiteral = "~0.9.1"
+Plots = "~1.22.4"
+PlutoUI = "~0.7.15"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -374,9 +374,9 @@ version = "0.59.0"
 
 [[GR_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Pkg", "Qt5Base_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "ef49a187604f865f4708c90e3f431890724e9012"
+git-tree-sha1 = "4c8c0719591e108a83fb933ac39e32731c7850ff"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
-version = "0.59.0+0"
+version = "0.60.0+0"
 
 [[GeometryBasics]]
 deps = ["EarCut_jll", "IterTools", "LinearAlgebra", "StaticArrays", "StructArrays", "Tables"]
@@ -409,9 +409,9 @@ version = "1.0.2"
 
 [[HTTP]]
 deps = ["Base64", "Dates", "IniFile", "Logging", "MbedTLS", "NetworkOptions", "Sockets", "URIs"]
-git-tree-sha1 = "60ed5f1643927479f845b0135bb369b031b541fa"
+git-tree-sha1 = "14eece7a3308b4d8be910e265c724a6ba51a9798"
 uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
-version = "0.9.14"
+version = "0.9.16"
 
 [[HarfBuzz_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg"]
@@ -419,10 +419,16 @@ git-tree-sha1 = "8a954fed8ac097d5be04921d595f741115c1b2ad"
 uuid = "2e76f6c2-a576-52d4-95c1-20adfe4de566"
 version = "2.8.1+0"
 
+[[Hyperscript]]
+deps = ["Test"]
+git-tree-sha1 = "8d511d5b81240fc8e6802386302675bdf47737b9"
+uuid = "47d2ed2b-36de-50cf-bf87-49c2cf4b8b91"
+version = "0.0.4"
+
 [[HypertextLiteral]]
-git-tree-sha1 = "72053798e1be56026b81d4e2682dbe58922e5ec9"
+git-tree-sha1 = "f6532909bf3d40b308a0f360b6a0e626c0e263a8"
 uuid = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
-version = "0.9.0"
+version = "0.9.1"
 
 [[IOCapture]]
 deps = ["Logging", "Random"]
@@ -641,9 +647,9 @@ version = "8.44.0+0"
 
 [[Parsers]]
 deps = ["Dates"]
-git-tree-sha1 = "9d8c00ef7a8d110787ff6f170579846f776133a9"
+git-tree-sha1 = "a8709b968a1ea6abc2dc1967cb1db6ac9a00dfb6"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "2.0.4"
+version = "2.0.5"
 
 [[Pixman_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -663,21 +669,21 @@ version = "2.0.1"
 
 [[PlotUtils]]
 deps = ["ColorSchemes", "Colors", "Dates", "Printf", "Random", "Reexport", "Statistics"]
-git-tree-sha1 = "2537ed3c0ed5e03896927187f5f2ee6a4ab342db"
+git-tree-sha1 = "b084324b4af5a438cd63619fd006614b3b20b87b"
 uuid = "995b91a9-d308-5afd-9ec6-746e21dbc043"
-version = "1.0.14"
+version = "1.0.15"
 
 [[Plots]]
 deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "GeometryBasics", "JSON", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "PlotThemes", "PlotUtils", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs"]
-git-tree-sha1 = "457b13497a3ea4deb33d273a6a5ea15c25c0ebd9"
+git-tree-sha1 = "6841db754bd01a91d281370d9a0f8787e220ae08"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.22.2"
+version = "1.22.4"
 
 [[PlutoUI]]
-deps = ["Base64", "Dates", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
-git-tree-sha1 = "0c3e067931708fa5641247affc1a1aceb53fff06"
+deps = ["Base64", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
+git-tree-sha1 = "633f8a37c47982bff23461db0076a33787b17ecd"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
-version = "0.7.11"
+version = "0.7.15"
 
 [[Preferences]]
 deps = ["TOML"]
@@ -762,9 +768,9 @@ uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [[StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
-git-tree-sha1 = "3240808c6d463ac46f1c1cd7638375cd22abbccb"
+git-tree-sha1 = "3c76dde64d03699e074ac02eb2e8ba8254d428da"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "1.2.12"
+version = "1.2.13"
 
 [[Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
@@ -799,9 +805,9 @@ version = "1.0.1"
 
 [[Tables]]
 deps = ["DataAPI", "DataValueInterfaces", "IteratorInterfaceExtensions", "LinearAlgebra", "TableTraits", "Test"]
-git-tree-sha1 = "1162ce4a6c4b7e31e0e6b14486a6986951c73be9"
+git-tree-sha1 = "fed34d0e71b91734bf0a7e10eb1bb05296ddbcd0"
 uuid = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
-version = "1.5.2"
+version = "1.6.0"
 
 [[Tar]]
 deps = ["ArgTools", "SHA"]
@@ -1035,8 +1041,8 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
+# ╠═c2b213da-9e73-46e6-b199-8ec881e5d44d
 # ╠═1caae88c-c64c-4a69-be12-773daab192b9
-# ╠═4a70a791-8abc-405c-8184-35c1f59514ce
 # ╠═5a535af1-8f0c-4e04-a903-b0f3a95c95da
 # ╠═162abddc-08fa-43ca-88c4-b4f0bef554d6
 # ╠═63af282f-5a93-40ec-b8e3-9820d289c26a
@@ -1057,9 +1063,11 @@ version = "0.9.1+5"
 # ╟─7dc4b64a-41d8-4a39-b29d-cbb9f654d92c
 # ╠═8ac2d431-2858-4340-b85b-2d0f09177b12
 # ╠═ba9a2a3e-697c-4efd-b2e6-99ef997460bd
+# ╠═cf577e7d-adf8-46ee-b892-cb509ca2d370
 # ╠═c4ae6a0e-6c3e-4824-961d-c8561bc42f1a
 # ╠═1d5154d4-fc15-414a-a2ae-d32ca2fc2d3e
 # ╠═b70bcaab-e0aa-4cad-9e42-d7acb2c4b210
+# ╠═145670bc-2d6d-48cc-bb53-4c90ae51855d
 # ╠═7264c1d2-f694-48b5-8759-425623e7713f
 # ╠═b9ae81b9-3467-496f-882a-c9ce1fcb5e7c
 # ╟─fe54be5b-e940-474c-9362-01147d9159c4

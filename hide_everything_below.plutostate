@@ -1,16 +1,81 @@
-Œ±cell_dependenciesŠÙ$ac312d0b-35fc-4355-8273-dd37c80287dd„´precedence_heuristic§cell_idÙ$ac312d0b-35fc-4355-8273-dd37c80287dd´downstream_cells_map€²upstream_cells_map‚§@md_str¨getindexÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6„´precedence_heuristic§cell_idÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6´downstream_cells_map€²upstream_cells_map‚¡x‘Ù$836189b1-0333-4305-99d2-6595752b4b44¡+Ù$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5„´precedence_heuristic§cell_idÙ$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5´downstream_cells_map‚¦reveal‘Ù$a51c086d-3619-411e-9cbc-83f34fe78d71¡b²upstream_cells_mapŠ§@md_str¤Base¤Core«PlutoRunner©@html_str°PlutoRunner.Bond¯Core.applicable¥@bind¨Base.get¨getindexÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88„´precedence_heuristic§cell_idÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88´downstream_cells_map€²upstream_cells_map‚§@md_str¨getindexÙ$00a4b7ce-277b-41aa-b608-4d0bf6bc73cb„´precedence_heuristic§cell_idÙ$00a4b7ce-277b-41aa-b608-4d0bf6bc73cb´downstream_cells_map€²upstream_cells_map€Ù$836189b1-0333-4305-99d2-6595752b4b44„´precedence_heuristic§cell_idÙ$836189b1-0333-4305-99d2-6595752b4b44´downstream_cells_map¡x‘Ù$aed0f069-17cd-43f2-aef1-0310b9c683e6²upstream_cells_map€Ù$a51c086d-3619-411e-9cbc-83f34fe78d71„´precedence_heuristic§cell_idÙ$a51c086d-3619-411e-9cbc-83f34fe78d71´downstream_cells_map€²upstream_cells_map…§@md_str£===µhide_everything_below‘Ù$0d10052b-efb0-4190-b94d-857d5903cf41¦reveal‘Ù$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5¨getindexÙ$0d10052b-efb0-4190-b94d-857d5903cf41„´precedence_heuristic§cell_idÙ$0d10052b-efb0-4190-b94d-857d5903cf41´downstream_cells_mapµhide_everything_below’Ù$a51c086d-3619-411e-9cbc-83f34fe78d71Ù$526393de-74f6-4513-9dbc-81919ae821fa²upstream_cells_map©@html_strÙ$526393de-74f6-4513-9dbc-81919ae821fa„´precedence_heuristic§cell_idÙ$526393de-74f6-4513-9dbc-81919ae821fa´downstream_cells_map€²upstream_cells_mapµhide_everything_below‘Ù$0d10052b-efb0-4190-b94d-857d5903cf41Ù$1724d36c-55e2-11eb-141c-75bf3e441715„´precedence_heuristic§cell_idÙ$1724d36c-55e2-11eb-141c-75bf3e441715´downstream_cells_map€²upstream_cells_map‚§@md_str¨getindex´cell_execution_orderšÙ$1724d36c-55e2-11eb-141c-75bf3e441715Ù$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5Ù$ac312d0b-35fc-4355-8273-dd37c80287ddÙ$836189b1-0333-4305-99d2-6595752b4b44Ù$00a4b7ce-277b-41aa-b608-4d0bf6bc73cbÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6Ù$0d10052b-efb0-4190-b94d-857d5903cf41Ù$a51c086d-3619-411e-9cbc-83f34fe78d71Ù$526393de-74f6-4513-9dbc-81919ae821faÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88®process_status¥ready¤pathÙN/home/runner/work/disorganised-mess/disorganised-mess/hide_everything_below.jlªcell_orderšÙ$1724d36c-55e2-11eb-141c-75bf3e441715Ù$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5Ù$a51c086d-3619-411e-9cbc-83f34fe78d71Ù$ac312d0b-35fc-4355-8273-dd37c80287ddÙ$836189b1-0333-4305-99d2-6595752b4b44Ù$00a4b7ce-277b-41aa-b608-4d0bf6bc73cbÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6Ù$0d10052b-efb0-4190-b94d-857d5903cf41Ù$526393de-74f6-4513-9dbc-81919ae821faÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88¥nbpkg„²installed_versions€§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputsŠÙ$ac312d0b-35fc-4355-8273-dd37c80287ddƒ§cell_idÙ$ac312d0b-35fc-4355-8273-dd37c80287dd¤codeÚmd"""
+Œ¥bonds€¬cell_resultsŠÙ$ac312d0b-35fc-4355-8273-dd37c80287dd‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚ/<div class="markdown"><p>A Pluto notebook is made up of small blocks of Julia code &#40;cells&#41; and together they form a reactive notebook. When you change a variable, Pluto automatically re-runs the cells that refer to it. Cells can even be placed in arbitrary order - intelligent syntax analysis figures out the dependencies between them and takes care of execution.</p>
+<p>Cells can contain arbitrary Julia code, and you can use external libraries. There are no code rewrites or wrappers, Pluto just looks at your code once before evaluation.</p>
+</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ\¯§m†f¬rootassigneeÀ§cell_idÙ$ac312d0b-35fc-4355-8273-dd37c80287dd§runtimeÍ|§erroredÂÙ$00a4b7ce-277b-41aa-b608-4d0bf6bc73cb‡¦queuedÂ±published_objects€§runningÂ¦output…¤body£123°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ\¯§mç¼¬rootassigneeÀ§cell_idÙ$00a4b7ce-277b-41aa-b608-4d0bf6bc73cb§runtimed§erroredÂÙ$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙ†<div class="markdown"><h2>Example</h2>
+<p>Reveal the rest of this notebook: <bond def="reveal"><input type=checkbox></bond></p>
+</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ\¯ª¥¬rootassigneeÀ§cell_idÙ$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5§runtimeÎúÂ§erroredÂÙ$526393de-74f6-4513-9dbc-81919ae821fa‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚõ<style>
+pluto-cell.hide_everything_below ~ pluto-cell {
+	display: none;
+}
+</style>
+
+<script>
+const cell = currentScript.closest("pluto-cell")
+
+const setclass = () => {
+	console.log("change!")
+	cell.classList.toggle("hide_everything_below", true)
+}
+setclass()
+const observer = new MutationObserver(setclass)
+
+observer.observe(cell, {
+	subtree: false,
+	attributeFilter: ["class"],
+})
+
+invalidation.then(() => {
+	observer.disconnect()
+	cell.classList.toggle("hide_everything_below", false)
+})
+
+</script>
+°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ\¯ªçO¬rootassigneeÀ§cell_idÙ$526393de-74f6-4513-9dbc-81919ae821fa§runtimed§erroredÂÙ$1724d36c-55e2-11eb-141c-75bf3e441715‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚ<div class="markdown"><h1>Hiding everything below a cell</h1>
+<p>This notebook defines a widget <code>hide_everything_below</code>. When shown as the output of a cell, all <em>subsequent</em> cells will be hidden. You can unhide those cells by removing the widget.</p>
+</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ\¯§mv¬rootassigneeÀ§cell_idÙ$1724d36c-55e2-11eb-141c-75bf3e441715§runtimeÍ}d§erroredÂÙ$836189b1-0333-4305-99d2-6595752b4b44‡¦queuedÂ±published_objects€§runningÂ¦output…¤body¡1°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ\¯ªÎ¥¹¬rootassignee¡x§cell_idÙ$836189b1-0333-4305-99d2-6595752b4b44§runtimed§erroredÂÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙ4<div class="markdown"><p>I am hidden&#33;</p>
+</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ\¯§möË¬rootassigneeÀ§cell_idÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88§runtimeÍø§erroredÂÙ$a51c086d-3619-411e-9cbc-83f34fe78d71‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚõ<style>
+pluto-cell.hide_everything_below ~ pluto-cell {
+	display: none;
+}
+</style>
+
+<script>
+const cell = currentScript.closest("pluto-cell")
+
+const setclass = () => {
+	console.log("change!")
+	cell.classList.toggle("hide_everything_below", true)
+}
+setclass()
+const observer = new MutationObserver(setclass)
+
+observer.observe(cell, {
+	subtree: false,
+	attributeFilter: ["class"],
+})
+
+invalidation.then(() => {
+	observer.disconnect()
+	cell.classList.toggle("hide_everything_below", false)
+})
+
+</script>
+°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØ\¯ªâí–¬rootassigneeÀ§cell_idÙ$a51c086d-3619-411e-9cbc-83f34fe78d71§runtimeÍ§erroredÂÙ$0d10052b-efb0-4190-b94d-857d5903cf41‡¦queuedÂ±published_objects€§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ\¯ªŞ‹Ö¬rootassigneeÀ§cell_idÙ$0d10052b-efb0-4190-b94d-857d5903cf41§runtimeÍ”§erroredÂÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6‡¦queuedÂ±published_objects€§runningÂ¦output…¤body¡3°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØ\¯ªØö¥¬rootassigneeÀ§cell_idÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6§runtimed§erroredÂ±cell_dependenciesŠÙ$ac312d0b-35fc-4355-8273-dd37c80287dd„´precedence_heuristic§cell_idÙ$ac312d0b-35fc-4355-8273-dd37c80287dd´downstream_cells_map€²upstream_cells_map‚§@md_str¨getindexÙ$00a4b7ce-277b-41aa-b608-4d0bf6bc73cb„´precedence_heuristic§cell_idÙ$00a4b7ce-277b-41aa-b608-4d0bf6bc73cb´downstream_cells_map€²upstream_cells_map€Ù$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5„´precedence_heuristic§cell_idÙ$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5´downstream_cells_map‚¦reveal‘Ù$a51c086d-3619-411e-9cbc-83f34fe78d71¡b²upstream_cells_mapŠ§@md_str¤Base¤Core«PlutoRunner©@html_str°PlutoRunner.Bond¯Core.applicable¥@bind¨Base.get¨getindexÙ$526393de-74f6-4513-9dbc-81919ae821fa„´precedence_heuristic§cell_idÙ$526393de-74f6-4513-9dbc-81919ae821fa´downstream_cells_map€²upstream_cells_mapµhide_everything_below‘Ù$0d10052b-efb0-4190-b94d-857d5903cf41Ù$1724d36c-55e2-11eb-141c-75bf3e441715„´precedence_heuristic§cell_idÙ$1724d36c-55e2-11eb-141c-75bf3e441715´downstream_cells_map€²upstream_cells_map‚§@md_str¨getindexÙ$836189b1-0333-4305-99d2-6595752b4b44„´precedence_heuristic§cell_idÙ$836189b1-0333-4305-99d2-6595752b4b44´downstream_cells_map¡x‘Ù$aed0f069-17cd-43f2-aef1-0310b9c683e6²upstream_cells_map€Ù$de4fda2e-81a8-455e-8ef9-e9554987fc88„´precedence_heuristic§cell_idÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88´downstream_cells_map€²upstream_cells_map‚§@md_str¨getindexÙ$a51c086d-3619-411e-9cbc-83f34fe78d71„´precedence_heuristic§cell_idÙ$a51c086d-3619-411e-9cbc-83f34fe78d71´downstream_cells_map€²upstream_cells_map…§@md_str£===µhide_everything_below‘Ù$0d10052b-efb0-4190-b94d-857d5903cf41¦reveal‘Ù$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5¨getindexÙ$0d10052b-efb0-4190-b94d-857d5903cf41„´precedence_heuristic§cell_idÙ$0d10052b-efb0-4190-b94d-857d5903cf41´downstream_cells_mapµhide_everything_below’Ù$a51c086d-3619-411e-9cbc-83f34fe78d71Ù$526393de-74f6-4513-9dbc-81919ae821fa²upstream_cells_map©@html_strÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6„´precedence_heuristic§cell_idÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6´downstream_cells_map€²upstream_cells_map‚¡x‘Ù$836189b1-0333-4305-99d2-6595752b4b44¡+´cell_execution_orderšÙ$1724d36c-55e2-11eb-141c-75bf3e441715Ù$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5Ù$ac312d0b-35fc-4355-8273-dd37c80287ddÙ$836189b1-0333-4305-99d2-6595752b4b44Ù$00a4b7ce-277b-41aa-b608-4d0bf6bc73cbÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6Ù$0d10052b-efb0-4190-b94d-857d5903cf41Ù$a51c086d-3619-411e-9cbc-83f34fe78d71Ù$526393de-74f6-4513-9dbc-81919ae821faÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88©shortpath¸hide_everything_below.jl®process_status¥ready¤pathÙN/home/runner/work/disorganised-mess/disorganised-mess/hide_everything_below.jlªcell_orderšÙ$1724d36c-55e2-11eb-141c-75bf3e441715Ù$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5Ù$a51c086d-3619-411e-9cbc-83f34fe78d71Ù$ac312d0b-35fc-4355-8273-dd37c80287ddÙ$836189b1-0333-4305-99d2-6595752b4b44Ù$00a4b7ce-277b-41aa-b608-4d0bf6bc73cbÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6Ù$0d10052b-efb0-4190-b94d-857d5903cf41Ù$526393de-74f6-4513-9dbc-81919ae821faÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88¥nbpkg„²installed_versions€§enabledÃ·restart_recommended_msgÀ´restart_required_msgÀ«cell_inputsŠÙ$ac312d0b-35fc-4355-8273-dd37c80287ddƒ§cell_idÙ$ac312d0b-35fc-4355-8273-dd37c80287dd¤codeÚmd"""
 A Pluto notebook is made up of small blocks of Julia code (cells) and together they form a reactive notebook. When you change a variable, Pluto automatically re-runs the cells that refer to it. Cells can even be placed in arbitrary order - intelligent syntax analysis figures out the dependencies between them and takes care of execution.
 
 Cells can contain arbitrary Julia code, and you can use external libraries. There are no code rewrites or wrappers, Pluto just looks at your code once before evaluation.
-"""«code_foldedÃÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6ƒ§cell_idÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6¤code¥x + 2«code_foldedÂÙ$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5ƒ§cell_idÙ$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5¤codeÙwbegin
+"""«code_foldedÃÙ$00a4b7ce-277b-41aa-b608-4d0bf6bc73cbƒ§cell_idÙ$00a4b7ce-277b-41aa-b608-4d0bf6bc73cb¤code£123«code_foldedÂÙ$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5ƒ§cell_idÙ$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5¤codeÙwbegin
 	b = @bind reveal html"<input type=checkbox>"
 	md"""
 	## Example
 	Reveal the rest of this notebook: $(b)
 	"""
-end«code_foldedÂÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88ƒ§cell_idÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88¤code¶md"""
+end«code_foldedÂÙ$526393de-74f6-4513-9dbc-81919ae821faƒ§cell_idÙ$526393de-74f6-4513-9dbc-81919ae821fa¤codeµhide_everything_below«code_foldedÂÙ$1724d36c-55e2-11eb-141c-75bf3e441715ƒ§cell_idÙ$1724d36c-55e2-11eb-141c-75bf3e441715¤codeÙámd"""
+# Hiding everything below a cell
+
+This notebook defines a widget `hide_everything_below`. When shown as the output of a cell, all _subsequent_ cells will be hidden. You can unhide those cells by removing the widget.
+"""«code_foldedÃÙ$836189b1-0333-4305-99d2-6595752b4b44ƒ§cell_idÙ$836189b1-0333-4305-99d2-6595752b4b44¤code¥x = 1«code_foldedÂÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88ƒ§cell_idÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88¤code¶md"""
 I am hidden!
-"""«code_foldedÃÙ$00a4b7ce-277b-41aa-b608-4d0bf6bc73cbƒ§cell_idÙ$00a4b7ce-277b-41aa-b608-4d0bf6bc73cb¤code£123«code_foldedÂÙ$836189b1-0333-4305-99d2-6595752b4b44ƒ§cell_idÙ$836189b1-0333-4305-99d2-6595752b4b44¤code¥x = 1«code_foldedÂÙ$a51c086d-3619-411e-9cbc-83f34fe78d71ƒ§cell_idÙ$a51c086d-3619-411e-9cbc-83f34fe78d71¤codeÙCif reveal === true
+"""«code_foldedÃÙ$a51c086d-3619-411e-9cbc-83f34fe78d71ƒ§cell_idÙ$a51c086d-3619-411e-9cbc-83f34fe78d71¤codeÙCif reveal === true
 	md"Here we go!"
 else
 	hide_everything_below
@@ -43,69 +108,4 @@ end«code_foldedÂÙ$0d10052b-efb0-4190-b94d-857d5903cf41ƒ§cell_idÙ$0d10052b-efb0-4
 	})
 	
 	</script>
-	""";«code_foldedÂÙ$526393de-74f6-4513-9dbc-81919ae821faƒ§cell_idÙ$526393de-74f6-4513-9dbc-81919ae821fa¤codeµhide_everything_below«code_foldedÂÙ$1724d36c-55e2-11eb-141c-75bf3e441715ƒ§cell_idÙ$1724d36c-55e2-11eb-141c-75bf3e441715¤codeÙámd"""
-# Hiding everything below a cell
-
-This notebook defines a widget `hide_everything_below`. When shown as the output of a cell, all _subsequent_ cells will be hidden. You can unhide those cells by removing the widget.
-"""«code_foldedÃ«notebook_idÙ$82ac95de-1ef0-11ec-131e-d1e952110757¥bonds€¬cell_resultsŠÙ$ac312d0b-35fc-4355-8273-dd37c80287dd‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚ/<div class="markdown"><p>A Pluto notebook is made up of small blocks of Julia code &#40;cells&#41; and together they form a reactive notebook. When you change a variable, Pluto automatically re-runs the cells that refer to it. Cells can even be placed in arbitrary order - intelligent syntax analysis figures out the dependencies between them and takes care of execution.</p>
-<p>Cells can contain arbitrary Julia code, and you can use external libraries. There are no code rewrites or wrappers, Pluto just looks at your code once before evaluation.</p>
-</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØT+ÿäÇm¬rootassigneeÀ§cell_idÙ$ac312d0b-35fc-4355-8273-dd37c80287dd§runtimeÍ§erroredÂÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6‡¦queuedÂ±published_objects€§runningÂ¦output…¤body¡3°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØT, X!¬rootassigneeÀ§cell_idÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6§runtimeÌÈ§erroredÂÙ$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙ†<div class="markdown"><h2>Example</h2>
-<p>Reveal the rest of this notebook: <bond def="reveal"><input type=checkbox></bond></p>
-</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØT,Ú7ø¬rootassigneeÀ§cell_idÙ$f77eadfc-dd72-4874-8e2d-e5f3f7e9b3c5§runtimeÎÉy§erroredÂÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÙ4<div class="markdown"><p>I am hidden&#33;</p>
-</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØT+ÿå/ñ¬rootassigneeÀ§cell_idÙ$de4fda2e-81a8-455e-8ef9-e9554987fc88§runtimeÍÀ§erroredÂÙ$00a4b7ce-277b-41aa-b608-4d0bf6bc73cb‡¦queuedÂ±published_objects€§runningÂ¦output…¤body£123°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØT+ÿå"¸¬rootassigneeÀ§cell_idÙ$00a4b7ce-277b-41aa-b608-4d0bf6bc73cb§runtimed§erroredÂÙ$836189b1-0333-4305-99d2-6595752b4b44‡¦queuedÂ±published_objects€§runningÂ¦output…¤body¡1°persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØT,‡˜¬rootassignee¡x§cell_idÙ$836189b1-0333-4305-99d2-6595752b4b44§runtimed§erroredÂÙ$a51c086d-3619-411e-9cbc-83f34fe78d71‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚõ<style>
-pluto-cell.hide_everything_below ~ pluto-cell {
-	display: none;
-}
-</style>
-
-<script>
-const cell = currentScript.closest("pluto-cell")
-
-const setclass = () => {
-	console.log("change!")
-	cell.classList.toggle("hide_everything_below", true)
-}
-setclass()
-const observer = new MutationObserver(setclass)
-
-observer.observe(cell, {
-	subtree: false,
-	attributeFilter: ["class"],
-})
-
-invalidation.then(() => {
-	observer.disconnect()
-	cell.classList.toggle("hide_everything_below", false)
-})
-
-</script>
-°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØT,)µ·¬rootassigneeÀ§cell_idÙ$a51c086d-3619-411e-9cbc-83f34fe78d71§runtimeÍà§erroredÂÙ$0d10052b-efb0-4190-b94d-857d5903cf41‡¦queuedÂ±published_objects€§runningÂ¦output…¤body °persist_js_stateÂ¤mimeªtext/plain²last_run_timestampËAØT,%~¬rootassigneeÀ§cell_idÙ$0d10052b-efb0-4190-b94d-857d5903cf41§runtimeÍø§erroredÂÙ$526393de-74f6-4513-9dbc-81919ae821fa‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚõ<style>
-pluto-cell.hide_everything_below ~ pluto-cell {
-	display: none;
-}
-</style>
-
-<script>
-const cell = currentScript.closest("pluto-cell")
-
-const setclass = () => {
-	console.log("change!")
-	cell.classList.toggle("hide_everything_below", true)
-}
-setclass()
-const observer = new MutationObserver(setclass)
-
-observer.observe(cell, {
-	subtree: false,
-	attributeFilter: ["class"],
-})
-
-invalidation.then(() => {
-	observer.disconnect()
-	cell.classList.toggle("hide_everything_below", false)
-})
-
-</script>
-°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØT,-¶‘¬rootassigneeÀ§cell_idÙ$526393de-74f6-4513-9dbc-81919ae821fa§runtimeÌÈ§erroredÂÙ$1724d36c-55e2-11eb-141c-75bf3e441715‡¦queuedÂ±published_objects€§runningÂ¦output…¤bodyÚ<div class="markdown"><h1>Hiding everything below a cell</h1>
-<p>This notebook defines a widget <code>hide_everything_below</code>. When shown as the output of a cell, all <em>subsequent</em> cells will be hidden. You can unhide those cells by removing the widget.</p>
-</div>°persist_js_stateÂ¤mime©text/html²last_run_timestampËAØT+ÿä·¢¬rootassigneeÀ§cell_idÙ$1724d36c-55e2-11eb-141c-75bf3e441715§runtimeÍ4X§erroredÂ©shortpath¸hide_everything_below.jl«in_temp_dirÂ
+	""";«code_foldedÂÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6ƒ§cell_idÙ$aed0f069-17cd-43f2-aef1-0310b9c683e6¤code¥x + 2«code_foldedÂ«notebook_idÙ$3628d8ba-333d-11ec-20dc-c5c222998d75«in_temp_dirÂ
