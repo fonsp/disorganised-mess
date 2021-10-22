@@ -31,38 +31,8 @@ using PlutoUI
 # ╔═╡ cab92b50-e47e-4d26-9922-01951339ec5f
 using HypertextLiteral
 
-# ╔═╡ d881ad54-f940-4f98-894d-5c158c975f89
-md"""
-```math
-\begin{array}{cc}
-1 & 2\\
-3 & 4
-\end{array}
-```
-"""
+# ╔═╡ c538c97b-e956-4185-ba95-5e9df33c8706
 
-# ╔═╡ f9b879ab-427a-4938-8bfa-e5c95b06e8d6
-br = HTML("<br>")
-
-# ╔═╡ 3443f8e8-fcf5-4e6a-88ee-f527a4bd0d42
-md"""
-asdf $br hello phillip
-
-asdf
-"""
-
-# ╔═╡ ebb7e2ec-6a2b-48c7-ae54-42802d3369bd
-md"""
-``123 123 12 31``
-"""
-
-# ╔═╡ 5a03b6cf-7e7b-4e16-b2c1-1618d6ca0438
-md"""
-$\begin{array}{cc}
-1 & 2\\
-3 & 4
-\end{array}$
-"""
 
 # ╔═╡ 9cf18586-7ed6-4624-945b-f8a69a27a507
 md"""
@@ -83,6 +53,9 @@ md"""
 
 Click and drag one of the numbers below to modify `B`.
 """
+
+# ╔═╡ ab8923dc-8fcb-4584-9979-233b67df78fa
+
 
 # ╔═╡ 969e2478-9785-487f-90e2-fdea675a9b0d
 md"""
@@ -1803,11 +1776,7 @@ version = "0.9.1+5"
 """
 
 # ╔═╡ Cell order:
-# ╠═d881ad54-f940-4f98-894d-5c158c975f89
-# ╠═f9b879ab-427a-4938-8bfa-e5c95b06e8d6
-# ╠═3443f8e8-fcf5-4e6a-88ee-f527a4bd0d42
-# ╠═ebb7e2ec-6a2b-48c7-ae54-42802d3369bd
-# ╠═5a03b6cf-7e7b-4e16-b2c1-1618d6ca0438
+# ╠═c538c97b-e956-4185-ba95-5e9df33c8706
 # ╟─9cf18586-7ed6-4624-945b-f8a69a27a507
 # ╠═93b9d789-1e17-48ee-bcf3-43f1a35e572d
 # ╠═c121b4f7-a113-4bf7-90b4-c1e4775bc956
@@ -1816,6 +1785,7 @@ version = "0.9.1+5"
 # ╠═9699d51e-22ad-4138-b91b-88a3e730dd3c
 # ╟─51a7ca06-5723-4c2b-8aba-bcdce5d33432
 # ╠═f80662e7-e437-4871-b084-28eb6903ba94
+# ╠═ab8923dc-8fcb-4584-9979-233b67df78fa
 # ╠═e57c8302-4238-46a6-83ac-588609a42924
 # ╠═a2a655ac-7a8b-4079-9f82-996206e793db
 # ╟─969e2478-9785-487f-90e2-fdea675a9b0d

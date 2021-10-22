@@ -109,7 +109,7 @@ border: none;
 padding: .1em .3em;
 border-radius: .3em;
 box-shadow: 0px 0px 10px rgba(0,0,0,.2);
-'>Computational Thinking</h1>
+'>Introduction to Computational Thinking</h1>
 
 </div>
 
