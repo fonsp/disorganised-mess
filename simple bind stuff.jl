@@ -21,10 +21,30 @@ begin
 end
 
 # ╔═╡ da3133c4-332b-11ec-1659-29ae989d67f3
-using PlutoUI
+begin
+	using PlutoUI
+	function Main.PlutoRunner._get_possible_values(slider::Slider)
+	    slider.range
+	end
+	function Main.PlutoRunner._get_possible_values(::CheckBox)
+	    Set{Bool}([true, false])
+	end
+end
 
 # ╔═╡ 3ac888c6-4dc8-4dc2-a418-f91499b20df6
 using HypertextLiteral
+
+# ╔═╡ c726f14f-b752-4f67-a185-499431d65479
+PlutoRunner._get_possible_values |> methods
+
+# ╔═╡ 6d03eb63-faa1-420f-9b79-2db0070a51c6
+
+
+# ╔═╡ fede4c85-03c7-4493-bfa5-12d0412cd43c
+PlutoUI.BuiltinsNotebook.is_sliderserver_static_export()
+
+# ╔═╡ 43f88e54-d5c3-4988-81f1-c0d3799818d1
+PlutoRunner.PossibleBindValues
 
 # ╔═╡ 8399c52d-c00c-456b-8178-c692d2749868
 @bind y Slider(6:.1:7)
@@ -61,6 +81,10 @@ md"---"
 
 # ╔═╡ Cell order:
 # ╠═833969da-caf1-4ab0-9ee8-4b0159566496
+# ╠═c726f14f-b752-4f67-a185-499431d65479
+# ╠═6d03eb63-faa1-420f-9b79-2db0070a51c6
+# ╠═fede4c85-03c7-4493-bfa5-12d0412cd43c
+# ╠═43f88e54-d5c3-4988-81f1-c0d3799818d1
 # ╠═f62f80c8-502c-4ce2-9223-6c2d15d57a80
 # ╠═8399c52d-c00c-456b-8178-c692d2749868
 # ╠═847d3057-f8f7-4983-a915-aed0ac961bce
