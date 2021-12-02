@@ -88,6 +88,14 @@ return html`
 </script>
 """)
 
+# ╔═╡ 716bf628-921d-4606-ae10-e287543b606c
+set_preamble_html(@htl("""
+
+<script>
+alert("Hello from preamble!")
+</script>
+"""))
+
 # ╔═╡ 99fafcb9-b660-4b63-86f1-3faa5f1cb529
 set_preamble_html(@htl("""
 
@@ -118,6 +126,7 @@ version = "0.9.3"
 
 # ╔═╡ Cell order:
 # ╠═d0e203fa-4c5a-11ec-36b8-2fd4376f116e
+# ╠═716bf628-921d-4606-ae10-e287543b606c
 # ╠═99fafcb9-b660-4b63-86f1-3faa5f1cb529
 # ╠═c7692fc3-7f54-4a34-8bd4-53ff4cafb92d
 # ╠═466e7aa9-45be-4df6-8500-de5b42dd2145
