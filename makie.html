@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>⚡ Pluto.jl ⚡</title>
     <meta charset="utf-8" />
     <script>
-        console.log("Pluto.jl, by Fons van der Plas (https://github.com/fonsp), Mikołaj Bochenski (https://github.com/malyvsen), Michiel Dral (https://github.com/dralletje) and friends 🌈")
+        console.log(
+            "Pluto.jl, by Fons van der Plas (https://github.com/fonsp), Mikołaj Bochenski (https://github.com/malyvsen), Michiel Dral (https://github.com/dralletje) and friends 🌈"
+        )
     </script>
     <meta name="theme-color" content="#ffffff" />
-    <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/img/favicon-16x16.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/img/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="96x96" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/img/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/img/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/img/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/img/favicon-96x96.png" />
     <meta name="description" content="Pluto.jl notebooks" />
-    <link rel="pluto-logo-big" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/img/logo.svg" />
-    <link rel="pluto-logo-small" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/img/favicon_unsaturated.svg" />
+    <link rel="pluto-logo-big" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/img/logo.svg" />
+    <link rel="pluto-logo-small" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/img/favicon_unsaturated.svg" />
 
-    <link rel="pluto-sw" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/sw.js" />
+    <link rel="pluto-sw" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/sw.js" />
     <script>
         navigator.serviceWorker?.register(document.head.querySelector("link[rel='pluto-sw']").getAttribute("href"), { scope: "./" }).catch(console.warn)
     </script>
@@ -26,37 +27,35 @@
     <script src="https://cdn.jsdelivr.net/npm/iframe-resizer@4.2.11/js/iframeResizer.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/ansi_up@5.0.1/ansi_up.min.js" defer></script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/editor.css" type="text/css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/hide-ui.css" type="text/css" media="all" data-pluto-file="hide-ui">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/binder.css" type="text/css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/treeview.css" type="text/css" />
-    <link rel="preload" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/juliamono.css" as="style">
-    <link rel="preload" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/vollkorn.css" as="style">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/atom-one-light.min.css">
+    <!-- This doesn't do anything unless activated, and it makes sure parcel bundles this -->
+    <script id="iframe-resizer-content-window-script" src="https://cdn.jsdelivr.net/npm/iframe-resizer@4.2.11/js/iframeResizer.contentWindow.min.js" crossorigin="anonymous" defer></script>
 
-    <!-- The instant feedback form at the bottom of the page uses Google Firestore to save feedback. -->
-    <script src="https://cdn.jsdelivr.net/npm/firebase@7.13.1/firebase-app.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/firebase@7.13.1/firebase-firestore.js" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/editor.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/hide-ui.css" type="text/css" media="all" data-pluto-file="hide-ui" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/binder.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/treeview.css" type="text/css" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/juliamono.css" as="style" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/vollkorn.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/atom-one-light.min.css" />
 
     <script data-pluto-file="launch-parameters">
 window.pluto_notebook_id = undefined;
-window.pluto_notebookfile = "data:text/julia;charset=utf-8;base64,IyMjIEEgUGx1dG8uamwgbm90ZWJvb2sgIyMjCiMgdjAuMTAuNAoKdXNpbmcgTWFya2Rvd24KdXNpbmcgSW50ZXJhY3RpdmVVdGlscwoKIyDilZTilZDilaEgZmUyOTYxNTAtYzQ1Mi0xMWVhLTE0YTktN2I0N2JiMWMyOTlkCnVzaW5nIEFic3RyYWN0UGxvdHRpbmcsIFdHTE1ha2llCgojIOKVlOKVkOKVoSAxYjg1NzU0YS1jNDUzLTExZWEtM2Y0Ny1lOTM5Y2RlZjFlNmIKc2NhdHRlcihyYW5kKDQpKQoKIyDilZTilZDilaEgQ2VsbCBvcmRlcjoKIyDilaDilZBmZTI5NjE1MC1jNDUyLTExZWEtMTRhOS03YjQ3YmIxYzI5OWQKIyDilaDilZAxYjg1NzU0YS1jNDUzLTExZWEtM2Y0Ny1lOTM5Y2RlZjFlNmIK";
+window.pluto_isolated_cell_ids = undefined;
+window.pluto_notebookfile = "makie.jl";
 window.pluto_disable_ui = true;
 window.pluto_slider_server_url = undefined;
-window.pluto_binder_url = "https://mybinder.org/v2/gh/fonsp/pluto-on-binder/v0.17.0";
-window.pluto_statefile = "data:;base64,jrFjZWxsX2RlcGVuZGVuY2llc4LZJGZlMjk2MTUwLWM0NTItMTFlYS0xNGE5LTdiNDdiYjFjMjk5ZIS0cHJlY2VkZW5jZV9oZXVyaXN0aWMHp2NlbGxfaWTZJGZlMjk2MTUwLWM0NTItMTFlYS0xNGE5LTdiNDdiYjFjMjk5ZLRkb3duc3RyZWFtX2NlbGxzX21hcIKoV0dMTWFraWWQsEFic3RyYWN0UGxvdHRpbmeQsnVwc3RyZWFtX2NlbGxzX21hcIDZJDFiODU3NTRhLWM0NTMtMTFlYS0zZjQ3LWU5MzljZGVmMWU2YoS0cHJlY2VkZW5jZV9oZXVyaXN0aWMJp2NlbGxfaWTZJDFiODU3NTRhLWM0NTMtMTFlYS0zZjQ3LWU5MzljZGVmMWU2YrRkb3duc3RyZWFtX2NlbGxzX21hcICydXBzdHJlYW1fY2VsbHNfbWFwgqdzY2F0dGVykKRyYW5kkLRjZWxsX2V4ZWN1dGlvbl9vcmRlcpLZJGZlMjk2MTUwLWM0NTItMTFlYS0xNGE5LTdiNDdiYjFjMjk5ZNkkMWI4NTc1NGEtYzQ1My0xMWVhLTNmNDctZTkzOWNkZWYxZTZitGxhc3RfaG90X3JlbG9hZF90aW1lywAAAAAAAAAArnByb2Nlc3Nfc3RhdHVzpXJlYWR5pHBhdGjZPi9ob21lL3J1bm5lci93b3JrL2Rpc29yZ2FuaXNlZC1tZXNzL2Rpc29yZ2FuaXNlZC1tZXNzL21ha2llLmpsqmNlbGxfb3JkZXKS2SRmZTI5NjE1MC1jNDUyLTExZWEtMTRhOS03YjQ3YmIxYzI5OWTZJDFiODU3NTRhLWM0NTMtMTFlYS0zZjQ3LWU5MzljZGVmMWU2YqVuYnBrZ4eyaW5zdGFsbGVkX3ZlcnNpb25zgqhXR0xNYWtpZaUwLjQuNbBBYnN0cmFjdFBsb3R0aW5npjAuMTguM7B0ZXJtaW5hbF9vdXRwdXRzgqhXR0xNYWtpZdoIOxtbMzJtG1sxbSAgTm8gQ2hhbmdlcxtbMjJtG1szOW0gdG8gYC90bXAvamxfd3BVTzBFL1Byb2plY3QudG9tbGAKG1szMm0bWzFtICBObyBDaGFuZ2VzG1syMm0bWzM5bSB0byBgL3RtcC9qbF93cFVPMEUvTWFuaWZlc3QudG9tbGAKG1szMm0bWzFtTG9hZGluZxtbMjJtG1szOW0gcGFja2FnZXMuLi4KG1szMm0bWzFtUHJlY29tcGlsaW5nG1syMm0bWzM5bSBwcm9qZWN0Li4uChtbMzJtICDinJMgG1szOW0bWzkwbU1hdGNoG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtaXNvYmFuZF9qbGwbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1PYnNlcnZhYmxlcxtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUZpbGxBcnJheXMbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1QRE1hdHMbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1BYnN0cmFjdFRyZWVzG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtUmVsb2NhdGFibGVGb2xkZXJzG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtUG9seWdvbk9wcxtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbVN0cnVjdFR5cGVzG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtU2lnbmVkRGlzdGFuY2VGaWVsZHMbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1EZW5zaXR5SW50ZXJmYWNlG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtUXVhZEdLG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtUm1hdGhfamxsG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtRnJlZVR5cGUbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1BbmltYXRpb25zG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtV2ViU29ja2V0cxtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUluZGlyZWN0QXJyYXlzG1szOW0KG1szM20gIOKckyAbWzM5bRtbOTBtSlNPThtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUltYWdlTWFnaWNrX2psbBtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbVNJTUQbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1Jc29iYW5kG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtV2lkZ2V0c0Jhc2UbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1NYWtpZUNvcmUbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1QYWNraW5nG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtU2hhZGVyQWJzdHJhY3Rpb25zG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtSlNPTjMbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1SbWF0aBtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUZyZWVUeXBlQWJzdHJhY3Rpb24bWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1HcmlkTGF5b3V0QmFzZRtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUNvbG9yQnJld2VyG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtU2NhbkJ5dGUbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1KU1NlcnZlG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtU3RhdHNGdW5zG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtQXV0b21hG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtVGlmZkltYWdlcxtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUltYWdlQ29yZRtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbURpc3RyaWJ1dGlvbnMbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1QTkdGaWxlcxtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbU5ldHBibRtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUtlcm5lbERlbnNpdHkbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1JbWFnZUlPG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtSW1hZ2VNYWdpY2sbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1NYXRoVGVYRW5naW5lG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtTWFraWUbWzM5bQobWzMybSAg4pyTIBtbMzltV0dMTWFraWUKG1szMm0gIOKckyAbWzM5bUFic3RyYWN0UGxvdHRpbmcKICA0NiBkZXBlbmRlbmNpZXMgc3VjY2Vzc2Z1bGx5IHByZWNvbXBpbGVkIGluIDEwNyBzZWNvbmRzICgxMzEgYWxyZWFkeSBwcmVjb21waWxlZCkKICAbWzMzbTEbWzM5bSBkZXBlbmRlbmN5IHByZWNvbXBpbGVkIGJ1dCBhIGRpZmZlcmVudCB2ZXJzaW9uIGlzIGN1cnJlbnRseSBsb2FkZWQuIFJlc3RhcnQganVsaWEgdG8gYWNjZXNzIHRoZSBuZXcgdmVyc2lvbgqwQWJzdHJhY3RQbG90dGluZ9oIOxtbMzJtG1sxbSAgTm8gQ2hhbmdlcxtbMjJtG1szOW0gdG8gYC90bXAvamxfd3BVTzBFL1Byb2plY3QudG9tbGAKG1szMm0bWzFtICBObyBDaGFuZ2VzG1syMm0bWzM5bSB0byBgL3RtcC9qbF93cFVPMEUvTWFuaWZlc3QudG9tbGAKG1szMm0bWzFtTG9hZGluZxtbMjJtG1szOW0gcGFja2FnZXMuLi4KG1szMm0bWzFtUHJlY29tcGlsaW5nG1syMm0bWzM5bSBwcm9qZWN0Li4uChtbMzJtICDinJMgG1szOW0bWzkwbU1hdGNoG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtaXNvYmFuZF9qbGwbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1PYnNlcnZhYmxlcxtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUZpbGxBcnJheXMbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1QRE1hdHMbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1BYnN0cmFjdFRyZWVzG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtUmVsb2NhdGFibGVGb2xkZXJzG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtUG9seWdvbk9wcxtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbVN0cnVjdFR5cGVzG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtU2lnbmVkRGlzdGFuY2VGaWVsZHMbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1EZW5zaXR5SW50ZXJmYWNlG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtUXVhZEdLG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtUm1hdGhfamxsG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtRnJlZVR5cGUbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1BbmltYXRpb25zG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtV2ViU29ja2V0cxtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUluZGlyZWN0QXJyYXlzG1szOW0KG1szM20gIOKckyAbWzM5bRtbOTBtSlNPThtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUltYWdlTWFnaWNrX2psbBtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbVNJTUQbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1Jc29iYW5kG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtV2lkZ2V0c0Jhc2UbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1NYWtpZUNvcmUbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1QYWNraW5nG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtU2hhZGVyQWJzdHJhY3Rpb25zG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtSlNPTjMbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1SbWF0aBtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUZyZWVUeXBlQWJzdHJhY3Rpb24bWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1HcmlkTGF5b3V0QmFzZRtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUNvbG9yQnJld2VyG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtU2NhbkJ5dGUbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1KU1NlcnZlG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtU3RhdHNGdW5zG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtQXV0b21hG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtVGlmZkltYWdlcxtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUltYWdlQ29yZRtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbURpc3RyaWJ1dGlvbnMbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1QTkdGaWxlcxtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbU5ldHBibRtbMzltChtbMzJtICDinJMgG1szOW0bWzkwbUtlcm5lbERlbnNpdHkbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1JbWFnZUlPG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtSW1hZ2VNYWdpY2sbWzM5bQobWzMybSAg4pyTIBtbMzltG1s5MG1NYXRoVGVYRW5naW5lG1szOW0KG1szMm0gIOKckyAbWzM5bRtbOTBtTWFraWUbWzM5bQobWzMybSAg4pyTIBtbMzltV0dMTWFraWUKG1szMm0gIOKckyAbWzM5bUFic3RyYWN0UGxvdHRpbmcKICA0NiBkZXBlbmRlbmNpZXMgc3VjY2Vzc2Z1bGx5IHByZWNvbXBpbGVkIGluIDEwNyBzZWNvbmRzICgxMzEgYWxyZWFkeSBwcmVjb21waWxlZCkKICAbWzMzbTEbWzM5bSBkZXBlbmRlbmN5IHByZWNvbXBpbGVkIGJ1dCBhIGRpZmZlcmVudCB2ZXJzaW9uIGlzIGN1cnJlbnRseSBsb2FkZWQuIFJlc3RhcnQganVsaWEgdG8gYWNjZXNzIHRoZSBuZXcgdmVyc2lvbgqnZW5hYmxlZMO3cmVzdGFydF9yZWNvbW1lbmRlZF9tc2fAtHJlc3RhcnRfcmVxdWlyZWRfbXNnwK1idXN5X3BhY2thZ2VzkKxpbnN0YW50aWF0ZWTDq2NlbGxfaW5wdXRzgtkkZmUyOTYxNTAtYzQ1Mi0xMWVhLTE0YTktN2I0N2JiMWMyOTlkhKdjZWxsX2lk2SRmZTI5NjE1MC1jNDUyLTExZWEtMTRhOS03YjQ3YmIxYzI5OWSwcnVubmluZ19kaXNhYmxlZMKkY29kZdkgdXNpbmcgQWJzdHJhY3RQbG90dGluZywgV0dMTWFraWWrY29kZV9mb2xkZWTC2SQxYjg1NzU0YS1jNDUzLTExZWEtM2Y0Ny1lOTM5Y2RlZjFlNmKEp2NlbGxfaWTZJDFiODU3NTRhLWM0NTMtMTFlYS0zZjQ3LWU5MzljZGVmMWU2YrBydW5uaW5nX2Rpc2FibGVkwqRjb2RlsHNjYXR0ZXIocmFuZCg0KSmrY29kZV9mb2xkZWTCq25vdGVib29rX2lk2SQ3MDgyMmZmZS00YzYzLTExZWMtMjI0Ni01MWVkYTVhYjJmYjilYm9uZHOArGNlbGxfcmVzdWx0c4LZJGZlMjk2MTUwLWM0NTItMTFlYS0xNGE5LTdiNDdiYjFjMjk5ZIimcXVldWVkwrFwdWJsaXNoZWRfb2JqZWN0c4CncnVubmluZ8Kmb3V0cHV0haRib2R5oLBwZXJzaXN0X2pzX3N0YXRlwqRtaW1lqnRleHQvcGxhaW6ybGFzdF9ydW5fdGltZXN0YW1wy0HYZzwr6JtjrHJvb3Rhc3NpZ25lZcCnY2VsbF9pZNkkZmUyOTYxNTAtYzQ1Mi0xMWVhLTE0YTktN2I0N2JiMWMyOTlkuWRlcGVuZHNfb25fZGlzYWJsZWRfY2VsbHPCp3J1bnRpbWXPAAAAAmyZKRinZXJyb3JlZMLZJDFiODU3NTRhLWM0NTMtMTFlYS0zZjQ3LWU5MzljZGVmMWU2YoimcXVldWVkwrFwdWJsaXNoZWRfb2JqZWN0c4CncnVubmluZ8Kmb3V0cHV0haRib2R5gqpzdGFja3RyYWNlkYWkbGluZQGnaW5saW5lZMKkY2FsbK90b3AtbGV2ZWwgc2NvcGWkZmlsZdkwbWFraWUuamwjPT0jMWI4NTc1NGEtYzQ1My0xMWVhLTNmNDctZTkzOWNkZWYxZTZipHBhdGjZZi9ob21lL3J1bm5lci93b3JrL2Rpc29yZ2FuaXNlZC1tZXNzL2Rpc29yZ2FuaXNlZC1tZXNzL21ha2llLmpsIz09IzFiODU3NTRhLWM0NTMtMTFlYS0zZjQ3LWU5MzljZGVmMWU2YqNtc2fZIlVuZGVmVmFyRXJyb3I6IHNjYXR0ZXIgbm90IGRlZmluZWSwcGVyc2lzdF9qc19zdGF0ZcKkbWltZdknYXBwbGljYXRpb24vdm5kLnBsdXRvLnN0YWNrdHJhY2Urb2JqZWN0smxhc3RfcnVuX3RpbWVzdGFtcMtB2Gc8LHErTqxyb290YXNzaWduZWXAp2NlbGxfaWTZJDFiODU3NTRhLWM0NTMtMTFlYS0zZjQ3LWU5MzljZGVmMWU2YrlkZXBlbmRzX29uX2Rpc2FibGVkX2NlbGxzwqdydW50aW1lwKdlcnJvcmVkw6lzaG9ydHBhdGiobWFraWUuamyubGFzdF9zYXZlX3RpbWXLQdhnPAreDlaraW5fdGVtcF9kaXLC";
+window.pluto_binder_url = "https://mybinder.org/v2/gh/fonsp/pluto-on-binder/v0.17.2";
+window.pluto_statefile = "makie.plutostate";
 </script>
 <!-- [automatically generated launch parameters can be inserted here] -->
 
 
-    <script src="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/editor.js" type="module" defer></script>
-    <script src="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/warn_old_browsers.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/editor.js" type="module" defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/warn_old_browsers.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/common/SetupMathJax.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/common/SetupMathJax.js"></script>
     <script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-svg-full.js" async></script>
-
 </head>
 
 <body class="loading no-MαθJax"></body>
-
 </html>

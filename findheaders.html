@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>⚡ Pluto.jl ⚡</title>
     <meta charset="utf-8" />
     <script>
-        console.log("Pluto.jl, by Fons van der Plas (https://github.com/fonsp), Mikołaj Bochenski (https://github.com/malyvsen), Michiel Dral (https://github.com/dralletje) and friends 🌈")
+        console.log(
+            "Pluto.jl, by Fons van der Plas (https://github.com/fonsp), Mikołaj Bochenski (https://github.com/malyvsen), Michiel Dral (https://github.com/dralletje) and friends 🌈"
+        )
     </script>
     <meta name="theme-color" content="#ffffff" />
-    <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/img/favicon-16x16.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/img/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="96x96" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/img/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/img/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/img/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/img/favicon-96x96.png" />
     <meta name="description" content="Pluto.jl notebooks" />
-    <link rel="pluto-logo-big" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/img/logo.svg" />
-    <link rel="pluto-logo-small" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/img/favicon_unsaturated.svg" />
+    <link rel="pluto-logo-big" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/img/logo.svg" />
+    <link rel="pluto-logo-small" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/img/favicon_unsaturated.svg" />
 
-    <link rel="pluto-sw" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/sw.js" />
+    <link rel="pluto-sw" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/sw.js" />
     <script>
         navigator.serviceWorker?.register(document.head.querySelector("link[rel='pluto-sw']").getAttribute("href"), { scope: "./" }).catch(console.warn)
     </script>
@@ -26,37 +27,35 @@
     <script src="https://cdn.jsdelivr.net/npm/iframe-resizer@4.2.11/js/iframeResizer.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/ansi_up@5.0.1/ansi_up.min.js" defer></script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/editor.css" type="text/css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/hide-ui.css" type="text/css" media="all" data-pluto-file="hide-ui">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/binder.css" type="text/css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/treeview.css" type="text/css" />
-    <link rel="preload" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/juliamono.css" as="style">
-    <link rel="preload" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/vollkorn.css" as="style">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/atom-one-light.min.css">
+    <!-- This doesn't do anything unless activated, and it makes sure parcel bundles this -->
+    <script id="iframe-resizer-content-window-script" src="https://cdn.jsdelivr.net/npm/iframe-resizer@4.2.11/js/iframeResizer.contentWindow.min.js" crossorigin="anonymous" defer></script>
 
-    <!-- The instant feedback form at the bottom of the page uses Google Firestore to save feedback. -->
-    <script src="https://cdn.jsdelivr.net/npm/firebase@7.13.1/firebase-app.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/firebase@7.13.1/firebase-firestore.js" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/editor.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/hide-ui.css" type="text/css" media="all" data-pluto-file="hide-ui" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/binder.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/treeview.css" type="text/css" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/juliamono.css" as="style" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/vollkorn.css" as="style" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/atom-one-light.min.css" />
 
     <script data-pluto-file="launch-parameters">
 window.pluto_notebook_id = undefined;
-window.pluto_notebookfile = "data:text/julia;charset=utf-8;base64,IyMjIEEgUGx1dG8uamwgbm90ZWJvb2sgIyMjCiMgdjAuMTEuNgoKdXNpbmcgTWFya2Rvd24KdXNpbmcgSW50ZXJhY3RpdmVVdGlscwoKIyDilZTilZDilaEgNjczYjc3ZmMtZTE2ZC0xMWVhLTM3MTgtMTEzNzE1NzAxZjc1Cm1kIiMgSGVsbG8iCgojIOKVlOKVkOKVoSBhYmExNzcxMi1lMTZmLTExZWEtM2E4ZS1mMzM4ZGMyODU4M2MKbWQiIyBXb3JsZCIKCiMg4pWU4pWQ4pWhIDI3MDk2NTUyLWUxNmQtMTFlYS0wMTkwLWMzYWRmNGE5MWNlYwpodG1sIiIiCjxzY3JpcHQ+CmNvbnN0IGhlYWRlcnMgPSBBcnJheS5mcm9tKAoJZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgKCQkicGx1dG8tbm90ZWJvb2sgcGx1dG8tb3V0cHV0IGgxIgoJKQopCgpyZXR1cm4gaHRtbGA8dWw+JHtoZWFkZXJzLm1hcChoMSA9PiAKCQkJaHRtbGA8bGk+JHtoMS5pbm5lclRleHR9PC9saT5gCgkpfTwvdWw+YAoKPC9zY3JpcHQ+CiIiIgoKIyDilZTilZDilaEgQ2VsbCBvcmRlcjoKIyDilaDilZA2NzNiNzdmYy1lMTZkLTExZWEtMzcxOC0xMTM3MTU3MDFmNzUKIyDilaDilZBhYmExNzcxMi1lMTZmLTExZWEtM2E4ZS1mMzM4ZGMyODU4M2MKIyDilaDilZAyNzA5NjU1Mi1lMTZkLTExZWEtMDE5MC1jM2FkZjRhOTFjZWMK";
+window.pluto_isolated_cell_ids = undefined;
+window.pluto_notebookfile = "findheaders.jl";
 window.pluto_disable_ui = true;
 window.pluto_slider_server_url = undefined;
-window.pluto_binder_url = "https://mybinder.org/v2/gh/fonsp/pluto-on-binder/v0.17.0";
-window.pluto_statefile = "data:;base64,jrFjZWxsX2RlcGVuZGVuY2llc4PZJDY3M2I3N2ZjLWUxNmQtMTFlYS0zNzE4LTExMzcxNTcwMWY3NYS0cHJlY2VkZW5jZV9oZXVyaXN0aWMJp2NlbGxfaWTZJDY3M2I3N2ZjLWUxNmQtMTFlYS0zNzE4LTExMzcxNTcwMWY3NbRkb3duc3RyZWFtX2NlbGxzX21hcICydXBzdHJlYW1fY2VsbHNfbWFwgqdAbWRfc3RykKhnZXRpbmRleJDZJDI3MDk2NTUyLWUxNmQtMTFlYS0wMTkwLWMzYWRmNGE5MWNlY4S0cHJlY2VkZW5jZV9oZXVyaXN0aWMJp2NlbGxfaWTZJDI3MDk2NTUyLWUxNmQtMTFlYS0wMTkwLWMzYWRmNGE5MWNlY7Rkb3duc3RyZWFtX2NlbGxzX21hcICydXBzdHJlYW1fY2VsbHNfbWFwgalAaHRtbF9zdHKQ2SRhYmExNzcxMi1lMTZmLTExZWEtM2E4ZS1mMzM4ZGMyODU4M2OEtHByZWNlZGVuY2VfaGV1cmlzdGljCadjZWxsX2lk2SRhYmExNzcxMi1lMTZmLTExZWEtM2E4ZS1mMzM4ZGMyODU4M2O0ZG93bnN0cmVhbV9jZWxsc19tYXCAsnVwc3RyZWFtX2NlbGxzX21hcIKnQG1kX3N0cpCoZ2V0aW5kZXiQtGNlbGxfZXhlY3V0aW9uX29yZGVyk9kkNjczYjc3ZmMtZTE2ZC0xMWVhLTM3MTgtMTEzNzE1NzAxZjc12SRhYmExNzcxMi1lMTZmLTExZWEtM2E4ZS1mMzM4ZGMyODU4M2PZJDI3MDk2NTUyLWUxNmQtMTFlYS0wMTkwLWMzYWRmNGE5MWNlY7RsYXN0X2hvdF9yZWxvYWRfdGltZcsAAAAAAAAAAK5wcm9jZXNzX3N0YXR1c6hzdGFydGluZ6RwYXRo2UQvaG9tZS9ydW5uZXIvd29yay9kaXNvcmdhbmlzZWQtbWVzcy9kaXNvcmdhbmlzZWQtbWVzcy9maW5kaGVhZGVycy5qbKpjZWxsX29yZGVyk9kkNjczYjc3ZmMtZTE2ZC0xMWVhLTM3MTgtMTEzNzE1NzAxZjc12SRhYmExNzcxMi1lMTZmLTExZWEtM2E4ZS1mMzM4ZGMyODU4M2PZJDI3MDk2NTUyLWUxNmQtMTFlYS0wMTkwLWMzYWRmNGE5MWNlY6VuYnBrZ4eyaW5zdGFsbGVkX3ZlcnNpb25zgLB0ZXJtaW5hbF9vdXRwdXRzgKdlbmFibGVkw7dyZXN0YXJ0X3JlY29tbWVuZGVkX21zZ8C0cmVzdGFydF9yZXF1aXJlZF9tc2fArWJ1c3lfcGFja2FnZXOQrGluc3RhbnRpYXRlZMOrY2VsbF9pbnB1dHOD2SQ2NzNiNzdmYy1lMTZkLTExZWEtMzcxOC0xMTM3MTU3MDFmNzWEp2NlbGxfaWTZJDY3M2I3N2ZjLWUxNmQtMTFlYS0zNzE4LTExMzcxNTcwMWY3NbBydW5uaW5nX2Rpc2FibGVkwqRjb2Rlq21kIiMgSGVsbG8iq2NvZGVfZm9sZGVkwtkkMjcwOTY1NTItZTE2ZC0xMWVhLTAxOTAtYzNhZGY0YTkxY2VjhKdjZWxsX2lk2SQyNzA5NjU1Mi1lMTZkLTExZWEtMDE5MC1jM2FkZjRhOTFjZWOwcnVubmluZ19kaXNhYmxlZMKkY29kZdnRaHRtbCIiIgo8c2NyaXB0Pgpjb25zdCBoZWFkZXJzID0gQXJyYXkuZnJvbSgKCWRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoCgkJInBsdXRvLW5vdGVib29rIHBsdXRvLW91dHB1dCBoMSIKCSkKKQoKcmV0dXJuIGh0bWxgPHVsPiR7aGVhZGVycy5tYXAoaDEgPT4gCgkJCWh0bWxgPGxpPiR7aDEuaW5uZXJUZXh0fTwvbGk+YAoJKX08L3VsPmAKCjwvc2NyaXB0PgoiIiKrY29kZV9mb2xkZWTC2SRhYmExNzcxMi1lMTZmLTExZWEtM2E4ZS1mMzM4ZGMyODU4M2OEp2NlbGxfaWTZJGFiYTE3NzEyLWUxNmYtMTFlYS0zYThlLWYzMzhkYzI4NTgzY7BydW5uaW5nX2Rpc2FibGVkwqRjb2Rlq21kIiMgV29ybGQiq2NvZGVfZm9sZGVkwqtub3RlYm9va19pZNkkODM3NzM0NWUtNGM2OC0xMWVjLTExMGMtZDcyNGQ2MTYwMDk4pWJvbmRzgKxjZWxsX3Jlc3VsdHOD2SQ2NzNiNzdmYy1lMTZkLTExZWEtMzcxOC0xMTM3MTU3MDFmNzWIpnF1ZXVlZMKxcHVibGlzaGVkX29iamVjdHOAp3J1bm5pbmfCpm91dHB1dIWkYm9kedkrPGRpdiBjbGFzcz0ibWFya2Rvd24iPjxoMT5IZWxsbzwvaDE+CjwvZGl2PrBwZXJzaXN0X2pzX3N0YXRlwqRtaW1lqXRleHQvaHRtbLJsYXN0X3J1bl90aW1lc3RhbXDLQdhnPiu3iOyscm9vdGFzc2lnbmVlwKdjZWxsX2lk2SQ2NzNiNzdmYy1lMTZkLTExZWEtMzcxOC0xMTM3MTU3MDFmNzW5ZGVwZW5kc19vbl9kaXNhYmxlZF9jZWxsc8KncnVudGltZc0ZyKdlcnJvcmVkwtkkMjcwOTY1NTItZTE2ZC0xMWVhLTAxOTAtYzNhZGY0YTkxY2VjiKZxdWV1ZWTCsXB1Ymxpc2hlZF9vYmplY3RzgKdydW5uaW5nwqZvdXRwdXSFpGJvZHnZxjxzY3JpcHQ+CmNvbnN0IGhlYWRlcnMgPSBBcnJheS5mcm9tKAoJZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgKCQkicGx1dG8tbm90ZWJvb2sgcGx1dG8tb3V0cHV0IGgxIgoJKQopCgpyZXR1cm4gaHRtbGA8dWw+JHtoZWFkZXJzLm1hcChoMSA9PiAKCQkJaHRtbGA8bGk+JHtoMS5pbm5lclRleHR9PC9saT5gCgkpfTwvdWw+YAoKPC9zY3JpcHQ+CrBwZXJzaXN0X2pzX3N0YXRlwqRtaW1lqXRleHQvaHRtbLJsYXN0X3J1bl90aW1lc3RhbXDLQdhnPiu3oEmscm9vdGFzc2lnbmVlwKdjZWxsX2lk2SQyNzA5NjU1Mi1lMTZkLTExZWEtMDE5MC1jM2FkZjRhOTFjZWO5ZGVwZW5kc19vbl9kaXNhYmxlZF9jZWxsc8KncnVudGltZc0HCKdlcnJvcmVkwtkkYWJhMTc3MTItZTE2Zi0xMWVhLTNhOGUtZjMzOGRjMjg1ODNjiKZxdWV1ZWTCsXB1Ymxpc2hlZF9vYmplY3RzgKdydW5uaW5nwqZvdXRwdXSFpGJvZHnZKzxkaXYgY2xhc3M9Im1hcmtkb3duIj48aDE+V29ybGQ8L2gxPgo8L2Rpdj6wcGVyc2lzdF9qc19zdGF0ZcKkbWltZal0ZXh0L2h0bWyybGFzdF9ydW5fdGltZXN0YW1wy0HYZz4rt5VwrHJvb3Rhc3NpZ25lZcCnY2VsbF9pZNkkYWJhMTc3MTItZTE2Zi0xMWVhLTNhOGUtZjMzOGRjMjg1ODNjuWRlcGVuZHNfb25fZGlzYWJsZWRfY2VsbHPCp3J1bnRpbWXNEsCnZXJyb3JlZMKpc2hvcnRwYXRormZpbmRoZWFkZXJzLmpsrmxhc3Rfc2F2ZV90aW1ly0HYZz4rsIMwq2luX3RlbXBfZGlywg==";
+window.pluto_binder_url = "https://mybinder.org/v2/gh/fonsp/pluto-on-binder/v0.17.2";
+window.pluto_statefile = "findheaders.plutostate";
 </script>
 <!-- [automatically generated launch parameters can be inserted here] -->
 
 
-    <script src="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/editor.js" type="module" defer></script>
-    <script src="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/warn_old_browsers.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/editor.js" type="module" defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/warn_old_browsers.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.0/frontend/common/SetupMathJax.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/fonsp/Pluto.jl@0.17.2/frontend/common/SetupMathJax.js"></script>
     <script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-svg-full.js" async></script>
-
 </head>
 
 <body class="loading no-MαθJax"></body>
-
 </html>
