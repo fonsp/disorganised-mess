@@ -76,18 +76,18 @@ input_file = joinpath(source_folder, "index.js")
 md"""
 ## Bundle
 
-Try changing the code in one of the JS files in the first cell, and the bundler will automatically re-run!
+Try changing the code in one of the JS files in the first section (above), and the bundler will automatically re-run!
 """
 
 # ╔═╡ ad5c76aa-d336-4b79-9c66-507a741ae39d
 import Deno_jll: deno
 
 # ╔═╡ 1d9a16b8-9c24-4b49-bb6d-e378683d5131
-begin
+bundle_code = begin
 	error_file = tempname()
 
 	try
-		global bundle_code = read(pipeline(`$(deno()) bundle $(input_file)`, stderr=error_file), String)
+		read(pipeline(`$(deno()) bundle $(input_file)`, stderr=error_file), String)
 	catch e
 		if e isa ProcessFailedException
 			@htl("""
@@ -112,9 +112,9 @@ md"""
 md"""
 # Magic
 
-We use [`publish_to_js`](https://github.com/fonsp/Pluto.jl/pull/1124) to make the string available to JS running in the cell output. Inside the JS, we turn the string into a blob URL and call `import()` on the that.
+We use [`publish_to_js`](https://github.com/fonsp/Pluto.jl/pull/1124) to make the string available to JS running in the cell output. Inside the JS, we turn the string into a blob URL and call `import()` on that.
 
-We create a `Map`, `window.created_imports` to keep track of strings that we already imported. When you re-import the same string a second time, the original import result is retured.
+We create a `Map`, called `window.created_imports`, to keep track of strings that we already imported. When you re-import the same string a second time, the original import result is retured.
 """
 
 # ╔═╡ d71abee5-6d3c-420c-b064-d3a346e197d9
