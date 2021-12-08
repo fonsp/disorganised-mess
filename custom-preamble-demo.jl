@@ -64,13 +64,8 @@ catch e
 	string(data)
 end)
 
-let r = await new Promise((r) => {
-        const reader = new FileReader()
-        reader.onload = () => r(reader.result)
-        reader.readAsDataURL(new Blob([data]))
-    })
 let u = new URL(window.location.href)
-u.searchParams.set("preamble_html", r)
+u.searchParams.set("preamble_html", data)
 
 
 
@@ -81,8 +76,11 @@ button.onclick = async () => {
 window.location.href = u.href
 }
 
+let code = html`<code></code>`
+code.innerText = data
+
 return html`
-<pre><code>\${JSON.stringify(r)}</code></pre>
+<pre>\${code}</pre>
 \${button}
 `
 </script>
