@@ -26,6 +26,48 @@ using PlutoUI
 # ╔═╡ a0ae55eb-5c18-451a-896d-325f09dba6cd
 using HypertextLiteral
 
+# ╔═╡ 76b5f036-6b70-4605-9063-f405b6b701fd
+md"""
+# TODO
+- get secret_id from last Combine
+- get last Combine, ideally during constructor
+- get last bond value, during constructor or intial_value
+
+
+Maybe
+
+```julia
+Bonds.incorporate_last_bond(
+	just_created::T, 
+	previous::T, 
+	previous_value_from_js::Any
+)::T
+
+```
+with default `(a,b)->a`
+"""
+
+# ╔═╡ d71251ee-ceaf-46e5-b93d-82472ee08b00
+@bind x Slider(1:10)
+
+# ╔═╡ aa01652d-7690-4462-8bae-2d77656abc8b
+just_created_bond = Slider(1:10)
+
+bond = APD.Bonds.incorporate_last_bond(just_created_bond, old_bond)
+
+
+x = Bonds.initial_value(bond)
+
+# let Pluto server know that :x is bound to `bond`
+
+HTML("<pluto-bond for=x>$(bond)</pluto-bond>")
+
+# ╔═╡ ebedad7d-764b-4eb1-9e6d-559a3c033cd0
+all_names = [:fons, :hannes, :asdf_dsfsdf]
+
+# ╔═╡ 8d1f6bd1-2d69-4685-8590-c5f93ef9b669
+@bind chosen_names MultiCheckBox(all_names; default=all_names[1:2])
+
 # ╔═╡ bfcf8d85-cc38-4346-ab9b-4ac99aac4d91
 function skip_as_script(m::Module)
 	if isdefined(m, :PlutoForceDisplay)
@@ -109,12 +151,6 @@ ha === hb
 
 # ╔═╡ 45986edf-1a65-4712-91b9-b79a408e0782
 
-
-# ╔═╡ ebedad7d-764b-4eb1-9e6d-559a3c033cd0
-all_names = [:fons, :hannes, :asdf_dsfsdf]
-
-# ╔═╡ 8d1f6bd1-2d69-4685-8590-c5f93ef9b669
-@bind chosen_names MultiCheckBox(all_names; default=all_names[1:2])
 
 # ╔═╡ 7e9e418a-399e-4122-aab3-5f9d96e66301
 @bind asdfsdf html"<input>"
@@ -853,6 +889,9 @@ end
 @skip_as_script cb2b
 
 # ╔═╡ Cell order:
+# ╠═76b5f036-6b70-4605-9063-f405b6b701fd
+# ╠═d71251ee-ceaf-46e5-b93d-82472ee08b00
+# ╠═aa01652d-7690-4462-8bae-2d77656abc8b
 # ╠═ebedad7d-764b-4eb1-9e6d-559a3c033cd0
 # ╠═8d1f6bd1-2d69-4685-8590-c5f93ef9b669
 # ╠═06d6f45a-3783-4b31-8926-ff0973bcc188
