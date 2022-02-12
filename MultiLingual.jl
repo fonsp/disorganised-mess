@@ -1,8 +1,18 @@
 ### A Pluto.jl notebook ###
-# v0.16.1
+# v0.17.7
 
 using Markdown
 using InteractiveUtils
+
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+end
 
 # ╔═╡ c35f0e90-1586-11ec-2bb5-abc0ab1a4a27
 using HypertextLiteral
@@ -152,6 +162,17 @@ MultiLingual([
 # ╔═╡ 33fb35e6-f935-4007-a53d-b66df49866ac
 ml = MultiLingual(["en" => "This is some English text!", "fr" => "Salut tous le monde !"])
 
+# ╔═╡ 9328bee0-5b2b-4f1d-8189-b5f8cddfa065
+md"# Hello!!!"
+
+# ╔═╡ 6fc7dffe-a0e6-4d01-b3ce-257ec902b98f
+MultiLingual([
+	"es" => md"# Salut !!!",
+	"nl" => md"# Hallo!!!",
+	"en" => md"hello",
+	
+])
+
 # ╔═╡ 7c7eb3ff-baf6-4a96-9337-47fda60d4ca2
 ml2 = MultiLingual(["asdfasdf" => "show me", "kjewfkjh" => "not me"])
 
@@ -205,6 +226,8 @@ version = "0.9.0"
 # ╠═c35f0e90-1586-11ec-2bb5-abc0ab1a4a27
 # ╠═1378705d-a3c6-4971-9ac8-cd2a12cf2ef9
 # ╠═33fb35e6-f935-4007-a53d-b66df49866ac
+# ╠═9328bee0-5b2b-4f1d-8189-b5f8cddfa065
+# ╠═6fc7dffe-a0e6-4d01-b3ce-257ec902b98f
 # ╠═7c7eb3ff-baf6-4a96-9337-47fda60d4ca2
 # ╠═e3992501-6f29-43ff-a0a6-7c9080c0bf9e
 # ╠═23530429-93ab-41c4-aafe-8071614ba19f
