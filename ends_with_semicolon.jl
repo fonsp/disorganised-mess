@@ -72,38 +72,39 @@ end
 
 # ╔═╡ 1e8406d0-f4a8-4269-ab37-60b87c3349dc
 begin
+
 let matchend = Dict("\"" => r"\"", "\"\"\"" => r"\"\"\"", "'" => r"'",
-                    "`" => r"`", "```" => r"```", "#" => r"$"m, "#=" => r"=#|#=")
+    "`" => r"`", "```" => r"```", "#" => r"$"m, "#=" => r"=#|#=")
     global _rm_strings_and_comments
     function _rm_strings_and_comments(code::Union{String,SubString{String}})
-        buf = IOBuffer(sizehint=sizeof(code))
+        buf = IOBuffer(sizehint = sizeof(code))
         pos = 1
         while true
             i = findnext(r"\"(?!\"\")|\"\"\"|'|`(?!``)|```|#(?!=)|#=", code, pos)
             isnothing(i) && break
             match = SubString(code, i)
-            j = findnext(matchend[match]::Regex, code, last(i)+1)
+            j = findnext(matchend[match]::Regex, code, nextind(code, last(i)))
             if match == "#=" # possibly nested
                 nested = 1
                 while j !== nothing
                     nested += SubString(code, j) == "#=" ? +1 : -1
                     iszero(nested) && break
-                    j = findnext(r"=#|#=", code, last(j)+1)
+                    j = findnext(r"=#|#=", code, nextind(code, last(j)))
                 end
             elseif match[1] != '#' # quote match: check non-escaped
                 while j !== nothing
-                    notbackslash = findprev(!=('\\'), code, first(j)-1)::Int
+                    notbackslash = findprev(!=('\\'), code, prevind(code, first(j)))::Int
                     isodd(first(j) - notbackslash) && break # not escaped
-                    j = findnext(matchend[match]::Regex, code, first(j)+1)
+                    j = findnext(matchend[match]::Regex, code, nextind(code, first(j)))
                 end
             end
             isnothing(j) && break
             if match[1] == '#'
-                print(buf, SubString(code, pos, first(i)-1))
+                print(buf, SubString(code, pos, prevind(code, first(i))))
             else
                 print(buf, SubString(code, pos, last(i)), ' ', SubString(code, j))
             end
-            pos = last(j)+1
+            pos = nextind(code, last(j))
         end
         print(buf, SubString(code, pos, lastindex(code)))
         return String(take!(buf))
@@ -277,7 +278,7 @@ end
 )
 
 # ╔═╡ a2201523-537f-4884-8b9a-396e3df3e94b
-ends_with_semicolon(
+@test_nowarn ends_with_semicolon(
 	"1;" * " #=# 2"
 )
 
@@ -289,6 +290,30 @@ ends_with_semicolon(
 
 # ╔═╡ ea5c44d9-4945-4e8a-ae49-f54c57fd85f7
 @test ends_with_semicolon("""a * "#" ;""")
+
+# ╔═╡ a7734b0d-a86d-4254-a83e-e774dd097f93
+@test !ends_with_semicolon("\"\\\";\"#\"")
+
+# ╔═╡ c840f61e-0e11-4008-9f58-4769bf487461
+"\";"#"
+
+# ╔═╡ 55764fc5-f352-4505-998a-797eda800946
+Text(
+	"\"\\\";\"#\""
+)
+
+# ╔═╡ 08109975-4e0f-46b7-9b0c-d095cd1db015
+@test ends_with_semicolon(
+	"\"\\\\\";#\""
+)
+
+# ╔═╡ 164d3cb8-a04c-4f2d-bd0e-27c836be3677
+@test ends_with_semicolon(
+	"é; #é \"é\""
+)
+
+# ╔═╡ 292f5fff-7209-420d-9944-0a833ac56fbb
+
 
 # ╔═╡ 5d4c0aae-f824-4d0b-a91c-d477c1aa9ee7
 begin
@@ -571,6 +596,12 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═adf3404a-c691-4a0a-8c42-25cab39da17a
 # ╠═d192bf86-bb28-42f9-970c-7b7bd634cd67
 # ╠═ea5c44d9-4945-4e8a-ae49-f54c57fd85f7
+# ╠═a7734b0d-a86d-4254-a83e-e774dd097f93
+# ╠═c840f61e-0e11-4008-9f58-4769bf487461
+# ╠═55764fc5-f352-4505-998a-797eda800946
+# ╠═08109975-4e0f-46b7-9b0c-d095cd1db015
+# ╠═164d3cb8-a04c-4f2d-bd0e-27c836be3677
+# ╠═292f5fff-7209-420d-9944-0a833ac56fbb
 # ╠═5d4c0aae-f824-4d0b-a91c-d477c1aa9ee7
 # ╠═4f6c6f25-2518-4dfc-8815-bf9858dd18d2
 # ╠═a407626a-06e8-457a-a991-01f9bcc747bd
