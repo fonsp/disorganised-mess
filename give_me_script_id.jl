@@ -116,7 +116,7 @@ begin
 				show(io, m, e)
 			end
 		end
-		write(io, "/<div>")
+		write(io, "</div>")
 	end
 end
 
@@ -134,7 +134,7 @@ begin
 				show(io, m, e)
 			end
 		end
-		write(io, "/<div>")
+		write(io, "</div>")
 	end
 end
 
