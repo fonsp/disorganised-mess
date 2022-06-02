@@ -182,6 +182,14 @@ xx = 30 .* randn(SVector{2,Float64},10)
 # ╔═╡ 4c755e8a-3568-43a9-b730-aa1f3eea353c
 triangulate_raw(xx; switches="Q")[1]
 
+# ╔═╡ 4ba3975c-a449-4c6d-8ef2-d3106f091efd
+Path([
+	SVector(1,2),
+	SVector(2,2),
+	SVector(1.2,1),
+	SVector(1,1.9),
+])
+
 # ╔═╡ f49f35fc-5005-4baf-be54-cb3a46fc2479
 # xx = [10000*SVector(p...) for p in small_dot.points[20:end]]
 
@@ -882,6 +890,7 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─5d1c8f91-f0b9-4a5d-9463-0438c57b271f
 # ╟─d1820c35-6acd-41fd-9138-ca37bdbb8126
 # ╠═ce02fd38-a690-426e-a10e-e768fc222981
+# ╠═4ba3975c-a449-4c6d-8ef2-d3106f091efd
 # ╠═f49f35fc-5005-4baf-be54-cb3a46fc2479
 # ╠═17c2953f-96ff-409c-949e-561158bcf6c2
 # ╠═f63083d5-eb82-4f65-8799-c2cc59385ab0

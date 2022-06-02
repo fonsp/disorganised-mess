@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.17.3
+# v0.17.5
 
 using Markdown
 using InteractiveUtils
@@ -838,9 +838,9 @@ version = "1.2.1"
 
 [[ImageMagick_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pkg", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "ea2b6fd947cdfc43c6b8c15cff982533ec1f72cd"
+git-tree-sha1 = "d43c324d044dc8256e1470a561ee7a0cf5e122c9"
 uuid = "c73af94c-d91f-53ed-93a7-00f77d67a9d7"
-version = "6.9.12+0"
+version = "6.9.12+1"
 
 [[ImageMetadata]]
 deps = ["AxisArrays", "ImageAxes", "ImageBase", "ImageCore"]
@@ -1411,11 +1411,11 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─62560766-f6bd-4909-8080-a0e5dad9fb68
 # ╟─7d054ee9-e6bc-4b20-b893-319e087fc6cc
 # ╟─29eca628-1603-4ce2-9952-ac6d35c8dd87
-# ╟─d546d6b8-c49b-43f5-b516-1a693bbb979a
-# ╟─4269201c-e46d-48f2-bc69-982eaa130f5c
-# ╟─a80d92ad-e6c0-497c-ac0d-79e865a74dc7
+# ╠═d546d6b8-c49b-43f5-b516-1a693bbb979a
+# ╠═4269201c-e46d-48f2-bc69-982eaa130f5c
+# ╠═a80d92ad-e6c0-497c-ac0d-79e865a74dc7
+# ╠═105ab6a9-8cfe-42e2-8d68-a7904a69bb4d
 # ╟─7f139b38-424f-49f1-b7b6-3b6be6f223c6
-# ╟─105ab6a9-8cfe-42e2-8d68-a7904a69bb4d
 # ╠═217e9838-2136-428d-9c2e-651203788c62
 # ╠═6864add2-6736-4ba6-a513-904ded50b996
 # ╠═a1727fe8-dd68-43ec-8c23-04728884d998
