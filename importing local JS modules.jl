@@ -134,13 +134,20 @@ function import_local_js(code::AbstractString)
 		window.created_imports = window.created_imports ?? new Map()
 		
 		let code = $(code_js)
-
 		if(created_imports.has(code)){
 			return created_imports.get(code)
 		} else {
-			let blob_promise = new Promise((r) => {
+			let blob_promise = new Promise((resolve, reject) => {
         		const reader = new FileReader()
-        		reader.onload = async () => r(await import(reader.result))
+        		reader.onload = async () => {
+					try {
+						resolve(await import(reader.result))
+					} catch(e) {
+						reject()
+					}
+				}
+				reader.onerror = () => reject()
+				reader.onabort = () => reject()
         		reader.readAsDataURL(
 				new Blob([code], {type : "text/javascript"}))
     		})
