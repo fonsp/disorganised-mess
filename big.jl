@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.19
+# v0.18.0
 
 using Markdown
 using InteractiveUtils
@@ -7,8 +7,9 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
 end
@@ -16,8 +17,22 @@ end
 # ╔═╡ 93136964-93c0-11ea-3da9-4d6e11b49b1e
 using Distributed
 
+# ╔═╡ d2853f19-d8d1-4a9b-8076-ab167cf2d539
+5
+
+# ╔═╡ 88725842-b172-11ea-004c-21fc8845bc9b
+const modifiers = [:(+=), :(-=), :(*=), :(/=), :(//=), :(^=), :(÷=), :(%=), :(<<=), :(>>=), :(>>>=), :(&=), :(⊻=), :(≔), :(⩴), :(≕)]
+
+
+# ╔═╡ 88cacaa4-b172-11ea-30eb-3bdf5cc1f1f8
+const modifiers_dotprefixed = [Symbol('.' * String(m)) for m in modifiers]
+
+
 # ╔═╡ f2d5e15e-5888-4d74-b8c5-b744603be7bc
 dog_file = download("https://upload.wikimedia.org/wikipedia/commons/e/ef/Pluto_in_True_Color_-_High-Res.jpg")
+
+# ╔═╡ a75e2cf6-1520-430c-abf1-83185d494dc5
+md" $(filesize(dog_file) / 1000) kB"
 
 # ╔═╡ e0a67ff3-376e-4bf8-b281-90486f31c80d
 begin
@@ -27,8 +42,8 @@ begin
 	end
 end
 
-# ╔═╡ a75e2cf6-1520-430c-abf1-83185d494dc5
-md" $(filesize(dog_file) / 1000) kB"
+# ╔═╡ 615bd1d0-5037-41ed-88bf-a0df03b32e2e
+[Dog(),Dog(),Dog(),Dog(),Dog()]
 
 # ╔═╡ cbd533bd-0d15-44d5-bf29-aea13b572719
 Dog()
@@ -36,11 +51,20 @@ Dog()
 # ╔═╡ 4343e495-afc5-47a4-9791-d3bc2ae7bf03
 [Dog(),Dog(),Dog(),Dog(),Dog()]
 
-# ╔═╡ 615bd1d0-5037-41ed-88bf-a0df03b32e2e
-[Dog(),Dog(),Dog(),Dog(),Dog()]
+# ╔═╡ e67b124c-f21a-47ca-aa8c-4a014b86320b
+1+1
 
-# ╔═╡ 88a14c54-801d-4c5b-8b39-1e887691798b
-1+2+3
+# ╔═╡ c74ac385-f88f-4cbe-a05d-bffceb1dd9e1
+
+
+# ╔═╡ 8843f164-b172-11ea-0d5c-67fbbd97d6ee
+"ScopeState moves _up_ the ASTree: it carries scope information up towards the endpoints."
+mutable struct ScopeState
+    inglobalscope::Bool
+    exposedglobals::Set{Symbol}
+    hiddenglobals::Set{Symbol}
+    definedfuncs::Set{Symbol}
+end
 
 # ╔═╡ 321f9e52-b193-11ea-09d3-0fcf6af1e472
 md"asdfasdf"
@@ -72,21 +96,6 @@ end
 	SymbolsState(references, assignments, function_calls) = SymbolsState(references, assignments, function_calls, Dict{FunctionName,SymbolsState}())
 	SymbolsState(references, assignments) = SymbolsState(references, assignments, Set{Symbol}())
 	SymbolsState() = SymbolsState(Set{Symbol}(), Set{Symbol}())
-end
-
-# ╔═╡ e67b124c-f21a-47ca-aa8c-4a014b86320b
-
-
-# ╔═╡ c74ac385-f88f-4cbe-a05d-bffceb1dd9e1
-
-
-# ╔═╡ 8843f164-b172-11ea-0d5c-67fbbd97d6ee
-"ScopeState moves _up_ the ASTree: it carries scope information up towards the endpoints."
-mutable struct ScopeState
-    inglobalscope::Bool
-    exposedglobals::Set{Symbol}
-    hiddenglobals::Set{Symbol}
-    definedfuncs::Set{Symbol}
 end
 
 # ╔═╡ 9be01bf8-b172-11ea-04fe-13c44256cf50
@@ -144,16 +153,9 @@ begin
 	end
 	
 	Base.push!(x::Set) = x
+
 	
 end
-
-# ╔═╡ 88725842-b172-11ea-004c-21fc8845bc9b
-const modifiers = [:(+=), :(-=), :(*=), :(/=), :(//=), :(^=), :(÷=), :(%=), :(<<=), :(>>=), :(>>>=), :(&=), :(⊻=), :(≔), :(⩴), :(≕)]
-
-
-# ╔═╡ 88cacaa4-b172-11ea-30eb-3bdf5cc1f1f8
-const modifiers_dotprefixed = [Symbol('.' * String(m)) for m in modifiers]
-
 
 # ╔═╡ 88a66df8-b172-11ea-3221-a9ee7593773f
 begin
@@ -190,6 +192,22 @@ function get_global_assignees(assignee_exprs, scopestate::ScopeState)::Set{Symbo
     return global_assignees
 end
 
+# ╔═╡ c0950f58-b172-11ea-1732-33d5e0b64bfa
+begin
+	
+	# TODO: this should return a FunctionName, and use `split_FunctionName`.
+	"Turn :(A{T}) into :A."
+	function uncurly!(ex::Expr, scopestate::ScopeState)::Symbol
+	    @assert ex.head == :curly
+	    push!(scopestate.hiddenglobals, (a for a in ex.args[2:end] if a isa Symbol)...)
+	    ex.args[1]
+	end
+	
+	uncurly!(ex::Expr)::Symbol = ex.args[1]
+	
+	uncurly!(s::Symbol, scopestate=nothing)::Symbol = s
+end
+
 # ╔═╡ bcc6f5ee-b172-11ea-1300-2f15d78621e8
 begin
 	
@@ -217,22 +235,6 @@ begin
 	# This is parsable code, so we have to treat it
 	get_assignees(::Any) = Symbol[]
 	
-end
-
-# ╔═╡ c0950f58-b172-11ea-1732-33d5e0b64bfa
-begin
-	
-	# TODO: this should return a FunctionName, and use `split_FunctionName`.
-	"Turn :(A{T}) into :A."
-	function uncurly!(ex::Expr, scopestate::ScopeState)::Symbol
-	    @assert ex.head == :curly
-	    push!(scopestate.hiddenglobals, (a for a in ex.args[2:end] if a isa Symbol)...)
-	    ex.args[1]
-	end
-	
-	uncurly!(ex::Expr)::Symbol = ex.args[1]
-	
-	uncurly!(s::Symbol, scopestate=nothing)::Symbol = s
 end
 
 # ╔═╡ cb9ef5c6-b172-11ea-1d46-a35df7f438c6
@@ -293,6 +295,390 @@ This is **not** the same as the expression `:(Module.func)`, but is used to iden
 This means that it is only the inverse of `ExploreExpression.split_FunctionName` iff `length(parts) ≤ 1`."""
 function join_FunctionName_parts(parts::FunctionName)::Symbol
 	join(parts .|> String, ".") |> Symbol
+end
+
+# ╔═╡ ee66048c-b172-11ea-03ca-b14977bb3e34
+begin
+	
+	# Spaghetti code for a spaghetti problem 🍝
+	
+	# Possible leaf: value
+	# Like: a = 1
+	# 1 is a value (Int64)
+	function explore!(value, scopestate::ScopeState)::SymbolsState
+	    # includes: LineNumberNode, Int64, String, 
+	    return SymbolsState()
+	end
+	
+	# Possible leaf: symbol
+	# Like a = x
+	# x is a symbol
+	# We handle the assignment separately, and explore!(:a, ...) will not be called.
+	# Therefore, this method only handles _references_, which are added to the symbolstate, depending on the scopestate.
+	function explore!(sym::Symbol, scopestate::ScopeState)::SymbolsState
+	    if sym ∈ scopestate.hiddenglobals
+	        SymbolsState(Set{Symbol}(), Set{Symbol}(), Set{Symbol}(), Dict{FunctionName,SymbolsState}())
+	    else
+	        SymbolsState(Set([sym]), Set{Symbol}(), Set{Symbol}(), Dict{FunctionName,SymbolsState}())
+	    end
+	end
+	
+	# General recursive method. Is never a leaf.
+	# Modifies the `scopestate`.
+	function explore!(ex::Expr, scopestate::ScopeState)::SymbolsState
+	    if ex.head == :(=)
+	        # Does not create scope
+	
+	        
+	        if ex.args[1] isa Expr && (ex.args[1].head == :call || ex.args[1].head == :where)
+	            # f(x, y) = x + y
+	            # Rewrite to:
+	            # function f(x, y) x + y end
+	            return explore!(Expr(:function, ex.args...), scopestate)
+	        end
+	        assignees = get_assignees(ex.args[1])
+	        val = ex.args[2]
+	
+	        global_assignees = get_global_assignees(assignees, scopestate)
+	        
+	        symstate = innersymstate = explore!(val, scopestate)
+	        # If we are _not_ assigning a global variable, then this symbol hides any global definition with that name
+	        push!(scopestate.hiddenglobals, setdiff(assignees, global_assignees)...)
+	        assigneesymstate = explore!(ex.args[1], scopestate)
+	        
+	        push!(scopestate.hiddenglobals, global_assignees...)
+	        push!(symstate.assignments, global_assignees...)
+	        push!(symstate.references, setdiff(assigneesymstate.references, global_assignees)...)
+	
+	        return symstate
+	    elseif ex.head in modifiers
+	        # We change: a[1] += 123
+	        # to:        a[1] = a[1] + 123
+	        # We transform the modifier back to its operator
+	        # for when users redefine the + function
+	
+	        operator = Symbol(string(ex.head)[1:end - 1])
+	        expanded_expr = Expr(:(=), ex.args[1], Expr(:call, operator, ex.args[1], ex.args[2]))
+	        return explore!(expanded_expr, scopestate)
+	    elseif ex.head in modifiers_dotprefixed
+	        # We change: a[1] .+= 123
+	        # to:        a[1] .= a[1] + 123
+	
+	        operator = Symbol(string(ex.head)[2:end - 1])
+	        expanded_expr = Expr(:(.=), ex.args[1], Expr(:call, operator, ex.args[1], ex.args[2]))
+	        return explore!(expanded_expr, scopestate)
+	    elseif ex.head == :let || ex.head == :for || ex.head == :while
+	        # Creates local scope
+	
+	        # Because we are entering a new scope, we create a copy of the current scope state, and run it through the expressions.
+	        innerscopestate = deepcopy(scopestate)
+	        innerscopestate.inglobalscope = false
+	
+	        return mapfoldl(a -> explore!(a, innerscopestate), union!, ex.args, init=SymbolsState())
+	    elseif ex.head == :call
+	        # Does not create scope
+	
+	        FunctionName = ex.args[1] |> split_FunctionName
+	        symstate = if length(FunctionName) == 0
+	            explore!(ex.args[1], scopestate)
+	        elseif length(FunctionName) == 1
+	            if FunctionName[1] ∈ scopestate.hiddenglobals
+	                SymbolsState()
+	            else
+	            SymbolsState(Set{Symbol}(), Set{Symbol}(), Set{FunctionName}([FunctionName]))
+	            end
+	        else
+	            SymbolsState(Set{Symbol}([FunctionName[end - 1]]), Set{Symbol}(), Set{FunctionName}([FunctionName]))
+	        end
+	        # Explore code inside function arguments:
+	        union!(symstate, explore!(Expr(:block, ex.args[2:end]...), scopestate))
+	        return symstate
+	    elseif ex.head == :kw
+	        return explore!(ex.args[2], scopestate)
+	    elseif ex.head == :struct
+	        # Creates local scope
+	
+	        structname = ex.args[2]
+	        structfields = ex.args[3].args
+	
+	        equiv_func = Expr(:function, Expr(:call, structname, structfields...), Expr(:block, nothing))
+	
+	        return explore!(equiv_func, scopestate)
+	    elseif ex.head == :generator
+	        # Creates local scope
+	
+	        # In a `generator`, a single expression is followed by the iterator assignments.
+	        # In a `for`, this expression comes at the end.
+	
+	        # This is not strictly the normal form of a `for` but that's okay
+	        return explore!(Expr(:for, ex.args[2:end]..., ex.args[1]), scopestate)
+	    elseif ex.head == :function || ex.head == :abstract
+	        symstate = SymbolsState()
+	        # Creates local scope
+	
+	        funcroot = ex.args[1]
+	
+	        # Because we are entering a new scope, we create a copy of the current scope state, and run it through the expressions.
+	        innerscopestate = deepcopy(scopestate)
+	        innerscopestate.inglobalscope = false
+	
+	        FunctionName, innersymstate = explore_funcdef!(funcroot, innerscopestate)
+	
+	        union!(innersymstate, explore!(Expr(:block, ex.args[2:end]...), innerscopestate))
+	        
+	        if will_assign_global(FunctionName, scopestate)
+	            symstate.function_definitions[FunctionName] = innersymstate
+	            if length(FunctionName) == 1
+	                push!(scopestate.definedfuncs, FunctionName[end])
+	                push!(scopestate.hiddenglobals, FunctionName[end])
+	            elseif length(FunctionName) > 1
+	                push!(symstate.references, FunctionName[end - 1]) # reference the module of the extended function
+	            end
+	        else
+	            # The function is not defined globally. However, the function can still modify the global scope or reference globals, e.g.
+	            
+	            # let
+	            #     function f(x)
+	            #         global z = x + a
+	            #     end
+	            #     f(2)
+	            # end
+	
+	            # so we insert the function's inner symbol state here, as if it was a `let` block.
+	            symstate = innersymstate
+	        end
+	
+	        return symstate
+	    elseif ex.head == :(->)
+	        # Creates local scope
+	
+	        tempname = Symbol("anon", rand(UInt64))
+	
+	        # We will rewrite this to a normal function definition, with a temporary name
+	        funcroot = ex.args[1]
+	        args_ex = if funcroot isa Symbol || (funcroot isa Expr && funcroot.head == :(::))
+	            [funcroot]
+	        elseif funcroot.head == :tuple
+	            funcroot.args
+	        else
+	            @error "Unknown lambda type"
+	        end
+	
+	        equiv_func = Expr(:function, Expr(:call, tempname, args_ex...), ex.args[2])
+	
+	        return explore!(equiv_func, scopestate)
+	    elseif ex.head == :global
+	        # Does not create scope
+	
+	        # We have one of:
+	        # global x;
+	        # global x = 1;
+	        # global x += 1;
+	
+	        # where x can also be a tuple:
+	        # global a,b = 1,2
+	
+	        globalisee = ex.args[1]
+	
+	        if isa(globalisee, Symbol)
+	            push!(scopestate.exposedglobals, globalisee)
+	            return SymbolsState()
+	        elseif isa(globalisee, Expr)
+	            innerscopestate = deepcopy(scopestate)
+	            innerscopestate.inglobalscope = true
+	            return explore!(globalisee, innerscopestate)
+	        else
+	            @error "unknow global use" ex
+	            return explore!(globalisee, scopestate)
+	        end
+	        
+	        return symstate
+	    elseif ex.head == :local
+	        # Does not create scope
+	
+	        localisee = ex.args[1]
+	
+	        if isa(localisee, Symbol)
+	            push!(scopestate.hiddenglobals, localisee)
+	            return SymbolsState()
+	        elseif isa(localisee, Expr) && (localisee.head == :(=) || localisee.head in modifiers)
+	            push!(scopestate.hiddenglobals, get_assignees(localisee.args[1])...)
+	            return explore!(localisee, scopestate)
+	        else
+	            @warn "unknow local use" ex
+	            return explore!(localisee, scopestate)
+	        end
+	    elseif ex.head == :tuple
+	        # Does not create scope
+	        
+	        # Is something like:
+	        # a,b,c = 1,2,3
+	        
+	        # This parses to:
+	        # head = :tuple
+	        # args = [:a, :b, :(c=1), :2, :3]
+	        
+	        # 🤔
+	        # we turn it into two expressions:
+	
+	        # (a, b) = (2, 3)
+	        # (c = 1)
+	
+	        # and explore those :)
+	
+	        indexoffirstassignment = findfirst(a -> isa(a, Expr) && a.head == :(=), ex.args)
+	        if indexoffirstassignment !== nothing
+	            # we have one of two cases, see next `if`
+	            indexofsecondassignment = findnext(a -> isa(a, Expr) && a.head == :(=), ex.args, indexoffirstassignment + 1)
+	
+	            if indexofsecondassignment !== nothing
+	                # we have a named tuple, e.g. (a=1, b=2)
+	                new_args = map(ex.args) do a
+	                    (a isa Expr && a.head == :(=)) ? a.args[2] : a
+	                end
+	                return explore!(Expr(:block, new_args...), scopestate)
+	            else
+	            # we have a tuple assignment, e.g. `a, (b, c) = [1, [2, 3]]`
+	                before = ex.args[1:indexoffirstassignment - 1]
+	                after = ex.args[indexoffirstassignment + 1:end]
+	
+	                symstate_middle = explore!(ex.args[indexoffirstassignment], scopestate)
+	                symstate_outer = explore!(Expr(:(=), Expr(:tuple, before...), Expr(:block, after...)), scopestate)
+	
+	                return union!(symstate_middle, symstate_outer)
+	            end
+	        else
+	            return explore!(Expr(:block, ex.args...), scopestate)
+	        end
+	    elseif ex.head == :(.) && ex.args[2] isa Expr && ex.args[2].head == :tuple
+	        # pointwise function call, e.g. sqrt.(nums)
+	        # we rewrite to a regular call
+	
+	        return explore!(Expr(:call, ex.args[1], ex.args[2].args...), scopestate)
+	    elseif ex.head == :using || ex.head == :import
+	        if scopestate.inglobalscope
+	            imports = if ex.args[1].head == :(:)
+	                ex.args[1].args[2:end]
+	            else
+	            ex.args
+	            end
+	
+	            packagenames = map(e -> e.args[end], imports)
+	
+	            return SymbolsState(Set{Symbol}(), Set{Symbol}(packagenames))
+	        else
+	            return SymbolsState(Set{Symbol}(), Set{Symbol}())
+	        end
+	    elseif ex.head == :macrocall && ex.args[1] isa Symbol && ex.args[1] == Symbol("@md_str")
+	        # Does not create scope
+	        # The Markdown macro treats things differently, so we must too
+	
+	        innersymstate = explore!(Markdown.toexpr(Markdown.parse(ex.args[3])), scopestate)
+	        push!(innersymstate.references, Symbol("@md_str"))
+	        
+	        return innersymstate
+	    elseif (ex.head == :macrocall && ex.args[1] isa Symbol && ex.args[1] == Symbol("@bind")
+	        && length(ex.args) == 4 && ex.args[3] isa Symbol)
+	        
+	        innersymstate = explore!(ex.args[4], scopestate)
+	        push!(innersymstate.assignments, ex.args[3])
+	        
+	        return innersymstate
+	    elseif ex.head == :quote
+	        # We ignore contents
+	
+	        return SymbolsState()
+	    elseif ex.head == :module
+	        # We ignore contents
+	
+	        return SymbolsState(Set{Symbol}(), Set{Symbol}([ex.args[2]]))
+	    else
+	        # fallback, includes:
+	        # begin, block, do, toplevel
+	        # (and hopefully much more!)
+	        
+	        # Does not create scope (probably)
+	
+	        return mapfoldl(a -> explore!(a, scopestate), union!, ex.args, init=SymbolsState())
+	    end
+	end
+end
+
+# ╔═╡ 886f52d2-b172-11ea-139b-f7def3fb542c
+begin
+	
+	"Return the function name and the SymbolsState from argument defaults. Add arguments as hidden globals to the `scopestate`.
+	
+	Is also used for `struct` and `abstract`."
+	function explore_funcdef!(ex::Expr, scopestate::ScopeState)::Tuple{FunctionName,SymbolsState}
+	    if ex.head == :call
+	        # get the function name
+	        name, symstate = explore_funcdef!(ex.args[1], scopestate)
+	        # and explore the function arguments
+	        return mapfoldl(a -> explore_funcdef!(a, scopestate), union!, ex.args[2:end], init=(name, symstate))
+	
+	    elseif ex.head == :(::) || ex.head == :kw || ex.head == :(=)
+	        # recurse
+	        name, symstate = explore_funcdef!(ex.args[1], scopestate)
+	        if length(ex.args) > 1
+	            # use `explore!` (not `explore_funcdef!`) to explore the argument's default value - these can contain arbitrary expressions
+	            union!(symstate, explore!(ex.args[2], scopestate))
+	        end
+	        return name, symstate
+	
+	    elseif ex.head == :where
+	        # function(...) where {T, S <: R, U <: A.B}
+	        # supertypes `R` and `A.B` are referenced
+	        supertypes_symstate = SymbolsState()
+	        for a in ex.args[2:end]
+	            name, inner_symstate = explore_funcdef!(a, scopestate)
+	            if length(name) == 1
+	                push!(scopestate.hiddenglobals, name[1])
+	            end
+	            union!(supertypes_symstate, inner_symstate)
+	        end
+	        # recurse
+	        name, symstate = explore_funcdef!(ex.args[1], scopestate)
+	        union!(symstate, supertypes_symstate)
+	        return name, symstate
+	
+	    elseif ex.head == :(<:)
+	        # for use in `struct` and `abstract`
+	        name = uncurly!(ex.args[1], scopestate)
+	        symstate = if length(ex.args) == 1
+	            SymbolsState()
+	        else
+	            explore!(ex.args[2], scopestate)
+	        end
+	        return Symbol[name], symstate
+	
+	    elseif ex.head == :curly
+	        name = uncurly!(ex, scopestate)
+	        return Symbol[name], SymbolsState()
+	
+	    elseif ex.head == :parameters || ex.head == :tuple
+	        return mapfoldl(a -> explore_funcdef!(a, scopestate), union!, ex.args, init=(Symbol[], SymbolsState()))
+	
+	    elseif ex.head == :(.)
+	        return split_FunctionName(ex), SymbolsState()
+	
+	    else
+	        return Symbol[], explore!(ex, scopestate)
+	    end
+	end
+	
+	function explore_funcdef!(ex::QuoteNode, scopestate::ScopeState)::Tuple{FunctionName,SymbolsState}
+	    explore_funcdef!(ex.value, scopestate)
+	end
+	
+	function explore_funcdef!(ex::Symbol, scopestate::ScopeState)::Tuple{FunctionName,SymbolsState}
+	    push!(scopestate.hiddenglobals, ex)
+	    Symbol[ex |> without_dotprefix |> without_dotsuffix], SymbolsState()
+	end
+	
+	function explore_funcdef!(::Any, ::ScopeState)::Tuple{FunctionName,SymbolsState}
+	    Symbol[], SymbolsState()
+	end
 end
 
 # ╔═╡ 4e0e992c-b172-11ea-35a3-9f7aef3592bd
@@ -427,11 +813,11 @@ struct Wow
 	y
 end
 
-# ╔═╡ 6de2fdec-9075-11ea-3a39-176a725c1c38
-which(show, (IO, MIME"text/plain", Wow))
-
 # ╔═╡ d6bb60b0-8fc4-11ea-1a96-6dffb769ac8d
 Base.show(io::IO, ::MIME"text/plain", w::Wow) = print(io, "wowie")
+
+# ╔═╡ 6de2fdec-9075-11ea-3a39-176a725c1c38
+which(show, (IO, MIME"text/plain", Wow))
 
 # ╔═╡ bc9b0846-8fe7-11ea-36be-95f4d5678d9f
 ww = md"";
@@ -857,415 +1243,62 @@ seq = n.^-2
 # ╔═╡ b2d792c2-7f73-11ea-0c65-a5042701e9f3
 sqrt(sum(seq) * 6.0)
 
-# ╔═╡ ee66048c-b172-11ea-03ca-b14977bb3e34
-begin
-	
-	# Spaghetti code for a spaghetti problem 🍝
-	
-	# Possible leaf: value
-	# Like: a = 1
-	# 1 is a value (Int64)
-	function explore!(value, scopestate::ScopeState)::SymbolsState
-	    # includes: LineNumberNode, Int64, String, 
-	    return SymbolsState()
-	end
-	
-	# Possible leaf: symbol
-	# Like a = x
-	# x is a symbol
-	# We handle the assignment separately, and explore!(:a, ...) will not be called.
-	# Therefore, this method only handles _references_, which are added to the symbolstate, depending on the scopestate.
-	function explore!(sym::Symbol, scopestate::ScopeState)::SymbolsState
-	    if sym ∈ scopestate.hiddenglobals
-	        SymbolsState(Set{Symbol}(), Set{Symbol}(), Set{Symbol}(), Dict{FunctionName,SymbolsState}())
-	    else
-	        SymbolsState(Set([sym]), Set{Symbol}(), Set{Symbol}(), Dict{FunctionName,SymbolsState}())
-	    end
-	end
-	
-	# General recursive method. Is never a leaf.
-	# Modifies the `scopestate`.
-	function explore!(ex::Expr, scopestate::ScopeState)::SymbolsState
-	    if ex.head == :(=)
-	        # Does not create scope
-	
-	        
-	        if ex.args[1] isa Expr && (ex.args[1].head == :call || ex.args[1].head == :where)
-	            # f(x, y) = x + y
-	            # Rewrite to:
-	            # function f(x, y) x + y end
-	            return explore!(Expr(:function, ex.args...), scopestate)
-	        end
-	        assignees = get_assignees(ex.args[1])
-	        val = ex.args[2]
-	
-	        global_assignees = get_global_assignees(assignees, scopestate)
-	        
-	        symstate = innersymstate = explore!(val, scopestate)
-	        # If we are _not_ assigning a global variable, then this symbol hides any global definition with that name
-	        push!(scopestate.hiddenglobals, setdiff(assignees, global_assignees)...)
-	        assigneesymstate = explore!(ex.args[1], scopestate)
-	        
-	        push!(scopestate.hiddenglobals, global_assignees...)
-	        push!(symstate.assignments, global_assignees...)
-	        push!(symstate.references, setdiff(assigneesymstate.references, global_assignees)...)
-	
-	        return symstate
-	    elseif ex.head in modifiers
-	        # We change: a[1] += 123
-	        # to:        a[1] = a[1] + 123
-	        # We transform the modifier back to its operator
-	        # for when users redefine the + function
-	
-	        operator = Symbol(string(ex.head)[1:end - 1])
-	        expanded_expr = Expr(:(=), ex.args[1], Expr(:call, operator, ex.args[1], ex.args[2]))
-	        return explore!(expanded_expr, scopestate)
-	    elseif ex.head in modifiers_dotprefixed
-	        # We change: a[1] .+= 123
-	        # to:        a[1] .= a[1] + 123
-	
-	        operator = Symbol(string(ex.head)[2:end - 1])
-	        expanded_expr = Expr(:(.=), ex.args[1], Expr(:call, operator, ex.args[1], ex.args[2]))
-	        return explore!(expanded_expr, scopestate)
-	    elseif ex.head == :let || ex.head == :for || ex.head == :while
-	        # Creates local scope
-	
-	        # Because we are entering a new scope, we create a copy of the current scope state, and run it through the expressions.
-	        innerscopestate = deepcopy(scopestate)
-	        innerscopestate.inglobalscope = false
-	
-	        return mapfoldl(a -> explore!(a, innerscopestate), union!, ex.args, init=SymbolsState())
-	    elseif ex.head == :call
-	        # Does not create scope
-	
-	        FunctionName = ex.args[1] |> split_FunctionName
-	        symstate = if length(FunctionName) == 0
-	            explore!(ex.args[1], scopestate)
-	        elseif length(FunctionName) == 1
-	            if FunctionName[1] ∈ scopestate.hiddenglobals
-	                SymbolsState()
-	            else
-	            SymbolsState(Set{Symbol}(), Set{Symbol}(), Set{FunctionName}([FunctionName]))
-	            end
-	        else
-	            SymbolsState(Set{Symbol}([FunctionName[end - 1]]), Set{Symbol}(), Set{FunctionName}([FunctionName]))
-	        end
-	        # Explore code inside function arguments:
-	        union!(symstate, explore!(Expr(:block, ex.args[2:end]...), scopestate))
-	        return symstate
-	    elseif ex.head == :kw
-	        return explore!(ex.args[2], scopestate)
-	    elseif ex.head == :struct
-	        # Creates local scope
-	
-	        structname = ex.args[2]
-	        structfields = ex.args[3].args
-	
-	        equiv_func = Expr(:function, Expr(:call, structname, structfields...), Expr(:block, nothing))
-	
-	        return explore!(equiv_func, scopestate)
-	    elseif ex.head == :generator
-	        # Creates local scope
-	
-	        # In a `generator`, a single expression is followed by the iterator assignments.
-	        # In a `for`, this expression comes at the end.
-	
-	        # This is not strictly the normal form of a `for` but that's okay
-	        return explore!(Expr(:for, ex.args[2:end]..., ex.args[1]), scopestate)
-	    elseif ex.head == :function || ex.head == :abstract
-	        symstate = SymbolsState()
-	        # Creates local scope
-	
-	        funcroot = ex.args[1]
-	
-	        # Because we are entering a new scope, we create a copy of the current scope state, and run it through the expressions.
-	        innerscopestate = deepcopy(scopestate)
-	        innerscopestate.inglobalscope = false
-	
-	        FunctionName, innersymstate = explore_funcdef!(funcroot, innerscopestate)
-	
-	        union!(innersymstate, explore!(Expr(:block, ex.args[2:end]...), innerscopestate))
-	        
-	        if will_assign_global(FunctionName, scopestate)
-	            symstate.function_definitions[FunctionName] = innersymstate
-	            if length(FunctionName) == 1
-	                push!(scopestate.definedfuncs, FunctionName[end])
-	                push!(scopestate.hiddenglobals, FunctionName[end])
-	            elseif length(FunctionName) > 1
-	                push!(symstate.references, FunctionName[end - 1]) # reference the module of the extended function
-	            end
-	        else
-	            # The function is not defined globally. However, the function can still modify the global scope or reference globals, e.g.
-	            
-	            # let
-	            #     function f(x)
-	            #         global z = x + a
-	            #     end
-	            #     f(2)
-	            # end
-	
-	            # so we insert the function's inner symbol state here, as if it was a `let` block.
-	            symstate = innersymstate
-	        end
-	
-	        return symstate
-	    elseif ex.head == :(->)
-	        # Creates local scope
-	
-	        tempname = Symbol("anon", rand(UInt64))
-	
-	        # We will rewrite this to a normal function definition, with a temporary name
-	        funcroot = ex.args[1]
-	        args_ex = if funcroot isa Symbol || (funcroot isa Expr && funcroot.head == :(::))
-	            [funcroot]
-	        elseif funcroot.head == :tuple
-	            funcroot.args
-	        else
-	            @error "Unknown lambda type"
-	        end
-	
-	        equiv_func = Expr(:function, Expr(:call, tempname, args_ex...), ex.args[2])
-	
-	        return explore!(equiv_func, scopestate)
-	    elseif ex.head == :global
-	        # Does not create scope
-	
-	        # We have one of:
-	        # global x;
-	        # global x = 1;
-	        # global x += 1;
-	
-	        # where x can also be a tuple:
-	        # global a,b = 1,2
-	
-	        globalisee = ex.args[1]
-	
-	        if isa(globalisee, Symbol)
-	            push!(scopestate.exposedglobals, globalisee)
-	            return SymbolsState()
-	        elseif isa(globalisee, Expr)
-	            innerscopestate = deepcopy(scopestate)
-	            innerscopestate.inglobalscope = true
-	            return explore!(globalisee, innerscopestate)
-	        else
-	            @error "unknow global use" ex
-	            return explore!(globalisee, scopestate)
-	        end
-	        
-	        return symstate
-	    elseif ex.head == :local
-	        # Does not create scope
-	
-	        localisee = ex.args[1]
-	
-	        if isa(localisee, Symbol)
-	            push!(scopestate.hiddenglobals, localisee)
-	            return SymbolsState()
-	        elseif isa(localisee, Expr) && (localisee.head == :(=) || localisee.head in modifiers)
-	            push!(scopestate.hiddenglobals, get_assignees(localisee.args[1])...)
-	            return explore!(localisee, scopestate)
-	        else
-	            @warn "unknow local use" ex
-	            return explore!(localisee, scopestate)
-	        end
-	    elseif ex.head == :tuple
-	        # Does not create scope
-	        
-	        # Is something like:
-	        # a,b,c = 1,2,3
-	        
-	        # This parses to:
-	        # head = :tuple
-	        # args = [:a, :b, :(c=1), :2, :3]
-	        
-	        # 🤔
-	        # we turn it into two expressions:
-	
-	        # (a, b) = (2, 3)
-	        # (c = 1)
-	
-	        # and explore those :)
-	
-	        indexoffirstassignment = findfirst(a -> isa(a, Expr) && a.head == :(=), ex.args)
-	        if indexoffirstassignment !== nothing
-	            # we have one of two cases, see next `if`
-	            indexofsecondassignment = findnext(a -> isa(a, Expr) && a.head == :(=), ex.args, indexoffirstassignment + 1)
-	
-	            if indexofsecondassignment !== nothing
-	                # we have a named tuple, e.g. (a=1, b=2)
-	                new_args = map(ex.args) do a
-	                    (a isa Expr && a.head == :(=)) ? a.args[2] : a
-	                end
-	                return explore!(Expr(:block, new_args...), scopestate)
-	            else
-	            # we have a tuple assignment, e.g. `a, (b, c) = [1, [2, 3]]`
-	                before = ex.args[1:indexoffirstassignment - 1]
-	                after = ex.args[indexoffirstassignment + 1:end]
-	
-	                symstate_middle = explore!(ex.args[indexoffirstassignment], scopestate)
-	                symstate_outer = explore!(Expr(:(=), Expr(:tuple, before...), Expr(:block, after...)), scopestate)
-	
-	                return union!(symstate_middle, symstate_outer)
-	            end
-	        else
-	            return explore!(Expr(:block, ex.args...), scopestate)
-	        end
-	    elseif ex.head == :(.) && ex.args[2] isa Expr && ex.args[2].head == :tuple
-	        # pointwise function call, e.g. sqrt.(nums)
-	        # we rewrite to a regular call
-	
-	        return explore!(Expr(:call, ex.args[1], ex.args[2].args...), scopestate)
-	    elseif ex.head == :using || ex.head == :import
-	        if scopestate.inglobalscope
-	            imports = if ex.args[1].head == :(:)
-	                ex.args[1].args[2:end]
-	            else
-	            ex.args
-	            end
-	
-	            packagenames = map(e -> e.args[end], imports)
-	
-	            return SymbolsState(Set{Symbol}(), Set{Symbol}(packagenames))
-	        else
-	            return SymbolsState(Set{Symbol}(), Set{Symbol}())
-	        end
-	    elseif ex.head == :macrocall && ex.args[1] isa Symbol && ex.args[1] == Symbol("@md_str")
-	        # Does not create scope
-	        # The Markdown macro treats things differently, so we must too
-	
-	        innersymstate = explore!(Markdown.toexpr(Markdown.parse(ex.args[3])), scopestate)
-	        push!(innersymstate.references, Symbol("@md_str"))
-	        
-	        return innersymstate
-	    elseif (ex.head == :macrocall && ex.args[1] isa Symbol && ex.args[1] == Symbol("@bind")
-	        && length(ex.args) == 4 && ex.args[3] isa Symbol)
-	        
-	        innersymstate = explore!(ex.args[4], scopestate)
-	        push!(innersymstate.assignments, ex.args[3])
-	        
-	        return innersymstate
-	    elseif ex.head == :quote
-	        # We ignore contents
-	
-	        return SymbolsState()
-	    elseif ex.head == :module
-	        # We ignore contents
-	
-	        return SymbolsState(Set{Symbol}(), Set{Symbol}([ex.args[2]]))
-	    else
-	        # fallback, includes:
-	        # begin, block, do, toplevel
-	        # (and hopefully much more!)
-	        
-	        # Does not create scope (probably)
-	
-	        return mapfoldl(a -> explore!(a, scopestate), union!, ex.args, init=SymbolsState())
-	    end
-	end
-end
+# ╔═╡ 00000000-0000-0000-0000-000000000001
+PLUTO_PROJECT_TOML_CONTENTS = """
+[deps]
+Distributed = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+"""
 
-# ╔═╡ 886f52d2-b172-11ea-139b-f7def3fb542c
-begin
-	
-	"Return the function name and the SymbolsState from argument defaults. Add arguments as hidden globals to the `scopestate`.
-	
-	Is also used for `struct` and `abstract`."
-	function explore_funcdef!(ex::Expr, scopestate::ScopeState)::Tuple{FunctionName,SymbolsState}
-	    if ex.head == :call
-	        # get the function name
-	        name, symstate = explore_funcdef!(ex.args[1], scopestate)
-	        # and explore the function arguments
-	        return mapfoldl(a -> explore_funcdef!(a, scopestate), union!, ex.args[2:end], init=(name, symstate))
-	
-	    elseif ex.head == :(::) || ex.head == :kw || ex.head == :(=)
-	        # recurse
-	        name, symstate = explore_funcdef!(ex.args[1], scopestate)
-	        if length(ex.args) > 1
-	            # use `explore!` (not `explore_funcdef!`) to explore the argument's default value - these can contain arbitrary expressions
-	            union!(symstate, explore!(ex.args[2], scopestate))
-	        end
-	        return name, symstate
-	
-	    elseif ex.head == :where
-	        # function(...) where {T, S <: R, U <: A.B}
-	        # supertypes `R` and `A.B` are referenced
-	        supertypes_symstate = SymbolsState()
-	        for a in ex.args[2:end]
-	            name, inner_symstate = explore_funcdef!(a, scopestate)
-	            if length(name) == 1
-	                push!(scopestate.hiddenglobals, name[1])
-	            end
-	            union!(supertypes_symstate, inner_symstate)
-	        end
-	        # recurse
-	        name, symstate = explore_funcdef!(ex.args[1], scopestate)
-	        union!(symstate, supertypes_symstate)
-	        return name, symstate
-	
-	    elseif ex.head == :(<:)
-	        # for use in `struct` and `abstract`
-	        name = uncurly!(ex.args[1], scopestate)
-	        symstate = if length(ex.args) == 1
-	            SymbolsState()
-	        else
-	            explore!(ex.args[2], scopestate)
-	        end
-	        return Symbol[name], symstate
-	
-	    elseif ex.head == :curly
-	        name = uncurly!(ex, scopestate)
-	        return Symbol[name], SymbolsState()
-	
-	    elseif ex.head == :parameters || ex.head == :tuple
-	        return mapfoldl(a -> explore_funcdef!(a, scopestate), union!, ex.args, init=(Symbol[], SymbolsState()))
-	
-	    elseif ex.head == :(.)
-	        return split_FunctionName(ex), SymbolsState()
-	
-	    else
-	        return Symbol[], explore!(ex, scopestate)
-	    end
-	end
-	
-	function explore_funcdef!(ex::QuoteNode, scopestate::ScopeState)::Tuple{FunctionName,SymbolsState}
-	    explore_funcdef!(ex.value, scopestate)
-	end
-	
-	function explore_funcdef!(ex::Symbol, scopestate::ScopeState)::Tuple{FunctionName,SymbolsState}
-	    push!(scopestate.hiddenglobals, ex)
-	    Symbol[ex |> without_dotprefix |> without_dotsuffix], SymbolsState()
-	end
-	
-	function explore_funcdef!(::Any, ::ScopeState)::Tuple{FunctionName,SymbolsState}
-	    Symbol[], SymbolsState()
-	end
-end
+# ╔═╡ 00000000-0000-0000-0000-000000000002
+PLUTO_MANIFEST_TOML_CONTENTS = """
+# This file is machine-generated - editing it directly is not advised
+
+julia_version = "1.7.0"
+manifest_format = "2.0"
+
+[[deps.Distributed]]
+deps = ["Random", "Serialization", "Sockets"]
+uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+
+[[deps.Random]]
+deps = ["SHA", "Serialization"]
+uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[deps.SHA]]
+uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
+
+[[deps.Serialization]]
+uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
+
+[[deps.Sockets]]
+uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
+"""
 
 # ╔═╡ Cell order:
-# ╠═e0a67ff3-376e-4bf8-b281-90486f31c80d
-# ╠═a75e2cf6-1520-430c-abf1-83185d494dc5
-# ╠═f2d5e15e-5888-4d74-b8c5-b744603be7bc
-# ╠═cbd533bd-0d15-44d5-bf29-aea13b572719
-# ╠═4343e495-afc5-47a4-9791-d3bc2ae7bf03
 # ╠═615bd1d0-5037-41ed-88bf-a0df03b32e2e
-# ╠═88a14c54-801d-4c5b-8b39-1e887691798b
+# ╠═d2853f19-d8d1-4a9b-8076-ab167cf2d539
+# ╠═cbd533bd-0d15-44d5-bf29-aea13b572719
+# ╠═881ed6f4-b172-11ea-237a-6d64da160f42
+# ╠═88a66df8-b172-11ea-3221-a9ee7593773f
+# ╠═a75e2cf6-1520-430c-abf1-83185d494dc5
+# ╠═88725842-b172-11ea-004c-21fc8845bc9b
+# ╠═88cacaa4-b172-11ea-30eb-3bdf5cc1f1f8
+# ╠═e0a67ff3-376e-4bf8-b281-90486f31c80d
+# ╠═4343e495-afc5-47a4-9791-d3bc2ae7bf03
+# ╠═f2d5e15e-5888-4d74-b8c5-b744603be7bc
+# ╠═e67b124c-f21a-47ca-aa8c-4a014b86320b
+# ╠═c74ac385-f88f-4cbe-a05d-bffceb1dd9e1
+# ╠═8843f164-b172-11ea-0d5c-67fbbd97d6ee
+# ╠═9be01bf8-b172-11ea-04fe-13c44256cf50
+# ╠═88a37164-b172-11ea-3db5-cba8006705b7
+# ╠═bcc6f5ee-b172-11ea-1300-2f15d78621e8
+# ╠═c0950f58-b172-11ea-1732-33d5e0b64bfa
 # ╠═2c0e8b60-b173-11ea-1db9-b7ae66e03dc1
 # ╠═321f9e52-b193-11ea-09d3-0fcf6af1e472
 # ╠═18c9914e-b173-11ea-342e-01c4e2097b8c
 # ╠═ff545550-b172-11ea-33ed-eb222597f035
 # ╠═2464da5e-b173-11ea-2532-13c06602328d
 # ╠═5edd43d4-b172-11ea-1dc4-79c3e07941ed
-# ╠═881ed6f4-b172-11ea-237a-6d64da160f42
-# ╠═e67b124c-f21a-47ca-aa8c-4a014b86320b
-# ╠═c74ac385-f88f-4cbe-a05d-bffceb1dd9e1
-# ╠═8843f164-b172-11ea-0d5c-67fbbd97d6ee
-# ╠═9be01bf8-b172-11ea-04fe-13c44256cf50
-# ╠═88725842-b172-11ea-004c-21fc8845bc9b
-# ╠═88cacaa4-b172-11ea-30eb-3bdf5cc1f1f8
-# ╠═88a66df8-b172-11ea-3221-a9ee7593773f
-# ╠═88a37164-b172-11ea-3db5-cba8006705b7
-# ╠═bcc6f5ee-b172-11ea-1300-2f15d78621e8
-# ╠═c0950f58-b172-11ea-1732-33d5e0b64bfa
 # ╠═c6be340e-b172-11ea-2333-bf81380f509b
 # ╠═cb9ef5c6-b172-11ea-1d46-a35df7f438c6
 # ╠═d8e0873e-b172-11ea-0409-d9c0d4eedb7d
@@ -1374,3 +1407,5 @@ end
 # ╠═e89f2218-906b-11ea-26ae-4f246faad6ba
 # ╠═b2d79330-7f73-11ea-0d1c-a9aad1efaae1
 # ╠═b2d79376-7f73-11ea-2dce-cb9c449eece6
+# ╟─00000000-0000-0000-0000-000000000001
+# ╟─00000000-0000-0000-0000-000000000002

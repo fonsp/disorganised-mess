@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.2
+# v0.19.4
 
 using Markdown
 using InteractiveUtils
@@ -7,8 +7,9 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
 end
@@ -174,12 +175,6 @@ _(There are [lots of special 'infixable' function names](https://github.com/Juli
 We you call it with the prefix notation, it becomes clear that it really is 'just another function', with lots of predefined methods.
 """
 
-# ╔═╡ 96707ef0-0a29-11eb-1a3e-6bcdfb7897eb
-+(1, 2)
-
-# ╔═╡ b0337d24-0a29-11eb-1fab-876a87c0973f
-+
-
 # ╔═╡ 9c9f53b2-09ea-11eb-0cda-639764250cee
 md"""
 > #### Extending + in the wild
@@ -202,6 +197,12 @@ function Base.:+(a::Coordinate, b::Coordinate)
 	
 	return Coordinate(a.x + b.x, a.y + b.y)
 end
+
+# ╔═╡ 96707ef0-0a29-11eb-1a3e-6bcdfb7897eb
++(1, 2)
+
+# ╔═╡ b0337d24-0a29-11eb-1fab-876a87c0973f
++
 
 # ╔═╡ e24d5796-0a68-11eb-23bb-d55d206f3c40
 # function Base.:+(a::Coordinate, b::Coordinate)
