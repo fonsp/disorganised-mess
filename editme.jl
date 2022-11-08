@@ -36,6 +36,7 @@ function EditMe(initial)
 	})
 		
 		return el
+		</script>
 		
 		""")
 	
