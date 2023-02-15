@@ -778,30 +778,7 @@ end
 
 # ╔═╡ b6512e8e-f85b-11ea-0cb6-619a5b3f67bc
 graders_raw = """
-Muhammad Ashhad Alam	ashhad13@mit.edu	Jeremiah
-Ali Alasmari	alasmari@mit.edu	Jeremiah
-Shaden Alshammari	shaden@mit.edu	Jeremiah
-Brian Avendano	onadneva@mit.edu	Jeremiah
-Soumayya Bint Outhman	bintouth@mit.edu	Jeremiah
-Alexander Bookbinder	a01@mit.edu	Jeremiah
-Ray Dedhia	rdedhia@mit.edu	Jeremiah
-Keegan Deppe	kdeppe@mit.edu	Jeremiah
-Julian Espada	jesp1999@mit.edu	Shashi
-Alison Fang	af_16@mit.edu	Shashi
-RuiYang Guo	mguo42@mit.edu	Shashi
-Tommy Heng	theng@mit.edu	Shashi
-Terry Kang	terryk@mit.edu	Shashi
-Justin Linick	jlinick@mit.edu	Shashi
-Megha Maran	megham@mit.edu	Shashi
-Zoe Marschner	zoem@mit.edu	Shashi
-Maya Nigrin	mayigrin@mit.edu	Peter
-Nicholas Ortiz	njortiz@mit.edu	Peter
-Olivia Seow	olivias@mit.edu	Peter
-Carlos Solano Saltachin	csolano@mit.edu	Peter
-Joshua Torres	torresjo@mit.edu	Peter
-Tho Tran	thotran9@mit.edu	Peter
-Benjamin Urquhart	benu@mit.edu	Peter
-Wayne Zhao	wayzhao@mit.edu	Peter"""
+"""
 
 # ╔═╡ c7553450-f85b-11ea-1dbd-3d72253a58d6
 graders = map(split(graders_raw, '\n')) do line
