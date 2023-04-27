@@ -48,7 +48,7 @@ md"""
 """
 
 # ╔═╡ c7656bfa-aeb9-4228-a796-7da3805419dc
-matches = problem_paths = map(zip(dist_files, local_contents, downloaded_contents)) do (f,cl,cd)
+matches = map(zip(dist_files, local_contents, downloaded_contents)) do (f,cl,cd)
 	cl == cd
 end
 
