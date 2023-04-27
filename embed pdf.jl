@@ -17,10 +17,11 @@ path = download(url)
 data = read(path)
 
 # ╔═╡ 2febdf14-4937-440f-be4e-14c25706ffa3
-@htl("""
+# @htl("""
 
-
-""")
+# <embed src=$(url) width="500" height="375" 
+#  type="application/pdf">
+# """)
 
 # ╔═╡ efb427b6-be8a-45a9-a97a-ca2e1109d50e
 @htl("""
@@ -82,6 +83,48 @@ import URIs
 # ╔═╡ 7846da99-bff7-4ae1-93ac-73a4e435d648
 @htl("""
 <iframe style="width: 100%; height: 400px" src=$("https://mozilla.github.io/pdf.js/web/viewer.html?file=$(URIs.escapeuri(url))")></iframe>
+
+""")
+
+# ╔═╡ 459cca31-df1b-447b-9fcb-5789f386dba3
+@htl("""
+
+<script id="asdf">
+
+	const embed = this ?? document.createElement("embed")
+	embed.style = "width: 100%; height: 400px"
+
+	
+	const data = $(PlutoRunner.publish_to_js(data))
+
+	const url = URL.createObjectURL(new Blob([data]), { type: "application/pdf" })	
+	embed.type = "application/pdf"
+	embed.src = url
+
+	return embed
+	
+</script>
+
+""")
+
+# ╔═╡ cc0a0bf4-ffde-4ccc-bd19-ebc077840e7d
+@htl("""
+
+<script id="asdf">
+
+	const embed = this ?? document.createElement("iframe")
+	embed.style = "width: 100%; height: 400px"
+
+	
+	const data = $(PlutoRunner.publish_to_js(data))
+
+	const url = URL.createObjectURL(new Blob([data]), { type: "application/pdf" })	
+	embed.type = "application/pdf"
+	embed.src = url
+
+	return embed
+	
+</script>
 
 """)
 
@@ -150,6 +193,8 @@ version = "1.4.0"
 # ╠═efb427b6-be8a-45a9-a97a-ca2e1109d50e
 # ╠═e794b6d0-fcdb-4c43-98d1-b7a7271c9aac
 # ╠═7846da99-bff7-4ae1-93ac-73a4e435d648
+# ╠═459cca31-df1b-447b-9fcb-5789f386dba3
+# ╠═cc0a0bf4-ffde-4ccc-bd19-ebc077840e7d
 # ╠═03368ed8-9b22-4bfa-b47a-147c19cb5be8
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

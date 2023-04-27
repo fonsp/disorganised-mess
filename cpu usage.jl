@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.14
+# v0.19.16
 
 using Markdown
 using InteractiveUtils
@@ -14,198 +14,85 @@ macro bind(def, element)
     end
 end
 
-# ╔═╡ 2aa03781-5ea6-463f-b632-5315f9cefd77
+# ╔═╡ d1d0c64f-1da6-436d-afa5-41b96ee3b87b
 using PlutoUI
 
-# ╔═╡ ba485dba-f7e5-439d-b1a7-b8240b956052
-using HypertextLiteral
+# ╔═╡ b9a24cd6-6b5d-11ed-33a5-37f88e154e87
+info = Sys.cpu_info()
 
-# ╔═╡ a11778e1-ce31-43cd-b91d-2ea4f6af557a
-@bind ms Slider(0:.01:10; default=1)
+# ╔═╡ ade86601-e50d-41d5-8cec-52f1da13d9f1
+period = 1
 
-# ╔═╡ 1ed6d4c2-e356-11ec-2abe-03feb2309707
-n = 1000_000
+# ╔═╡ 6d4a8cb0-f1af-405d-9f1d-8f267b2e8ea0
+@bind tick Clock(period)
 
-# ╔═╡ 108502ea-e957-480e-97db-66013ca533dc
-x = randn(n) * .5
+# ╔═╡ 46f162d8-39b3-4436-b316-83eaa7197ddd
+percentage(x::Real) = "$(round(100 * x, digits=1))%"
 
-# ╔═╡ 5fd1fff2-1873-40d3-b94f-8eff96d1c51a
-y = randn(n) * .5
+# ╔═╡ 337ef986-751f-417c-ac39-ffd5755c5f2c
+Sys.free_memory() / Sys.total_memory() |> percentage
 
-# ╔═╡ 5916ea15-cc6b-4bda-9e95-d3c27fc7e7b3
+# ╔═╡ 8b9c9662-c7af-4b18-acd3-0e49e713ca79
+idle_time(info::Sys.CPUinfo) = Int64(info.cpu_times!idle)
 
+# ╔═╡ ff5a18c0-d6ef-4a9e-ac09-b8744e0e659d
+idles = idle_time.(info)
 
-# ╔═╡ fc99db75-bdba-4cf3-b18c-afb54adf023c
-md"""
-# Definition
-"""
+# ╔═╡ b34fa9fc-226d-408f-99ad-e0ce4f20ec26
+busy_time(info::Sys.CPUinfo) = 
+	Int64(
+		info.cpu_times!user +
+		info.cpu_times!nice +
+		info.cpu_times!sys +
+		info.cpu_times!irq
+	)
 
-# ╔═╡ d8899cc8-513b-48c7-b7a8-2d8bd71d45bb
-# begin
-# 	Base.@kwdef struct FastScatter
-# 		x::Vector{<:Real}
-# 		y::Vector{<:Real}
-# 		color::String="#ffffff"
-# 		marker_size::Real=5
-# 	end
-
-# 	function Base.show(io::IO, m::MIME"text/html", f::FastScatter)
-		
-# 	show(io, m, @htl("""
-# 		<div>
-# 		<script id=asdfasdf>
-# 		const {default: createScatterplot} = await import('https://esm.sh/regl-scatterplot@1.2.3');
-		
-# 		const canvas = this ?? document.createElement("canvas")
-# 		canvas.style = `width: 100%; aspect-ratio: 1; border-radius: .6em;`
+# ╔═╡ e904df03-b6ab-4f9d-a834-bc8a8f704e27
+usages = let
+	tick
 	
-# 		currentScript.parentElement.append(canvas)
-		
-# 		const { width, height } = canvas.getBoundingClientRect();
-		
-# 		const scatterplot = canvas._scatterplot ?? createScatterplot({
-# 			canvas,
-# 			width,
-# 			height,
-# 		});
-# 		scatterplot.set({
-# 			pointSize: $(f.marker_size),
-# 			pointColor: [$(f.color)],
-# 			performanceMode: false,
-# 		})
-# 		canvas._scatterplot = scatterplot
-	
+	info = Sys.cpu_info()
+	busies = busy_time.(info)
+	idles = idle_time.(info)
 
-# 		const raw_x = $(Main.PlutoRunner.publish_to_js(convert(Vector{Float32}, f.x)))
-# 		const raw_y = $(Main.PlutoRunner.publish_to_js(convert(Vector{Float32}, f.y)))
+	sleep(period)
 
-# 		const points = Array.prototype.map.call(raw_x, (x,i) => [x,raw_y[i]])
-# 		scatterplot.draw(points)
-	
-# 		/*scatterplot.draw({
-# 			x: raw_x,
-# 			y: raw_y,
-# 			valueA: 0,
-# 		});*/
+	info = Sys.cpu_info()
+	busies = busy_time.(info) .- busies
+	idles = idle_time.(info) .- idles
 
-# 		invalidation.then(() => {
-# 			// clear memory
-# 			points.length = 0
-# 			//scatterplot.clear()
-# 			//scatterplot.destroy()
-# 		})
 
-# 		return canvas
-# 		</script>
-# 		</div>
-# 	"""))
-# 	end
-# end
-
-# ╔═╡ efd2d320-a7d2-404b-9786-04d116d24b6e
-begin
-	Base.@kwdef struct FastScatter
-		x::Vector{<:Real}
-		y::Vector{<:Real}
-		color::String="#000000"
-		marker_size::Real=5
-	end
-
-	function Base.show(io::IO, m::MIME"text/html", f::FastScatter)
-		
-	show(io, m, @htl("""
-		<div>
-		<canvas style="width: 100%; aspect-ratio: 1; border-radius: .6em;"></canvas>
-		<script>
-		const {default: createScatterplot} = await import('https://esm.sh/regl-scatterplot@1.2.3');
-		
-		const canvas = currentScript.parentElement.querySelector("canvas")
-		
-		const { width, height } = canvas.getBoundingClientRect();
-		
-		const scatterplot = createScatterplot({
-			canvas,
-			width,
-			height,
-			pointSize: $(f.marker_size),
-			pointColor: [$(f.color)],
-			performanceMode: true,
-		});
-
-		const raw_x = $(Main.PlutoRunner.publish_to_js(convert(Vector{Float32}, f.x)))
-		const raw_y = $(Main.PlutoRunner.publish_to_js(convert(Vector{Float32}, f.y)))
-		const points = Array.prototype.map.call(raw_x, (x,i) => [x,raw_y[i]])
-			console.log(points.length, [...points[0]])
-			
-		// const points = new Array(10000)
-		//   .fill()
-		//   .map(() => [-1 + Math.random() * 2, -1 + Math.random() * 2, 0]);
-		
-		scatterplot.draw(points);
-
-			invalidation.then(() => {
-				// clear memory
-				points.length = 0
-				scatterplot.clear()
-				scatterplot.destroy()
-			})
-		
-		</script>
-		</div>
-	"""))
-	end
+	busies ./ (idles .+ busies)
 end
 
-# ╔═╡ 50f3b397-7668-4d01-8736-452149978399
-scatter(x,y; kwargs...) = FastScatter(;x, y, kwargs...)
+# ╔═╡ 8e30faf0-b0da-4ea3-87d4-5416bc725922
+percentage.(usages)
 
-# ╔═╡ c6ac6f31-69b6-4532-a666-3f0a4c8ccaae
-scatter(x,y; marker_size=ms)
+# ╔═╡ b2831af8-9099-4bf7-85c8-961878142747
+percentage(sum(usages)/length(usages))
 
-# ╔═╡ 0ba77e2c-8202-408c-b193-4b232d3458ce
-# begin
-# 	Base.@kwdef struct FastScatter
-# 		x
-# 		y
-# 	end
+# ╔═╡ 4b7b1d7b-dbc7-4c1e-8bca-0b0cf51bb3c1
+busies = busy_time.(info)
 
-# 	function Base.show(io::IO, m::MIME"text/html", f::FastScatter)
-		
-# 	show(io, m, @htl("""
-# 		<div>
-# 		<canvas style="width: 100%; height: 300px"></canvas>
-# 		<script>
-# 		const {default: createScatterplot} = await import('https://esm.sh/regl-scatterplot@1.2.3');
-		
-# 		const raw_x = $(Main.PlutoRunner.publish_to_js(convert(Vector{Float32}, f.x)))
-# 		const raw_y = $(Main.PlutoRunner.publish_to_js(convert(Vector{Float32}, f.y)))
-# 		const points = Array.prototype.map.call(raw_x, (x,i) => [x,raw_y[i],0])
-# 			console.log(points.length)
-		
-# 		</script>
-# 		</div>
-# 	"""))
-# 	end
-# end
+# ╔═╡ 255d1136-a32e-4950-a53a-0f90a2b8aefb
+
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
-HypertextLiteral = "ac1192a8-f4b3-4bfe-ba22-af5b92cd3ab2"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 
 [compat]
-HypertextLiteral = "~0.9.4"
-PlutoUI = "~0.7.39"
+PlutoUI = "~0.7.48"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.8.0"
+julia_version = "1.8.3"
 manifest_format = "2.0"
-project_hash = "76fe9282f386a17bdec28e0adfe6e55a2e4613fd"
+project_hash = "97be6e027681c6ecfa37671630e179d506eb1167"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -225,9 +112,9 @@ uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
 [[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
-git-tree-sha1 = "0f4e115f6f34bbe43c19751c90a38b2f380637b9"
+git-tree-sha1 = "eb7f0f8307f71fac7c606984ea5fb2817275d6e4"
 uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
-version = "0.11.3"
+version = "0.11.4"
 
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -309,6 +196,11 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
 
+[[deps.MIMEs]]
+git-tree-sha1 = "65f28ad4b594aebe22157d6fac869786a255b7eb"
+uuid = "6c6e2e6c-3030-632d-7369-2d6c69616d65"
+version = "0.1.4"
+
 [[deps.Markdown]]
 deps = ["Base64"]
 uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
@@ -335,10 +227,10 @@ uuid = "4536629a-c528-5b80-bd46-f80d51c5b363"
 version = "0.3.20+0"
 
 [[deps.Parsers]]
-deps = ["Dates"]
-git-tree-sha1 = "1285416549ccfcdf0c50d4997a94331e88d68413"
+deps = ["Dates", "SnoopPrecompile"]
+git-tree-sha1 = "b64719e8b4504983c7fca6cc9db3ebc8acc2a4d6"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "2.3.1"
+version = "2.5.1"
 
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
@@ -346,10 +238,10 @@ uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 version = "1.8.0"
 
 [[deps.PlutoUI]]
-deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "Random", "Reexport", "UUIDs"]
-git-tree-sha1 = "8d1f54886b9037091edf146b517989fc4a09efec"
+deps = ["AbstractPlutoDingetjes", "Base64", "ColorTypes", "Dates", "FixedPointNumbers", "Hyperscript", "HypertextLiteral", "IOCapture", "InteractiveUtils", "JSON", "Logging", "MIMEs", "Markdown", "Random", "Reexport", "URIs", "UUIDs"]
+git-tree-sha1 = "efc140104e6d0ae3e7e30d56c98c4a927154d684"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
-version = "0.7.39"
+version = "0.7.48"
 
 [[deps.Printf]]
 deps = ["Unicode"]
@@ -375,6 +267,11 @@ version = "0.7.0"
 [[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
+[[deps.SnoopPrecompile]]
+git-tree-sha1 = "f604441450a3c0569830946e5b33b78c928e1a85"
+uuid = "66db9d55-30c0-4569-8b51-7e840670fc0c"
+version = "1.0.1"
+
 [[deps.Sockets]]
 uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
 
@@ -394,7 +291,7 @@ version = "1.0.0"
 [[deps.Tar]]
 deps = ["ArgTools", "SHA"]
 uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
-version = "1.10.0"
+version = "1.10.1"
 
 [[deps.Test]]
 deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
@@ -404,6 +301,11 @@ uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 git-tree-sha1 = "6bac775f2d42a611cdfcd1fb217ee719630c4175"
 uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
 version = "0.1.6"
+
+[[deps.URIs]]
+git-tree-sha1 = "e59ecc5a41b000fa94423a578d29290c7266fc10"
+uuid = "5c2747f8-b7ea-4ff2-ba2e-563bfd36b1d4"
+version = "1.4.0"
 
 [[deps.UUIDs]]
 deps = ["Random", "SHA"]
@@ -434,18 +336,19 @@ version = "17.4.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═a11778e1-ce31-43cd-b91d-2ea4f6af557a
-# ╠═1ed6d4c2-e356-11ec-2abe-03feb2309707
-# ╟─108502ea-e957-480e-97db-66013ca533dc
-# ╠═5fd1fff2-1873-40d3-b94f-8eff96d1c51a
-# ╠═c6ac6f31-69b6-4532-a666-3f0a4c8ccaae
-# ╠═2aa03781-5ea6-463f-b632-5315f9cefd77
-# ╟─5916ea15-cc6b-4bda-9e95-d3c27fc7e7b3
-# ╟─fc99db75-bdba-4cf3-b18c-afb54adf023c
-# ╠═ba485dba-f7e5-439d-b1a7-b8240b956052
-# ╠═50f3b397-7668-4d01-8736-452149978399
-# ╟─d8899cc8-513b-48c7-b7a8-2d8bd71d45bb
-# ╠═efd2d320-a7d2-404b-9786-04d116d24b6e
-# ╠═0ba77e2c-8202-408c-b193-4b232d3458ce
+# ╠═b9a24cd6-6b5d-11ed-33a5-37f88e154e87
+# ╠═ade86601-e50d-41d5-8cec-52f1da13d9f1
+# ╠═d1d0c64f-1da6-436d-afa5-41b96ee3b87b
+# ╠═6d4a8cb0-f1af-405d-9f1d-8f267b2e8ea0
+# ╠═8e30faf0-b0da-4ea3-87d4-5416bc725922
+# ╠═b2831af8-9099-4bf7-85c8-961878142747
+# ╠═e904df03-b6ab-4f9d-a834-bc8a8f704e27
+# ╠═337ef986-751f-417c-ac39-ffd5755c5f2c
+# ╠═46f162d8-39b3-4436-b316-83eaa7197ddd
+# ╠═4b7b1d7b-dbc7-4c1e-8bca-0b0cf51bb3c1
+# ╠═ff5a18c0-d6ef-4a9e-ac09-b8744e0e659d
+# ╠═8b9c9662-c7af-4b18-acd3-0e49e713ca79
+# ╠═b34fa9fc-226d-408f-99ad-e0ce4f20ec26
+# ╠═255d1136-a32e-4950-a53a-0f90a2b8aefb
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
