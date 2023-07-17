@@ -61,6 +61,9 @@ filter(nb.cells) do c
 	occursin("recipe", c.code)
 end
 
+# ╔═╡ b4f7acd1-a26f-4574-b547-a00d38e20dfe
+Pluto.SessionActions.shutdown(s, nb)
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -508,5 +511,6 @@ version = "17.4.0+0"
 # ╠═c5de8519-959c-4c4d-ab3c-2c501c4eb918
 # ╠═aea8d189-5ea0-4729-897d-b6f6409aef72
 # ╠═414b94c6-fdeb-4562-adfa-9d88afe43ba0
+# ╠═b4f7acd1-a26f-4574-b547-a00d38e20dfe
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
