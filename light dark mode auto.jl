@@ -26,6 +26,9 @@ big(x) = @htl """
 <span style="font-size: 10rem;">$x</span>
 """
 
+# ╔═╡ 79b29de1-4010-4cb0-bf92-2d1fd7af6400
+big("gerhARD")
+
 # ╔═╡ 1a25bc4a-dbdf-4cb4-ae78-c1eca48ee7e1
 dark_plot = big("🌚")
 
@@ -58,9 +61,12 @@ lightdark(light, dark) = @htl """
 		}
 	}
 </style>
-<span class="plutoui-only-when-light">$light</span>
-<span class="plutoui-only-when-dark">$dark</span>
+<span class="plutoui-only-when-light">$((@isdefined(embed_display) ? embed_display : identity)(light))</span>
+<span class="plutoui-only-when-dark">$((@isdefined(embed_display) ? embed_display : identity)(dark))</span>
 """
+
+# ╔═╡ 2a6e8c4e-89c5-4e0d-8392-952054243025
+lightdark(["☀️","🍦","⭐️", 123], ["🛰️","💂","🎱"])
 
 # ╔═╡ 2161b66e-73bf-41aa-b692-238eccfab347
 lightdark(light_plot, dark_plot)
@@ -101,8 +107,10 @@ version = "0.1.7"
 # ╟─71ff15f4-a183-4222-bba0-8785668af3fb
 # ╠═2161b66e-73bf-41aa-b692-238eccfab347
 # ╠═f59cd504-2385-4e21-8150-9bc8bb443438
+# ╠═2a6e8c4e-89c5-4e0d-8392-952054243025
 # ╟─36d3abc9-aadd-4fa5-b8bf-9f35349c461a
 # ╠═d1bdbaaa-91fb-424e-8356-141aedfa0764
+# ╠═79b29de1-4010-4cb0-bf92-2d1fd7af6400
 # ╠═1a25bc4a-dbdf-4cb4-ae78-c1eca48ee7e1
 # ╠═176b2f2e-d648-4af7-9d5b-cafc2304166a
 # ╟─75b365ee-bc3d-42e8-9b16-44d165584f89
