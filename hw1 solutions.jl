@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.12.20
+# v0.19.25
 
 using Markdown
 using InteractiveUtils
@@ -7,10 +7,29 @@ using InteractiveUtils
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
     quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : missing
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
+end
+
+# ╔═╡ 65780f00-ed6b-11ea-1ecf-8b35523a7ac0
+begin
+	import Pkg
+	Pkg.activate(mktempdir())
+end
+
+# ╔═╡ 74b008f6-ed6b-11ea-291f-b3791d6d1b35
+begin
+	Pkg.add(["Images", "ImageIO", "ImageMagick"])
+	using Images
+end
+
+# ╔═╡ 6b30dc38-ed6b-11ea-10f3-ab3f121bf4b8
+begin
+	Pkg.add("PlutoUI")
+	using PlutoUI
 end
 
 # ╔═╡ 83eb9ca0-ed68-11ea-0bc5-99a09c68f867
@@ -48,24 +67,6 @@ Submission by: **_$(student.name)_** ($(student.kerberos_id)@mit.edu)
 
 # ╔═╡ 5f95e01a-ee0a-11ea-030c-9dba276aba92
 md"_Let's create a package environment:_"
-
-# ╔═╡ 65780f00-ed6b-11ea-1ecf-8b35523a7ac0
-begin
-	import Pkg
-	Pkg.activate(mktempdir())
-end
-
-# ╔═╡ 74b008f6-ed6b-11ea-291f-b3791d6d1b35
-begin
-	Pkg.add(["Images", "ImageIO", "ImageMagick"])
-	using Images
-end
-
-# ╔═╡ 6b30dc38-ed6b-11ea-10f3-ab3f121bf4b8
-begin
-	Pkg.add("PlutoUI")
-	using PlutoUI
-end
 
 # ╔═╡ 67461396-ee0a-11ea-3679-f31d46baa9b4
 md"_We set up Images.jl again:_"
