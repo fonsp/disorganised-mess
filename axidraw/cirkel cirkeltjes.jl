@@ -38,7 +38,7 @@ Path(coords)
 point_at_angle(a) = Point(cos(2π * a), sin(2π * a))
 
 # ╔═╡ 627bb923-8b14-436b-bb6c-a96509c5633f
-nturns = 40
+nturns = 20
 
 # ╔═╡ 8b3a59d9-54ce-49b8-be38-84f990d4c944
 @bind offset Slider(0:.01:5)
@@ -55,13 +55,10 @@ offset, scale
 # ╔═╡ 507bcac5-738d-4ade-b6cc-5458e94073aa
 
 
-# ╔═╡ 6b7c3e64-4521-4e9b-a3ba-1cb828156411
-img = load(download("https://fonsp.com/img/doggoSmall.jpg?raw=true"))
-
 # ╔═╡ 0fa1f477-5690-4745-8a0c-84e08d72593e
 function get_value_at(p::Point)
 
-	max_size = maximum(size(img)) / 2
+	max_size = minimum(size(img)) / 2
 
 	q = max_size * p + Point(max_size, max_size)
 
@@ -85,7 +82,7 @@ spiral(special::Bool) = [
 		p = a * point_at_angle(a)
 		val = get_value_at(p / nturns)
 
-		a * point_at_angle(a) + (1.0 - val) * 0.5 * point_at_angle(a^2 * 4)
+		a * point_at_angle(a) + (1.0 - val) * 0.4 * point_at_angle(a^2 * 7)
 	else
 		a * point_at_angle(a)
 	end
@@ -105,6 +102,18 @@ spiral(special::Bool) = [
 
 # ╔═╡ 2f357adf-7214-4b38-b88e-9cd041bb4039
 get_value_at(Point(1,0))
+
+# ╔═╡ 4d76fb89-fdcf-432e-bc2b-2c474b7ef93a
+get_value_at(Point(-.99999,-.3))
+
+# ╔═╡ 6b7c3e64-4521-4e9b-a3ba-1cb828156411
+# ╠═╡ disabled = true
+#=╠═╡
+img = load(download("https://fonsp.com/img/doggoSmall.jpg?raw=true"))
+  ╠═╡ =#
+
+# ╔═╡ 0cb05e28-3f18-4efc-a347-49465bad97e7
+img = load("/Users/fons/Pictures/axi/berg2.jpeg")
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1460,7 +1469,9 @@ version = "17.4.0+2"
 # ╟─507bcac5-738d-4ade-b6cc-5458e94073aa
 # ╠═176efebb-5683-434f-bee8-6c672fc55eed
 # ╠═6b7c3e64-4521-4e9b-a3ba-1cb828156411
+# ╠═0cb05e28-3f18-4efc-a347-49465bad97e7
 # ╠═0fa1f477-5690-4745-8a0c-84e08d72593e
 # ╠═2f357adf-7214-4b38-b88e-9cd041bb4039
+# ╠═4d76fb89-fdcf-432e-bc2b-2c474b7ef93a
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
