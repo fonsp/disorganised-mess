@@ -84,7 +84,7 @@ begin
 
 		h = @htl """
 		<div class="plutoui_slideshow">
-			<input value=1 type=range min=1 max=$(length(animation.slides))>
+			<input value=0 type=range min=0 max=$(length(animation.slides) - 1)>
 		<pui-slides>
 			$((
 				@htl """
