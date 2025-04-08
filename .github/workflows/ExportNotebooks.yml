@@ -9,6 +9,9 @@ on:
     push:
         branches:
             - main
+    # to keep the cache fresh, which avoids extremely long rebuilds:
+    schedule:
+        - cron: 0 5 */5 * *
     workflow_dispatch:
 
 jobs:
